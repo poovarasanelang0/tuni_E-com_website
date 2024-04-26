@@ -1,0 +1,65 @@
+.heading_color_see {
+  color: rgb(44, 26, 120);
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.card-container {
+  max-width: 300px;
+}
+
+.fixed-img {
+  width: 100%;
+  height: 55vh;
+  object-fit: cover;
+}
+
+@media only screen and (max-width: 768px) {
+  .card-container {
+    max-width: 200px;
+  }
+
+  .fixed-img {
+    width: 100%;
+    padding: 10px;
+    height: 40vh;
+    object-fit: cover;
+  }
+
+}
+
+
+
+@media only screen and (max-width: 480px) {
+  .card-container {
+    max-width: 250px;
+  }
+
+  .fixed-img {
+    width: 100%;
+    padding: 10px;
+    height: 40vh;
+    object-fit: cover;
+  }
+
+}
+
+.price_msg_success {
+  color: rgb(62, 140, 47);
+  font-weight: bold;
+}
+
+.prices_details h5 {
+  font-size: 18px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+
+.card_container {
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  cursor: pointer;
+}
+
+.card_container:hover {
+  opacity: 1;
+  transform: translateY(-40px);
+}

@@ -1,0 +1,39 @@
+.colore_text{
+    color: rgb(44, 26, 120);
+    font-family: 'Times New Roman', Times, serif;
+}
+
+
+.slick-container {
+    margin: 0 auto;
+    width: 80%; /* Adjust width as needed */
+  }
+  
+  .slick-image {
+    width: 100%;
+    height: auto;
+  }
+  
+
+  .mens_image_row{
+    height: auto;
+    width: 30vh;
+
+  }
+  .mens_image_row img{
+  object-fit: cover;
+ 
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .mens_image_row{
+        height: auto;
+        width: 22vh;
+    
+      }
+      .mens_image_row img{
+      object-fit: cover;
+     
+      }
+   
+  }

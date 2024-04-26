@@ -1,0 +1,15 @@
+.carsoul_bar img{
+  height: 75vh;
+}
+.bg_next_prev_color{
+  background:rgb(44, 26, 120);
+  
+}
+
+
+@media only screen and (max-width: 768px) {
+  .carsoul_bar img{
+    height: auto;
+  }
+ 
+}
