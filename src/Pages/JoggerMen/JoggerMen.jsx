@@ -19,9 +19,9 @@ import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-import { firestore } from "../../firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import 'firebase/firestore';
+import { firestore } from "../../firebaseConfig"
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const JoggerMen = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
@@ -30,26 +30,65 @@ const JoggerMen = () => {
     setSelectedFilter(event.target.value);
   };
 
-  const [productData, setProductData] = useState([]);
+  // dd
+
+
+
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [products, setProducts] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productColl = collection(firestore, "Clothes");
-        const snapshot = await getDocs(productColl);
-        const productsDetails = snapshot.docs.map((doc) => ({
+        const productRef = collection(
+          firestore,
+          "clothes",
+          "Men",
+          "Shirt",
+          "full sleve",
+          "Plain"
+        );
+        const snapshot = await getDocs(productRef);
+        const productsData = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        console.log("data ", productsDetails);
-        setProductData(productsDetails);
+        setProducts(productsData);
       } catch (error) {
-        console.log(error, "error msg");
+        console.error("Error fetching products:", error);
       }
     };
+
     fetchData();
   }, []);
 
+  const handleRadioChange = (category) => {
+    setSelectedCategory(category);
+  };
 
+  const filteredProducts =
+    selectedCategory === "all"
+      ? products
+      : products.filter((product) => product.category === selectedCategory);
+
+
+
+
+
+
+
+
+  const [selectedRadio, setSelectedRadio] = useState("exampleRadios1");
+
+  const handleNextButtonClick = () => {
+    // Assuming 'exampleRadios1' is the ID of the default radio button
+    if (selectedRadio === "exampleRadios1") {
+      setSelectedRadio("flexRadioDefault2");
+    } else if (selectedRadio === "flexRadioDefault2") {
+      setSelectedRadio("flexRadioDefault3");
+    }
+    // Add more conditions if you have more radio buttons
+  };
 
   const settings = {
     dots: true,
@@ -59,7 +98,7 @@ const JoggerMen = () => {
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 768, // Adjust breakpoint as needed for your mobile devices
+        breakpoint: 768,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -68,22 +107,63 @@ const JoggerMen = () => {
     ],
   };
 
-
   const isSmallScreen = () => {
-    return window.innerWidth < 768; // Define your breakpoint as needed
+    return window.innerWidth < 768;
   };
 
   // Function to render product cards for small screens
   const renderProductCardsSmallScreen = () => {
     return (
-      <Slider dots={true} infinite={true} speed={500} slidesToShow={1} slidesToScroll={1}>
-        {productData.map((product) => (
-          <div key={product.id} className="col-lg-4 col-md-4 col-12">
+      <Slider
+        dots={true}
+        infinite={true}
+        speed={500}
+        slidesToShow={1}
+        slidesToScroll={1}
+      >
+        {filteredProducts.map((product)  => (
+          <div key={product.id} className="">
             <Link
               to={`/SingleProducts/${product.id}`}
               className="text-decoration-none border-0"
             >
-              {/* Product card content */}
+              <div className="card-container card_container1">
+                <div className="card text-white">
+                  <div className="product_images">
+                    <img
+                      src={product.imageUrl}
+                      className="card-img fixed_img"
+                      alt={product.name}
+                    />
+                  </div>
+                  <div clexampleRadios1assName="card-img-overlay">
+                    <span className="badge bg-success ">BEST SELLER</span>
+                  </div>
+                  <div className="card-img-overlay d-flex ">
+                    <div className="mt-auto">
+                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                        <i className="bi bi-star-fill text-warning"></i> 4.5 |
+                        20
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="mt-3">{product.name}</h5>
+                  <h4>{product.category}</h4>
+                  <h6 className="fw-bold">
+                    <i className="bi bi-currency-rupee"></i>
+                    {product.price} &nbsp;
+                    <del>
+                      <i className="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    OFF
+                  </h6>
+                  <p className="price_msg_success">
+                    Lowest price in last 30 days
+                  </p>
+                </div>
+              </div>
             </Link>
           </div>
         ))}
@@ -95,22 +175,55 @@ const JoggerMen = () => {
   const renderProductCardsLargeScreen = () => {
     return (
       <div className="row">
-        {productData.map((product) => (
-          <div key={product.id} className="col-lg-8 col-md-4 col-12">
+        {filteredProducts.map((product)  => (
+          <div key={product.id} className="col-lg-4 col-md-6 col-12">
             <Link
               to={`/SingleProducts/${product.id}`}
               className="text-decoration-none border-0"
             >
-              {/* Product card content */}
+              <div className="card-container card_container1">
+                <div className="card text-white">
+                  <div className="product_images">
+                    <img
+                      src={product.imageUrl}
+                      className="card-img fixed_img"
+                      alt={product.name}
+                    />
+                  </div>
+                  <div className="card-img-overlay">
+                    <span className="badge bg-success ">BEST SELLER</span>
+                  </div>
+                  <div className="card-img-overlay d-flex ">
+                    <div className="mt-auto">
+                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                        <i className="bi bi-star-fill text-warning"></i> 4.5 |
+                        20
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="mt-3">{product.name}</h5>
+                  <h4>{product.category}</h4>
+                  <h6 className="fw-bold">
+                    <i className="bi bi-currency-rupee"></i>
+                    {product.price} &nbsp;
+                    <del>
+                      <i className="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    OFF
+                  </h6>
+                  <p className="price_msg_success">
+                    Lowest price in last 30 days
+                  </p>
+                </div>
+              </div>
             </Link>
           </div>
         ))}
       </div>
     );
   };
-
-
-
 
   return (
     <>
@@ -153,6 +266,55 @@ const JoggerMen = () => {
                 Price High to Low
               </option>
             </select>
+          </div>
+        </div>
+      </div>
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <div className="d-flex justify-content-center">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id="all"
+                  value="all"
+                  checked={selectedCategory === "all"}
+                  onChange={() => handleRadioChange("all")}
+                />
+                <label className="form-check-label" htmlFor="all">
+                  All T-shirt
+                </label>
+              </div>
+
+              <div className="form-check mx-1">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id="plain"
+                  value="plain"
+                  checked={selectedCategory === "plain"}
+                  onChange={() => handleRadioChange("plain")}
+                />
+                <label className="form-check-label" htmlFor="plain">
+Plain T-shirt            </label>
+              </div>
+              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+                <input
+                  className="form-check-input"
+                  name="flexRadioDefault"
+                  type="radio"
+                  id="printed"
+                  value="printed"
+                  checked={selectedCategory === "printed"}
+                  onChange={() => handleRadioChange("printed")}
+                />
+                <label className="form-check-label" htmlFor="printed">
+Printed T-shirt                </label>
+              </div>
+
+              {/* <button >Next</button> */}
+            </div>
           </div>
         </div>
       </div>
@@ -426,7 +588,9 @@ const JoggerMen = () => {
           </div>
 
           <div className="col-lg-8">
-          {isSmallScreen() ? renderProductCardsSmallScreen() : renderProductCardsLargeScreen()}
+            {isSmallScreen()
+              ? renderProductCardsSmallScreen()
+              : renderProductCardsLargeScreen()}
           </div>
         </div>
       </div>

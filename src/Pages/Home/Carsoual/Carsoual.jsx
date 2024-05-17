@@ -4,6 +4,7 @@ import Carsoul2 from "../Assets/car2.webp";
 import Carsoul3 from "../Assets/car3.webp";
 import Carsoul4 from "../Assets/car5.webp";
 import "./Carsoual.css"
+import zIndex from '@mui/material/styles/zIndex';
 
 const Carsoual = () => {
   return (
@@ -12,7 +13,7 @@ const Carsoual = () => {
       <div className='row'>
         <div className='col-12'>
         <div id="carouselExampleIndicators" className="carousel slide my-4" data-bs-ride="carousel">
-        <div className="carousel-indicators">
+        <div className="carousel-indicators" style={{zIndex:"1"}}>
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to={0} className="active" aria-current="true" aria-label="Slide 1" />
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to={1} aria-label="Slide 2" />
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to={2} aria-label="Slide 3" />

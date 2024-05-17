@@ -1,0 +1,79 @@
+.back_color{
+    background: rgb(21,26,61);
+}
+.login_image_logo img{
+    height: 100px;
+    color: white;
+}
+.family_font{
+    font-family: 'Times New Roman', Times, serif;
+}
+.small_image img{
+    width: 30px;
+    height: 30px;
+}
+.heading_font{
+    font-size: 15px;
+}
+.para_font{
+    font-size: 12px;
+}
+
+
+ .shadow_lg{
+    background: rgb(30,38,85);
+    border-radius: 20px;
+   
+ }
+ .custom-border {
+    border: 1px solid #6c757d; 
+    border-radius: 5px;
+  }
+  .custom-border1 {
+    border: 1px solid #6c757d; 
+  background:rgb(30,38,85);
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+
+  }
+  .img_google img{
+    height: 25px;
+    width: 30px;
+  }
+  .img_google button{
+    border: 0;
+    border-image-repeat: repeat;
+    border-width: 1px;
+    border-style: solid;
+    border-image: linear-gradient(to right, #4285F4, #DB4437, #F4B400, #0F9D58) 1;
+    border-radius: 5px;
+  }
+  .img_google{
+    border-radius: 60px;
+    /* background: gray; */
+
+  }
+
+  .otp-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .otp-box {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    margin: 0 5px;
+    font-size: 18px;
+    text-align: center;
+  }
+  
+.border_line button:hover{
+    border-bottom: 1px green;
+    background:blue;
+    color: white;
+    border-radius: 10px;
+}
+
+

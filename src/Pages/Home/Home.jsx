@@ -25,6 +25,7 @@ import Women5 from "./Assets/women5.avif"
 import Women6 from "./Assets/women6.avif"
 
 import OurStory from "./Assets/BRAND_STORY_2000_x_521_px_5.webp"
+import {Link} from "react-router-dom"
 
 
 import AOS from 'aos';
@@ -110,14 +111,14 @@ const Home = () => {
 
           <div className=" col-lg-2 col-md-6 col-6 my-4">
             <div className="mens_image_row">
-              <img src={Men1} alt="Men1" className="img-fluid" data-aos="flip-right" data-aos-duration="1500" />
-              <h6 className="text-center py-2 fw-bold">T-Shirt</h6>
+            <Link to="/FullHandTshirt" className="text-decoration-none border-0 text-black">  <img src={Men1} alt="Men1" className="img-fluid" data-aos="flip-right" data-aos-duration="1500" />
+              <h6 className="text-center py-2 fw-bold">Full Hand T-Shirt</h6></Link>
             </div>
           </div>
           <div className=" col-lg-2 col-md-6 col-6 my-4 ">
             <div className="mens_image_row">
-              <img src={Men2} alt="Men2" className="img-fluid" data-aos="flip-left" data-aos-duration="1500" />
-              <h6 className="text-center py-2 fw-bold">Oversized Teas</h6>
+            <Link to="/HalfHandTshirt" className="text-decoration-none border-0 text-black">       <img src={Men2} alt="Men2" className="img-fluid" data-aos="flip-left" data-aos-duration="1500" />
+              <h6 className="text-center py-2 fw-bold">Half Hand T-Shirt</h6></Link>
             </div>
           </div>
           <div className="col-lg-2 col-md-6 col-6 my-4 ">

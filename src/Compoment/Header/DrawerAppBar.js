@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { List, ListItem, ListItemButton, Menu, MenuItem } from "@mui/material";
+import Modal from "@mui/material/Modal";
 
 import TuniLogo from "./Assets/Tuni full logo.svg";
 
@@ -20,6 +21,12 @@ import MenImg2 from "../Header/Assets/New.webp";
 import MenImg3 from "../Header/Assets/7.avif";
 import MenImg4 from "../Header/Assets/8.avif";
 import MenImg5 from "../Header/Assets/9.avif";
+
+import TshirtHalf1 from "./Assets/tshirt.gif";
+import TshirtHalf2 from "./Assets/tshirt (1).gif";
+import TshirtHalf3 from "./Assets/charity.gif";
+import TshirtHalf4 from "./Assets/shirt.gif";
+import TshirtHalf5 from "./Assets/long-sleeves.gif";
 
 import MenImg6 from "../Header/Assets/1 (1).avif";
 import MenImg7 from "../Header/Assets/3.avif";
@@ -30,9 +37,13 @@ import MenImg10 from "../Header/Assets/6.avif";
 import React, { useState, useEffect } from "react";
 import AddToCart from "../AddToCart/AddToCart";
 import Men from "./SubDropDown/Men";
+import CartItem from "../AddToCart/CartItem";
+import "./Header.css";
+import Login from "../Login/Login";
+import { auth, provider, firestore } from "../../firebaseConfig";
 
 // Declaring some constants
-const drawerWidth = 240;
+const drawerWidth = 260;
 const navItems = [
   "JoggerMen",
   "Women",
@@ -47,55 +58,246 @@ const DrawerAppBar = (props) => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  const logout = async () => {
+    try {
+      localStorage.removeItem('rzp_device_id');
+      localStorage.clear();
+      localStorage.removeItem('rzp_checkout_anon_id');
+  
+      await auth.signOut();
+      window.location.reload(); 
+    } catch (error) {
+      console.error('Error logging out:', error.message);
+    }
+  };
+  
+  
+
+  const [submenuOpen, setSubmenuOpen] = useState(false);
+
+  const handleSubmenuToggle = () => {
+    setSubmenuOpen(!submenuOpen);
+  };
+
+  const closeSubmenu = () => {
+    setSubmenuOpen(false);
+  };
+
+  // shirt
+
+  const [submenuOpenShirt, setSubmenuOpenShirt] = useState(false);
+
+  const handleSubmenuToggleShirt = () => {
+    setSubmenuOpenShirt(!submenuOpenShirt);
+  };
+
+  const closeSubmenuShirt = () => {
+    setSubmenuOpenShirt(false);
+  };
+
   const drawer = (
-    <Box onClick={handleDrawerToggle}>
+    <Box>
       <Typography variant="h6">
+        <div className="d-flex justify-content-end mx-3 my-1">
+          <button className="border-0" onClick={handleDrawerToggle}>
+            <i class="bi bi-x-circle-fill"></i>
+          </button>
+        </div>
         <div className="text-center">
           {" "}
           <img
             src={TuniLogo}
             alt="Logo"
-            style={{ width: "50px", height: "50px" }}
+            style={{ width: "60px", height: "60px" }}
           />{" "}
         </div>
       </Typography>
       <Divider />
       <List>
         <Typography>
-          <div className="small_nav_bar_heading fw-bold fs-5 mx-3"> Men</div>
-          <ListItem>
-            <Link to="/JoggerMen" style={{ textDecoration: "none" }}>
-              <ListItemButton>
-                <i class="bi bi-handbag mx-2"></i> JoggerMen
+          <div
+            className="small_nav_bar_heading fw-bold fs-5 mx-3"
+            style={{ marginTop: "-15px" }}
+          >
+            Men
+          </div>
+          <List component="nav" className="submenu-wrapper">
+            <ListItem>
+              <ListItemButton
+                onClick={handleSubmenuToggle}
+                className="fw-bold"
+                style={{ marginTop: "-15px" }}
+              >
+                <i className="bi bi-handbag mx-1 "></i> T-Shirt
               </ListItemButton>
-            </Link>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <i class="bi bi-handbag mx-2"></i> T-Shirt
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <i class="bi bi-handbag mx-2"></i> Short
-            </ListItemButton>
-          </ListItem>
+            </ListItem>
+            {submenuOpen && (
+              <>
+                <ListItem>
+                  <Link
+                    to="/HalfHandTshirt"
+                    style={{ textDecoration: "none", marginTop: "-25px" }}
+                  >
+                    <ListItemButton onClick={closeSubmenu}>
+                      <div className="img_size_small_dev">
+                        <img
+                          src={TshirtHalf2}
+                          alt="TshirtHalf"
+                          className="img-fluid"
+                        ></img>{" "}
+                        Half Hand T-Shirt
+                      </div>
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link
+                    to="/FullHandTshirt"
+                    style={{ textDecoration: "none", marginTop: "-28px" }}
+                  >
+                    <ListItemButton onClick={closeSubmenu}>
+                      <div className="img_size_small_dev">
+                        <img
+                          src={TshirtHalf2}
+                          alt="TshirtHalf"
+                          className="img-fluid"
+                        ></img>{" "}
+                        Full Hand T-Shirt
+                      </div>
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link
+                    to="/CollarTshirt"
+                    style={{ textDecoration: "none", marginTop: "-28px" }}
+                  >
+                    <ListItemButton onClick={closeSubmenu}>
+                      <div className="img_size_small_dev">
+                        <img
+                          src={TshirtHalf3}
+                          alt="TshirtHalf"
+                          className="img-fluid"
+                        ></img>{" "}
+                        Collar T-Shirt
+                      </div>
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+
+              {/*  */}
+
+              <ListItem>
+                  <Link
+                    to="/RoundNeck"
+                    style={{ textDecoration: "none", marginTop: "-28px" }}
+                  >
+                    <ListItemButton onClick={closeSubmenu}>
+                      <div className="img_size_small_dev">
+                        <img
+                          src={TshirtHalf3}
+                          alt="TshirtHalf"
+                          className="img-fluid"
+                        ></img>{" "}
+                        Round Neck T-Shirt
+                      </div>
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+
+                <ListItem>
+                  <Link
+                    to="/VNeck"
+                    style={{ textDecoration: "none", marginTop: "-28px" }}
+                  >
+                    <ListItemButton onClick={closeSubmenu}>
+                      <div className="img_size_small_dev">
+                        <img
+                          src={TshirtHalf3}
+                          alt="TshirtHalf"
+                          className="img-fluid"
+                        ></img>{" "}
+                        V-Neck T-Shirt
+                      </div>
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+
+              </>
+            )}
+            {/* shirt */}
+            <ListItem>
+              <ListItemButton
+                onClick={handleSubmenuToggleShirt}
+                className="fw-bold"
+                style={{ marginTop: "-15px" }}
+              >
+                <i className="bi bi-handbag mx-1 "></i> Shirt
+              </ListItemButton>
+            </ListItem>
+            {submenuOpenShirt && (
+              <>
+                <ListItem>
+                  <Link
+                    to="/HalfHandTshirt"
+                    style={{ textDecoration: "none", marginTop: "-25px" }}
+                  >
+                    <ListItemButton onClick={closeSubmenuShirt}>
+                      <div className="img_size_small_dev">
+                        <img
+                          src={TshirtHalf4}
+                          alt="TshirtHalf"
+                          className="img-fluid"
+                        ></img>{" "}
+                        Half Hand Shirt
+                      </div>
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link
+                    to="/FullHandTshirt"
+                    style={{ textDecoration: "none", marginTop: "-28px" }}
+                  >
+                    <ListItemButton onClick={closeSubmenuShirt}>
+                      <div className="img_size_small_dev">
+                        <img
+                          src={TshirtHalf5}
+                          alt="TshirtHalf"
+                          className="img-fluid"
+                        ></img>{" "}
+                        Full Hand Shirt
+                      </div>
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+                
+                {/* Add more submenu items here if needed */}
+              </>
+            )}
+
+            <ListItem>
+              <ListItemButton>
+                <i className="bi bi-handbag mx-2"></i> Short
+              </ListItemButton>
+            </ListItem>
+          </List>
         </Typography>
         <Typography>
           <div className="small_nav_bar_heading fw-bold fs-5 mx-3">Women</div>
           <ListItem>
             <ListItemButton>
-              <i class="bi bi-person-standing-dress mx-2"></i> Pant
+              <i className="bi bi-person-standing-dress mx-2"></i> Pant
             </ListItemButton>
           </ListItem>
           <ListItem>
             <ListItemButton>
-              <i class="bi bi-person-standing-dress mx-2"></i> T-Shirt
+              <i className="bi bi-person-standing-dress mx-2"></i> T-Shirt
             </ListItemButton>
           </ListItem>
           <ListItem>
             <ListItemButton>
-              <i class="bi bi-person-standing-dress mx-2"></i> Short
+              <i className="bi bi-person-standing-dress mx-2"></i> Short
             </ListItemButton>
           </ListItem>
         </Typography>
@@ -106,12 +308,27 @@ const DrawerAppBar = (props) => {
   );
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const [open, setOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    console.log("edit_{{{{{");
+    setOpen(true);
+    handleClose();
+
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+ 
+  
+
+  const handleCloseModal = () => {
+    setOpen(false);
   };
 
   return (
@@ -160,35 +377,35 @@ const DrawerAppBar = (props) => {
                     }}
                   >
                     <div className="d-flex justify-content-end">
-                      <div>
-                        <Button
-                          id="basic-button"
-                          aria-controls={open ? "basic-menu" : undefined}
-                          aria-haspopup="true"
-                          aria-expanded={open ? "true" : undefined}
-                          onClick={handleClick}
-                        >
-                          <i class="bi bi-people text-black mx-2 fs-3" />
-                        </Button>
-                        <Menu
-                          id="basic-menu"
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleClose}
-                          MenuListProps={{
-                            "aria-labelledby": "basic-button",
-                          }}
-                        >
-                          <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <Button
+                        id="basic-button"
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                      >
+                        <i class="bi bi-people text-black mx-2 fs-3" />
+                      </Button>
+                      {/* <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                      >
+                        <MenuItem onClick={handleClose}>My account</MenuItem>
+                        <Link to="">
+                          {" "}
                           <MenuItem onClick={handleClose}>
                             Log In or Sign Up
                           </MenuItem>
-                          <MenuItem onClick={handleClose}>Logout</MenuItem>
-                        </Menu>
-                      </div>
-                    </div>
-
-                    <div className="d-flex justify-content-end">
+                        </Link>
+                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                      </Menu> */}
+                    </div>{" "}
+                    <div className="d-flex justify-content-end mx-2 px-1">
                       <i
                         class="bi bi-bag-check text-black "
                         data-bs-toggle="offcanvas"
@@ -196,7 +413,6 @@ const DrawerAppBar = (props) => {
                         aria-controls="offcanvasRightcartSmall"
                       ></i>
                     </div>
-
                     <div
                       class="offcanvas offcanvas-end"
                       tabindex="-1"
@@ -239,6 +455,7 @@ const DrawerAppBar = (props) => {
                       marginLeft: "40px",
                     }}
                   />
+                  <Box sx={{ display: { xs: "none", sm: "block" } }}></Box>
                 </Link>
               </Typography>
               <Box sx={{ flexGrow: 1 }} />
@@ -253,79 +470,21 @@ const DrawerAppBar = (props) => {
                     padding: 0,
                   }}
                 >
-                  <div className="dropdown">
-                    <button className="dropbtn">Men</button>
-                    <div className="dropdown-content">
-                      <div className="menu-links my-3 px-2">
-                        <div className="menu_img mx-2 ">
-                          <a href="/JoggerMen">
-                            <img
-                              src={MenImg1}
-                              alt="im1"
-                              className="img-fluid"
-                            />
-                          </a>
-
-                          <h6 className="text-center px-1">Joggers-men</h6>
-{/* ss */}
-                          {/* end */}
-                        </div>
-
-                        <div className="menu_img mx-2">
-                          <a href="#">
-                            <img
-                              src={MenImg2}
-                              alt="im1"
-                              className="img-fluid"
-                            />
-                          </a>
-                          <h6 className="text-center px-1">Co-ord-sets</h6>
-                        </div>
-                        <div className="menu_img mx-2">
-                          <a href="#">
-                            <img
-                              src={MenImg3}
-                              alt="im1"
-                              className="img-fluid"
-                            />
-                          </a>
-                          <h6 className="text-center px-1">
-                            Oversized-t-shirts
-                          </h6>
-                        </div>
-                        <div className="menu_img mx-2">
-                          <a href="#">
-                            <img
-                              src={MenImg4}
-                              alt="im1"
-                              className="img-fluid"
-                            />
-                          </a>
-                          <h6 className="text-center px-1">T-shirts</h6>
-                        </div>
-                        <div className="menu_img mx-2">
-                          <a href="#">
-                            <img
-                              src={MenImg5}
-                              alt="im1"
-                              className="img-fluid"
-                            />
-                          </a>
-                          <h6 className="text-center px-1">
-                            Shorts-collection
-                          </h6>
-                        </div>
-                        
+                  <li>
+                    <div className="dropdown">
+                      <button className="dropbtn">Men</button>
+                      <div className="dropdown-content">
+                        <Men />
                       </div>
                     </div>
-                  </div>
+                  </li>
 
                   <div className="dropdown">
                     <button className="dropbtn">Women</button>
                     <div className="dropdown-content">
                       <div className="menu-links my-3 px-2">
                         <div className="menu_img mx-2 ">
-                          <a href="#">
+                          <a href="/WomenPant">
                             <img
                               src={MenImg6}
                               alt="im1"
@@ -335,7 +494,7 @@ const DrawerAppBar = (props) => {
                           <h6 className="text-center px-1"> T-shirts</h6>
                         </div>
                         <div className="menu_img mx-2">
-                          <a href="#">
+                          <a href="/WomenPant">
                             <img
                               src={MenImg7}
                               alt="im1"
@@ -345,7 +504,7 @@ const DrawerAppBar = (props) => {
                           <h6 className="text-center px-1">Co-ord-sets</h6>
                         </div>
                         <div className="menu_img mx-2">
-                          <a href="#">
+                          <a href="/WomenPant">
                             <img
                               src={MenImg8}
                               alt="im1"
@@ -356,7 +515,7 @@ const DrawerAppBar = (props) => {
                         </div>
 
                         <div className="menu_img mx-2">
-                          <a href="#">
+                          <a href="/WomenPant">
                             <img
                               src={MenImg9}
                               alt="im1"
@@ -367,7 +526,7 @@ const DrawerAppBar = (props) => {
                         </div>
 
                         <div className="menu_img mx-2">
-                          <a href="#">
+                          <a href="/WomenPant">
                             <img
                               src={MenImg10}
                               alt="im1"
@@ -379,17 +538,12 @@ const DrawerAppBar = (props) => {
                       </div>
                     </div>
                   </div>
-
-                  <li className="px-4">Summer T-Shirts</li>
-                  <li className="px-4">Oversized T-Shirts</li>
+                  <a href="/Summer" className="text-decoration-none text-black" >   <li className="px-3">Summer T-Shirts</li></a> 
+                  <a href="/Oversize" className="text-decoration-none text-black">  <li className="px-2 mx-2">Oversized T-Shirts</li></a> 
                 </ul>
               </Box>
+
               <Box sx={{ display: { xs: "none", sm: "block" } }}>
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  style={{ marginRight: "25px" }}
-                />
                 <IconButton color="inherit">
                   <div>
                     <Button
@@ -401,21 +555,67 @@ const DrawerAppBar = (props) => {
                     >
                       <i class="bi bi-people text-black mx-2 fs-3" />
                     </Button>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                      }}
-                    >
-                      <MenuItem onClick={handleClose}>My account</MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        Log In or Sign Up
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>Logout</MenuItem>
-                    </Menu>
+                    <div className="bg-info" style={{ zIndex: "1000" }}>
+                      <div >
+                        <Menu
+                          id="basic-menu"
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl)}
+                          onClose={handleClose}
+                          MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                          }}
+                        >
+                 <Link to="/TrackOrder" className="text-decoration-none text-black"><MenuItem onClick={handleClose}>Track Order</MenuItem></Link>  
+                          <MenuItem onClick={handleClose}>Contact</MenuItem>
+                          <MenuItem onClick={handleClose}>My account</MenuItem>
+                          <MenuItem onClick={handleOpenModal}>
+                            Log In or Sign Up
+                          </MenuItem>
+                          <MenuItem onClick={logout}>Logout</MenuItem>
+                        
+
+                        </Menu>
+                        <Modal
+                          open={open}
+                          onClose={handleCloseModal}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                        >
+                          <Box
+                            sx={{
+                              position: "absolute",
+                              top: "50%",
+                              left: "50%",
+                              transform: "translate(-50%, -50%)",
+                              width: 900,
+                              maxWidth: "90%",
+                              maxHeight: "90vh", 
+                              overflowY: "auto",
+                              bgcolor: "rgb(21,26,61)",
+                              boxShadow: 24,
+                              p: 4,
+                              position: "relative", 
+                              borderRadius:"10px",
+                              border: "2px solid #E5E9EE", 
+                             
+                            }}
+                          >
+                            <IconButton
+                              sx={{
+                                position: "absolute",
+                                top: 0,
+                                right: 0,
+                              }}
+                              onClick={handleCloseModal}
+                            >
+                             <i class="bi bi-x-lg text-bold text-white "></i>
+                            </IconButton>
+                            <Login />
+                          </Box>
+                        </Modal>
+                      </div>
+                    </div>
                   </div>
                 </IconButton>
                 <IconButton>
@@ -443,10 +643,9 @@ const DrawerAppBar = (props) => {
                         aria-label="Close"
                       ></button>
                     </div>
-                    {/* home add to cart  */}
-
-                    <div className="offcanvas-body">
+                    <div className="offcanvas-body overflow-y-auto">
                       <AddToCart />
+                     
                     </div>
                   </div>
                 </IconButton>

@@ -1,48 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 
-import "./SingleProduct.css"
+const Product_add = ({ initialQuantity, onQuantityChange }) => {
+  const [quantity, setQuantity] = useState(initialQuantity);
 
-function Product_add({ onQuantityChange }) {
-  const [quantity, setQuantity] = useState(1); 
+  useEffect(() => {
+    // Update the quantity whenever initialQuantity changes
+    setQuantity(initialQuantity);
+  }, [initialQuantity]);
 
-  const handleDecrement = () => {
-   
-    setQuantity((prevQuantity) => {
-      const newQuantity = prevQuantity > 1 ? prevQuantity - 1 : 0;
-      onQuantityChange(newQuantity);
-      return newQuantity;
-    });
+  const handleIncrease = () => {
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity);
+    onQuantityChange(newQuantity); // Pass the updated quantity to onQuantityChange
   };
 
-  const handleIncrement = () => {
-    setQuantity((prevQuantity) => {
-      const newQuantity = prevQuantity + 1;
-      onQuantityChange(newQuantity);
-      return newQuantity;
-    });
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      const newQuantity = quantity - 1;
+      setQuantity(newQuantity);
+      onQuantityChange(newQuantity); // Pass the updated quantity to onQuantityChange
+    }
   };
 
   return (
-    <div className="quantity-control">
-      <button
-        type="button"
-        className="quantity-selector__button"
-        aria-label="Decrease quantity"
-        onClick={handleDecrement}
-      >
-        -
-      </button>
-      <input type="text" className="QuantityDisplay" value={quantity} readOnly />
-      <button
-        type="button"
-        className="quantity-selector__button"
-        aria-label="Increase quantity"
-        onClick={handleIncrement}
-      >
-        +
-      </button>
+    <div className="product-quantity" style={{ marginTop: "-10px" }}>
+      <button className="quantity-selector__button" onClick={handleDecrease}>-</button>
+      <span className="px-2 fs-6">{quantity}</span>
+      <button className="quantity-selector__button " onClick={handleIncrease}>+</button>
     </div>
   );
-}
+};
 
 export default Product_add;

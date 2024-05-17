@@ -5,7 +5,7 @@ const SaleTimeRunning = () => {
 
     useEffect(() => {
         
-        const countDownDate = new Date("May 1, 2024 15:37:25").getTime();
+        const countDownDate = new Date("May 10, 2024 15:37:25").getTime();
 
         
         const intervalId = setInterval(() => {

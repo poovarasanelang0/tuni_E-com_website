@@ -15,6 +15,8 @@ import ProductImg8 from "./Assets/OrderimgCarsoual8.webp";
 import TravelH from "./Assets/TRAVEL_HOODIE_2000_x_521_px.webp";
 import CashGif from "./Assets/Mobikwik_Banner_SEP.gif";
 import Verfiy from "./Assets/verified.webp";
+import {Link} from "react-router-dom"
+
 
 const HomeProduct = () => {
   const settings = {
@@ -48,13 +50,14 @@ const HomeProduct = () => {
           slidesToShow: 1,
           slidesToScroll: 1,
           dots: true,
-          centerMode: true, // Center mode
+          centerMode: true, 
           centerPadding: "20px",
         },
       },
     ],
   };
 
+  
   return (
     <>
       <div className="container-fluid my-5">
@@ -351,12 +354,12 @@ const HomeProduct = () => {
         </div>
         <div className="row">
           <div className="col text-center my-3">
-            <button
+          <Link to="/FullHandTshirt" className="text-decoration-none border-0 text-black">      <button
               type="button"
               className="btn btn-outline-primary text-center rounded-pill px-5"
             >
               Shop All Products
-            </button>
+            </button></Link>
           </div>
         </div>
       </div>
