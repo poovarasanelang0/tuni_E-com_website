@@ -2,15 +2,24 @@ import React, { useState } from "react";
 
 import MenImg1 from "../Assets/Collectio_Icon_copy.webp";
 import MenImg2 from "../Assets/New.webp";
-import MenImg3 from "../Assets/7.avif";
+import MenImg3 from "../Assets/shirtimg.webp";
 import MenImg4 from "../Assets/8.avif";
 import MenImg5 from "../Assets/9.avif";
 import TshirtHalf from "./Assets/tshirt.gif";
 import TshirtHalf1 from "./Assets/tshirt (1).gif";
 import TshirtHalf2 from "./Assets/charity.gif";
+import TshirtHalf4 from "../Assets/v-neck-shirt.png";
+
+import TshirtHalf3 from "../Assets/shirt.png";
+
 
 import Shirt1 from "./Assets/shirt.gif";
 import Shirt2 from "./Assets/long-sleeves.gif";
+
+
+import Pant1 from "./Assets/baggy.gif";
+import Pant2 from "./Assets/pants.gif";
+import Pant3 from "./Assets/overall.gif";
 
 import { Link } from "react-router-dom";
 
@@ -76,7 +85,7 @@ const Men = () => {
                   }`}
                 >
                   <div className="menu_img">
-                    <img src={MenImg3} alt="im1" className="img-fluid" />
+                    <img src={MenImg3} alt="im1" className="img-fluid"  style={{borderRadius:"50%"}}/>
                   </div>
                   Shirt
                 </div>
@@ -152,7 +161,7 @@ const Men = () => {
                     <Link to="/RoundNeck">
                       <div className="d-flex">
                         <img
-                          src={TshirtHalf2}
+                          src={TshirtHalf3}
                           alt="TshirtHalf"
                           className="img-fluid mx-2"
                         ></img>{" "}
@@ -164,7 +173,7 @@ const Men = () => {
                     <Link to="/VNeck">
                       <div className="d-flex">
                         <img
-                          src={TshirtHalf2}
+                          src={TshirtHalf4}
                           alt="TshirtHalf"
                           className="img-fluid mx-2"
                         ></img>{" "}
@@ -174,6 +183,7 @@ const Men = () => {
                   </li>
                 </ul>
               </div>
+              {/* ---------------------------------------------------pant---------------- */}
               <div
                 className={`tab-pane fade ${
                   activeTab === "Pant" ? "show active" : ""
@@ -182,11 +192,47 @@ const Men = () => {
                 role="tabpanel"
                 aria-labelledby="pills-HomeLoan-tab"
               >
-                <ul className="fs-6 list-unstyled mx-5">
-                  <li className="my-2">Joggers Pant</li>
-                  <li className="my-2">Six Pocket Pant</li>
-                </ul>
+                <ul className="fs-6 list-unstyled mx-5 img_size_red">
+                <li className="">
+                    <Link to="/HalfHandTshirt">
+                      <div className="d-flex">
+                        <img
+                          src={Pant2}
+                          alt="TshirtHalf"
+                          className="img-fluid mx-2"
+                        ></img>{" "}
+                        <span>Jogger</span>
+                      </div>
+                    </Link>
+                  </li>
+                  <li className="">
+                    <Link to="/HalfHandTshirt">
+                      <div className="d-flex">
+                        <img
+                          src={Pant1}
+                          alt="TshirtHalf"
+                          className="img-fluid mx-2"
+                        ></img>{" "}
+                        <span>Six Pocket</span>
+                      </div>
+                    </Link>
+                  </li>
+                  <li className="">
+                    <Link to="/HalfHandTshirt">
+                      <div className="d-flex">
+                        <img
+                          src={Pant3}
+                          alt="TshirtHalf"
+                          className="img-fluid mx-2"
+                        ></img>{" "}
+                        <span>Jeans</span>
+                      </div>
+                    </Link>
+                  </li>
+                  
+                 </ul>
               </div>
+
               <div
                 className={`tab-pane fade ${
                   activeTab === "Shirt" ? "show active" : ""
@@ -222,7 +268,9 @@ const Men = () => {
                   </li>
                 </ul>
               </div>
-              <div
+
+
+               <div
                 className={`tab-pane fade ${
                   activeTab === "Shorts" ? "show active" : ""
                 }`}

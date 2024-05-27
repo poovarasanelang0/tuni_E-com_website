@@ -10,7 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { List, ListItem, ListItemButton, Menu, MenuItem } from "@mui/material";
 import Modal from "@mui/material/Modal";
 
@@ -41,6 +41,8 @@ import CartItem from "../AddToCart/CartItem";
 import "./Header.css";
 import Login from "../Login/Login";
 import { auth, provider, firestore } from "../../firebaseConfig";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Declaring some constants
 const drawerWidth = 260;
@@ -53,27 +55,17 @@ const navItems = [
 
 const DrawerAppBar = (props) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [submenuOpen, setSubmenuOpen] = useState(false);
+  const [submenuOpenShirt, setSubmenuOpenShirt] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [user, setUser] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
-
-  const logout = async () => {
-    try {
-      localStorage.removeItem('rzp_device_id');
-      localStorage.clear();
-      localStorage.removeItem('rzp_checkout_anon_id');
-  
-      await auth.signOut();
-      window.location.reload(); 
-    } catch (error) {
-      console.error('Error logging out:', error.message);
-    }
-  };
-  
-  
-
-  const [submenuOpen, setSubmenuOpen] = useState(false);
 
   const handleSubmenuToggle = () => {
     setSubmenuOpen(!submenuOpen);
@@ -85,14 +77,59 @@ const DrawerAppBar = (props) => {
 
   // shirt
 
-  const [submenuOpenShirt, setSubmenuOpenShirt] = useState(false);
-
   const handleSubmenuToggleShirt = () => {
     setSubmenuOpenShirt(!submenuOpenShirt);
   };
 
   const closeSubmenuShirt = () => {
     setSubmenuOpenShirt(false);
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  // const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setOpen(false);
+  };
+
+  // ---------------------------------------
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+        setOpenModal(false);
+      } else {
+        setUser(null);
+        setOpenModal(true);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const logout = async () => {
+    try {
+      localStorage.removeItem("rzp_device_id");
+      localStorage.clear();
+      localStorage.removeItem("rzp_checkout_anon_id");
+      toast.success("Successfully Logout");
+      navigate("/");
+      await auth.signOut();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error logging out:", error.message);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   const drawer = (
@@ -185,9 +222,9 @@ const DrawerAppBar = (props) => {
                   </Link>
                 </ListItem>
 
-              {/*  */}
+                {/*  */}
 
-              <ListItem>
+                <ListItem>
                   <Link
                     to="/RoundNeck"
                     style={{ textDecoration: "none", marginTop: "-28px" }}
@@ -222,7 +259,6 @@ const DrawerAppBar = (props) => {
                     </ListItemButton>
                   </Link>
                 </ListItem>
-
               </>
             )}
             {/* shirt */}
@@ -271,7 +307,7 @@ const DrawerAppBar = (props) => {
                     </ListItemButton>
                   </Link>
                 </ListItem>
-                
+
                 {/* Add more submenu items here if needed */}
               </>
             )}
@@ -306,30 +342,6 @@ const DrawerAppBar = (props) => {
       </List>
     </Box>
   );
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const [open, setOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    console.log("edit_{{{{{");
-    setOpen(true);
-    handleClose();
-
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
- 
-  
-
-  const handleCloseModal = () => {
-    setOpen(false);
-  };
 
   return (
     <>
@@ -461,7 +473,7 @@ const DrawerAppBar = (props) => {
               <Box sx={{ flexGrow: 1 }} />
               <Box sx={{ display: { xs: "none", sm: "block" } }}>
                 <ul
-                  className="d-none d-md-flex text-black fw-bold"
+                  className="d-none d-md-flex text-black fw-bold fw-bold"
                   style={{
                     listStyleType: "none",
                     display: "flex",
@@ -470,9 +482,16 @@ const DrawerAppBar = (props) => {
                     padding: 0,
                   }}
                 >
+                  <a href="/" className="text-decoration-none text-black ">
+                    {" "}
+                    <li className=" mx-2 fw-bold heading_hover">Home</li>
+                  </a>
+
                   <li>
                     <div className="dropdown">
-                      <button className="dropbtn">Men</button>
+                      <button className="dropbtn fw-semibold heading_hover">
+                        Men
+                      </button>
                       <div className="dropdown-content">
                         <Men />
                       </div>
@@ -480,7 +499,9 @@ const DrawerAppBar = (props) => {
                   </li>
 
                   <div className="dropdown">
-                    <button className="dropbtn">Women</button>
+                    <button className="dropbtn fw-semibold heading_hover">
+                      Women
+                    </button>
                     <div className="dropdown-content">
                       <div className="menu-links my-3 px-2">
                         <div className="menu_img mx-2 ">
@@ -538,8 +559,23 @@ const DrawerAppBar = (props) => {
                       </div>
                     </div>
                   </div>
-                  <a href="/Summer" className="text-decoration-none text-black" >   <li className="px-3">Summer T-Shirts</li></a> 
-                  <a href="/Oversize" className="text-decoration-none text-black">  <li className="px-2 mx-2">Oversized T-Shirts</li></a> 
+                  <a href="/Summer" class="text-decoration-none text-black">
+                    <li class="px-3 blink position-relative heading_hover">
+                      <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                        NEW
+                      </span>
+                      Men's Combo Offers
+                    </li>
+                  </a>
+
+                  <a href="/Summer" class="text-decoration-none text-black">
+                    <li class="px-3 blinks position-relative heading_hover">
+                      <span class="badge bg-danger position-absolute top-0  start-100 translate-middle">
+                        NEW
+                      </span>
+                      Women's Combo Offers
+                    </li>
+                  </a>
                 </ul>
               </Box>
 
@@ -556,7 +592,7 @@ const DrawerAppBar = (props) => {
                       <i class="bi bi-people text-black mx-2 fs-3" />
                     </Button>
                     <div className="bg-info" style={{ zIndex: "1000" }}>
-                      <div >
+                      <div>
                         <Menu
                           id="basic-menu"
                           anchorEl={anchorEl}
@@ -566,18 +602,50 @@ const DrawerAppBar = (props) => {
                             "aria-labelledby": "basic-button",
                           }}
                         >
-                 <Link to="/TrackOrder" className="text-decoration-none text-black"><MenuItem onClick={handleClose}>Track Order</MenuItem></Link>  
-                          <MenuItem onClick={handleClose}>Contact</MenuItem>
-                          <MenuItem onClick={handleClose}>My account</MenuItem>
-                          <MenuItem onClick={handleOpenModal}>
-                            Log In or Sign Up
-                          </MenuItem>
-                          <MenuItem onClick={logout}>Logout</MenuItem>
-                        
-
+                          <Link
+                            to="/TrackOrder"
+                            className="text-decoration-none text-black"
+                          >
+                            <MenuItem onClick={handleClose} className="subdropdown_hover">
+                              Track Order
+                            </MenuItem>
+                          </Link>
+                          <Link
+                            to="/Contact"
+                            className="text-decoration-none text-black"
+                          >
+                            {" "}
+                            <MenuItem onClick={handleClose} className="subdropdown_hover">Contact</MenuItem>
+                          </Link>
+                          <Link
+                            to="/Account"
+                            className="text-decoration-none text-black"
+                          >
+                            {" "}
+                            <MenuItem onClick={handleClose} className="subdropdown_hover">
+                              My account
+                            </MenuItem>
+                          </Link>
+                          {user ? (
+                            <IconButton color="inherit">
+                              <Button onClick={logout} className="text-black subdropdown_hover" >
+                                Logout
+                              </Button>
+                            </IconButton>
+                          ) : (
+                            <IconButton color="inherit">
+                              <Button
+                                onClick={handleOpenModal}
+                                className="text-black subdropdown_hover"
+                              >
+                                Login
+                              </Button>
+                            </IconButton>
+                          )}
                         </Menu>
+
                         <Modal
-                          open={open}
+                          open={openModal}
                           onClose={handleCloseModal}
                           aria-labelledby="modal-modal-title"
                           aria-describedby="modal-modal-description"
@@ -590,15 +658,14 @@ const DrawerAppBar = (props) => {
                               transform: "translate(-50%, -50%)",
                               width: 900,
                               maxWidth: "90%",
-                              maxHeight: "90vh", 
+                              maxHeight: "90vh",
                               overflowY: "auto",
                               bgcolor: "rgb(21,26,61)",
                               boxShadow: 24,
                               p: 4,
-                              position: "relative", 
-                              borderRadius:"10px",
-                              border: "2px solid #E5E9EE", 
-                             
+                              position: "relative",
+                              borderRadius: "10px",
+                              border: "2px solid #E5E9EE",
                             }}
                           >
                             <IconButton
@@ -609,7 +676,7 @@ const DrawerAppBar = (props) => {
                               }}
                               onClick={handleCloseModal}
                             >
-                             <i class="bi bi-x-lg text-bold text-white "></i>
+                              <i class="bi bi-x-lg text-bold text-white "></i>
                             </IconButton>
                             <Login />
                           </Box>
@@ -645,7 +712,6 @@ const DrawerAppBar = (props) => {
                     </div>
                     <div className="offcanvas-body overflow-y-auto">
                       <AddToCart />
-                     
                     </div>
                   </div>
                 </IconButton>

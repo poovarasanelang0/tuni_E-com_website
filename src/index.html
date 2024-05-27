@@ -1151,3 +1151,550 @@ const AddToCart = () => {
 
 export default AddToCart;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useState, useEffect } from "react";
+import { Form, Button, Collapse, ListGroup } from "react-bootstrap";
+import "./Payment.css";
+import { firestore, auth } from "../../firebaseConfig";
+import {
+  collection,
+  addDoc,
+  doc,
+  deleteDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const Payment = ({ cartProducts }) => {
+  const [formFields, setFormFields] = useState({
+    username: "",
+    pincode: "",
+    address: "",
+    phoneNumber: "",
+  });
+  const [formFieldsError, setFormFieldsError] = useState({
+    usernameError: "",
+    pincodeError: "",
+    addressError: "",
+    phoneNumberError: "",
+  });
+  const [showNewAddressForm, setShowNewAddressForm] = useState(false);
+  const [showOldAddress, setShowOldAddress] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
+
+  const calculateTotalPrice = (cartProducts) => {
+    let totalPrice = 0;
+    cartProducts.forEach((cartProduct) => {
+      const price = parseInt(cartProduct.data.price);
+      const count = parseInt(cartProduct.data.itemCountcustomer);
+      totalPrice += price * count;
+    });
+    return totalPrice;
+  };
+
+  const totalCartPrice = calculateTotalPrice(cartProducts);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [oldAddresses, setOldAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null); // New state to store selected address
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+      console.log(user, "userid");
+      if (user) {
+        fetchOldAddresses(user.uid);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const fetchOldAddresses = async (userId) => {
+    const addressesRef = collection(
+      firestore,
+      "AllOrderList",
+      userId,
+      "OrderItemPlaced"
+    );
+    const addressesSnapshot = await getDocs(addressesRef);
+    const addressesList = [];
+    addressesSnapshot.forEach((doc) => {
+      addressesList.push({ id: doc.id, data: doc.data() });
+    });
+    setOldAddresses(addressesList);
+    console.log(addressesList, "addressesList_po");
+  };
+
+
+
+  const handleSelectNewAddress = () => {
+    setSelectedAddress(null);
+    setFormFields({
+      username: "",
+      pincode: "",
+      address: "",
+      phoneNumber: "",
+    });
+  };
+
+  // const handleSubmitForm = async (e) => {
+  //   e.preventDefault();
+
+  //   let errors = {};
+  //   let hasErrors = false;
+
+  //   for (const key in formFields) {
+  //     if (!formFields[key]?.trim()) {
+  //       // Use optional chaining to avoid 'Cannot read properties of undefined' error
+  //       errors[`${key}Error`] = `${
+  //         key.charAt(0).toUpperCase() + key.slice(1)
+  //       } is required`;
+  //       hasErrors = true;
+  //     }
+  //   }
+
+  //   // if (!formFields.name.trim()) {
+  //   //   errors.nameError = "Name is required";
+  //   //   hasErrors = true;
+  //   // }
+
+  //   // if (!formFields.pincode.trim()) {
+  //   //   errors.pincodeError = "Pincode is required";
+  //   //   hasErrors = true;
+  //   // } else if (!/^\d{6}$/.test(formFields.pincode.trim())) {
+  //   //   errors.pincodeError = "Invalid pincode";
+  //   //   hasErrors = true;
+  //   // }
+
+  //   // if (!formFields.address.trim()) {
+  //   //   errors.addressError = "Address is required";
+  //   //   hasErrors = true;
+  //   // }
+
+  //   // if (!formFields.phoneNumber.trim()) {
+  //   //   errors.phoneNumberError = "Phone Number is required";
+  //   //   hasErrors = true;
+  //   // } else if (!/^\d{10}$/.test(formFields.phoneNumber.trim())) {
+  //   //   errors.phoneNumberError = "Invalid phone number";
+  //   //   hasErrors = true;
+  //   // }
+
+  //   if (hasErrors) {
+  //     setFormFieldsError(errors);
+  //     return;
+  //   }
+
+  //   try {
+      
+  //     const orderData = {
+  //       username: formFields.username,
+  //       pincode: formFields.pincode,
+  //       address: formFields.address,
+  //       phoneNumber: formFields.phoneNumber,
+  //       totalPrice: totalCartPrice,
+  //       cartProducts: cartProducts.map((product) => ({
+  //         brand: product.data.brand || "",
+  //         category: product.data.category || "",
+  //         color: product.data.color || "",
+  //         gender: product.data.gender || "",
+  //         id: product.data.id || "",
+  //         imageUrl: product.data.imageUrl || [],
+  //         itemCountcustomer: product.data.itemCountcustomer || 0,
+  //         name: product.data.name || "",
+  //         price: product.data.price || "",
+  //         sizecustomers: product.data.sizecustomers || "",
+  //       })),
+  //     };
+
+  //     const userDocRef = doc(collection(firestore, "users"), currentUser.uid);
+  //     const orderAddressRef = collection(userDocRef, "OrderAddress");
+  //     await addDoc(orderAddressRef, orderData);
+
+  //     openRazorpay(orderData);
+  //   } catch (error) {
+  //     console.error("Error adding document: ", error);
+  //   }
+  // };
+
+
+  const handleSelectOldAddress = (address) => {
+    setSelectedAddress(address);
+    setFormFields({
+      username: address.data.orderAddress.username || "",
+      pincode: address.data.orderAddress.pincode || "",
+      address: address.data.orderAddress.address || "",
+      phoneNumber: address.data.orderAddress.phoneNumber || "",
+    });
+  };
+
+  const handleToggleAddressForm = () => {
+    console.log("new addresss");
+    setShowNewAddressForm(showNewAddressForm);
+  };
+
+  const handleSubmitForm = async (e) => {
+    e.preventDefault();
+  
+    if (selectedAddress || !showNewAddressForm) {
+      const orderAddressData = selectedAddress
+        ? selectedAddress.data.orderAddress
+        : formFields;
+  
+      const orderData = {
+        username: orderAddressData.username,
+        pincode: orderAddressData.pincode,
+        address: orderAddressData.address,
+        phoneNumber: orderAddressData.phoneNumber,
+        totalPrice: calculateTotalPrice(cartProducts),
+        cartProducts: cartProducts.map((product) => ({
+          brand: product.data.brand || "",
+          category: product.data.category || "",
+          color: product.data.color || "",
+          gender: product.data.gender || "",
+          id: product.data.id || "",
+          imageUrl: product.data.imageUrl || [],
+          itemCountcustomer: product.data.itemCountcustomer || 0,
+          name: product.data.name || "",
+          price: product.data.price || "",
+          sizecustomers: product.data.sizecustomers || "",
+        })),
+      };
+  
+      const isNewAddress = !selectedAddress && showNewAddressForm;
+  
+      if (isNewAddress) {
+        // Handle new address order placement
+        try {
+          const userDocRef = doc(collection(firestore, "users"), currentUser.uid);
+          const orderAddressRef = collection(userDocRef, "OrderAddress");
+  
+          // Add the new address document with auto-generated ID
+          await addDoc(orderAddressRef, orderAddressData);
+  
+          openRazorpay(orderData);
+        } catch (error) {
+          console.error("Error adding document: ", error);
+        }
+      } else {
+        // Handle order placement with selected address
+        openRazorpay(orderData);
+      }
+  
+      // Clear the form fields after placing the order
+      if (!selectedAddress) {
+        setFormFields({
+          username: "",
+          pincode: "",
+          address: "",
+          phoneNumber: "",
+        });
+      }
+    } else {
+      toast.error("Please select an old address or enter a new one.");
+    }
+  };
+  
+  
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "name") {
+      if (!/^[A-Za-z\s]+$/.test(value)) {
+        setFormFieldsError((prevErrors) => ({
+          ...prevErrors,
+          nameError: "Name should contain only letters",
+        }));
+      } else {
+        setFormFieldsError((prevErrors) => ({
+          ...prevErrors,
+          nameError: "",
+        }));
+      }
+    }
+    setFormFields((prevFields) => ({
+      ...prevFields,
+      [name]: value,
+    }));
+  };
+
+  const openRazorpay = (orderData) => {
+    if (totalCartPrice) {
+      var options = {
+        key: "rzp_live_W0t2SeLjFxX8SB",
+        key_secret: "TO1w1yoIo0Z5HXmRitcqpEqG",
+        amount: totalCartPrice * 100,
+        currency: "INR",
+        name: "TUNi",
+        timeout: 300,
+        description: "For Testing Purpose",
+        handler: async function (response) {
+          // Payment Successful!
+          try {
+            const newOrdersRef = doc(
+              firestore,
+              "AllOrderList",
+              currentUser.uid
+            );
+            const newOrdersList = collection(newOrdersRef, "OrderItemPlaced");
+
+            // Add cart items to the "new orders" collection
+            await Promise.all(
+              cartProducts.map(async (product) => {
+                await addDoc(newOrdersList, {
+                  ...product.data,
+                  totalPrice: totalCartPrice,
+                  orderAddress: formFields,
+                });
+              })
+            );
+
+            // Delete items from Firestore cart collection
+            await Promise.all(
+              cartProducts.map((product) =>
+                deleteItemFromFirestoreCartItem(product.id)
+              )
+            );
+
+            navigate("/TrackOrder");
+            toast.success("Your Product Placed");
+
+            window.location.reload();
+          } catch (error) {
+            console.error("Error processing order after payment: ", error);
+          }
+        },
+        prefill: {
+          name: formFields.name,
+          email: "",
+          contact: formFields.phoneNumber,
+        },
+        notes: {
+          address: formFields.address,
+        },
+        theme: {
+          color: "#CC7833",
+        },
+      };
+      var pay = new window.Razorpay(options);
+      pay.open();
+    } else {
+      alert("Please add some products to the basket!");
+    }
+  };
+
+  const deleteItemFromFirestoreCartItem = async (productId) => {
+    try {
+      const userDocRef = doc(
+        collection(firestore, "users", currentUser.uid, "cartCollection"),
+        productId
+      );
+      await deleteDoc(userDocRef);
+
+      console.log("Document successfully deleted from cart!");
+    } catch (error) {
+      console.error("Error removing product from cart: ", error);
+    }
+  };
+
+  return (
+    <>
+      <div className="col my-2">
+        <div className="d-flex justify-content-between">
+          <div className="fs-6">
+            <h4 className="fw-bold">
+              <i className="bi bi-currency-rupee"></i>
+              {totalCartPrice}
+            </h4>
+            <p className="bluecolor">Total payable</p>
+          </div>
+          <div className="bg_color_buy_now">
+            <button
+              className="btn px-5 rounded-pill"
+              onClick={() => setShowForm(!showForm)}
+              disabled={cartProducts.length === 0}
+            >
+              Buy Now
+            </button>
+          </div>
+        </div>
+      </div>
+      <Collapse in={!showNewAddressForm}>
+        <div>
+          <Form onSubmit={handleSubmitForm}>
+            <h5 className="fw-bold color_heading">Enter Your Details</h5>
+            <div className="mb-3">
+              <Button
+                variant="outline-primary"
+                onClick={() => setShowOldAddress(true)}
+              >
+                Use Old Address
+              </Button>{" "}
+              <Button
+                variant="outline-primary"
+                onClick={handleToggleAddressForm}
+              >
+                Enter New Address
+              </Button>
+            </div>
+            <Collapse in={showOldAddress}>
+              <div>
+                <ListGroup>
+                  {oldAddresses.map((address) => (
+                    <ListGroup.Item
+                      key={address.id}
+                      action
+                      active={
+                        selectedAddress && selectedAddress.id === address.id
+                      }
+                      onClick={() => handleSelectOldAddress(address)}
+                      className="my-2 fontsize"
+                    >
+                    <span className="fw-bold">Address :</span>  {address.data.orderAddress.username},{" "}
+                      {address.data.orderAddress.phoneNumber},
+                      {address.data.orderAddress.address},{" "}
+                      {address.data.orderAddress.pincode}
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </div>
+            </Collapse>
+            <Collapse in={showNewAddressForm}>
+              <div>
+                <Form.Group className="mb-3" controlId="formName">
+                  <Form.Label className="d-flex justify-content-start fs-6">
+                    Name
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your name"
+                    name="username"
+                    value={formFields.username}
+                    onChange={handleChange}
+                  />
+                  {formFieldsError.usernameError && (
+                    <Form.Text className="text-danger">
+                      <div className="font_size_error_message">
+                        {formFieldsError.usernameError}
+                      </div>
+                    </Form.Text>
+                  )}
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formPincode">
+                  <Form.Label className="d-flex justify-content-start fs-6">
+                    Pincode
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your pincode"
+                    name="pincode"
+                    value={formFields.pincode}
+                    onChange={handleChange}
+                  />
+                  {formFieldsError.pincodeError && (
+                    <Form.Text className="text-danger font_size_error_message">
+                      <div className="font_size_error_message">
+                        {formFieldsError.pincodeError}
+                      </div>
+                    </Form.Text>
+                  )}
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formAddress">
+                  <Form.Label className="d-flex justify-content-start fs-6">
+                    Address
+                  </Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    placeholder="Enter your address"
+                    name="address"
+                    value={formFields.address}
+                    onChange={handleChange}
+                  />
+                  {formFieldsError.addressError && (
+                    <Form.Text className="text-danger font_size_error_message">
+                      <div className="font_size_error_message">
+                        {formFieldsError.addressError}
+                      </div>
+                    </Form.Text>
+                  )}
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formPhoneNumber">
+                  <Form.Label className="d-flex justify-content-start fs-6">
+                    Phone Number
+                  </Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your phone number"
+                    name="phoneNumber"
+                    value={formFields.phoneNumber}
+                    onChange={handleChange}
+                  />
+                  {formFieldsError.phoneNumberError && (
+                    <Form.Text className="text-danger">
+                      <div className="font_size_error_message">
+                        {formFieldsError.phoneNumberError}
+                      </div>
+                    </Form.Text>
+                  )}
+                </Form.Group>
+              </div>
+            </Collapse>
+            <Button
+              variant="primary"
+              type="submit"
+              className="px-5 rounded-pill"
+            >
+              Submit and Buy Now
+            </Button>
+          </Form>
+        </div>
+      </Collapse>
+    
+    </>
+  );
+};
+
+export default Payment;

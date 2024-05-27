@@ -1,0 +1,43 @@
+.nav-pills .nav-link.active {
+    background-color: transparent !important;
+    color: black;
+
+  }
+  
+  .nav-pills .nav-link {
+    background-color: transparent !important;
+    color: black;
+  }
+  
+  .nav-pills .nav-link.active,
+  .nav-pills .nav-link {
+    color: #000; 
+  }
+
+  .img_size_view1{
+ 
+    justify-content: center;
+    display: flex;
+  }
+  .text_color{
+    color: blue;
+  }
+  .submitbtn_edit{
+    background: rgb(48,56,121);
+    color: white;
+    border-radius: 15px;
+  }
+  .submitbtn_edit:hover{
+    background: rgb(5, 148, 7);
+    color: white;
+    border-radius: 15px;
+  }
+
+
+
+  .btn-link {
+    background-color: transparent !important; /* Ensure background is transparent */
+    border: none !important; /* Remove any border */
+    color: inherit; /* Ensure the text color inherits from the parent element */
+    text-decoration: none; /* Remove underline */
+  }

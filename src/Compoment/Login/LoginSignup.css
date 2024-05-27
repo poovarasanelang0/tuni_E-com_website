@@ -59,21 +59,6 @@
     display: flex;
     justify-content: center;
   }
-  
-  .otp-box {
-    width: 40px;
-    height: 40px;
-    border: 1px solid #ccc;
-    margin: 0 5px;
-    font-size: 18px;
-    text-align: center;
-  }
-  
-.border_line button:hover{
-    border-bottom: 1px green;
-    background:blue;
-    color: white;
-    border-radius: 10px;
-}
+ 
 
 

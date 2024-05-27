@@ -106,5 +106,77 @@ background: rgb(124,38,220);
 
 
 
+  @keyframes blink {
+    0% {
+      opacity: 1;
+      color: black; 
+    }
+    50% {
+      opacity: 0;
+      color: rgb(13, 245, 160); 
+     
+    }
+    100% {
+      opacity: 1;
+      color: rgb(247, 4, 4); 
+    }
+  }
+
+  .blink {
+    animation: blink 2s infinite;
+  }
+
+  @keyframes blinks {
+    0% {
+      opacity: 0;
+      color: black; 
+    }
+    50% {
+      opacity: 1;
+      color: rgb(13, 245, 160); 
+     
+    }
+    100% {
+      opacity: 1;
+      color: rgb(247, 4, 4); 
+    }
+  }
+
+  .blinks {
+    animation: blink 2s infinite;
+  }
+  
 
 
+
+
+  .heading_hover {
+    position: relative;
+}
+
+.heading_hover:hover {
+    color: rgb(17, 32, 167); 
+    /* border-bottom: 1px solid rgb(17, 32, 167);  */
+}
+
+.heading_hover::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: rgb(17, 32, 167);
+    transition: width 0.3s ease; 
+}
+
+.heading_hover:hover::after {
+    width: 100%;
+}
+
+
+.subdropdown_hover:hover{
+  color: blue;
+  font-size: 13px;
+
+}

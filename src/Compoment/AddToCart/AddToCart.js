@@ -14,6 +14,8 @@ import Gpaypayment from "../../Pages/SingleProduct/Assets/secure-transaction.svg
 import Devlimg from "../../Pages/SingleProduct/Assets/delivery-sec.svg";
 import Payment from "../../Pages/Payment/Payment";
 import { firestore, auth } from "../../firebaseConfig";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddToCart = () => {
   const [userId, setUserId] = useState(null); // State to store user ID
@@ -131,6 +133,7 @@ const AddToCart = () => {
       (cartProduct) => cartProduct.id !== productId
     );
     setCartProducts(updatedCartProducts);
+    toast.success("Successfully Clear CartItem")
     deleteItemFromFirestore(productId);
   };
 
@@ -141,6 +144,7 @@ const AddToCart = () => {
         productId
       );
       await deleteDoc(userDocRef);
+
       console.log("Document successfully deleted from cart!");
     } catch (error) {
       console.error("Error removing product from cart: ", error);

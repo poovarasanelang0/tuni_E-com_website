@@ -1479,3 +1479,945 @@ const Login = () => {
 export default Login;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useState, useEffect } from "react";
+import { Form, Button, Collapse } from "react-bootstrap";
+import "./Payment.css";
+import { firestore, auth } from "../../firebaseConfig";
+import { collection, addDoc, doc, deleteDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const Payment = ({ cartProducts }) => {
+  const [formFields, setFormFields] = useState({
+    name: "",
+    pincode: "",
+    address: "",
+    phoneNumber: "",
+  });
+  const [formFieldsError, setFormFieldsError] = useState({
+    nameError: "",
+    pincodeError: "",
+    addressError: "",
+    phoneNumberError: "",
+  });
+
+  const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
+
+  const calculateTotalPrice = (cartProducts) => {
+    let totalPrice = 0;
+    cartProducts.forEach((cartProduct) => {
+      const price = parseInt(cartProduct.data.price);
+      const count = parseInt(cartProduct.data.itemCountcustomer);
+      totalPrice += price * count;
+    });
+    return totalPrice;
+  };
+
+  const totalCartPrice = calculateTotalPrice(cartProducts);
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+      console.log(user, "userid");
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handleSubmitForm = async (e) => {
+    e.preventDefault();
+
+    let errors = {};
+    let hasErrors = false;
+
+    if (!formFields.name.trim()) {
+      errors.nameError = "Name is required";
+      hasErrors = true;
+    }
+
+    if (!formFields.pincode.trim()) {
+      errors.pincodeError = "Pincode is required";
+      hasErrors = true;
+    } else if (!/^\d{6}$/.test(formFields.pincode.trim())) {
+      errors.pincodeError = "Invalid pincode";
+      hasErrors = true;
+    }
+
+    if (!formFields.address.trim()) {
+      errors.addressError = "Address is required";
+      hasErrors = true;
+    }
+
+    if (!formFields.phoneNumber.trim()) {
+      errors.phoneNumberError = "Phone Number is required";
+      hasErrors = true;
+    } else if (!/^\d{10}$/.test(formFields.phoneNumber.trim())) {
+      errors.phoneNumberError = "Invalid phone number";
+      hasErrors = true;
+    }
+
+    if (hasErrors) {
+      setFormFieldsError(errors);
+      return;
+    }
+
+    try {
+      const orderData = {
+        name: formFields.name,
+        pincode: formFields.pincode,
+        address: formFields.address,
+        phoneNumber: formFields.phoneNumber,
+        totalPrice: totalCartPrice,
+        cartProducts: cartProducts.map((product) => ({
+          brand: product.data.brand || "",
+          category: product.data.category || "",
+          color: product.data.color || "",
+          gender: product.data.gender || "",
+          id: product.data.id || "",
+          imageUrl: product.data.imageUrl || [],
+          itemCountcustomer: product.data.itemCountcustomer || 0,
+          name: product.data.name || "",
+          price: product.data.price || "",
+          sizecustomers: product.data.sizecustomers || "",
+        })),
+      };
+
+      const userDocRef = doc(collection(firestore, "users"), currentUser.uid);
+      const orderAddressRef = collection(userDocRef, "OrderAddress");
+      await addDoc(orderAddressRef, orderData);
+
+      openRazorpay(orderData);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "name") {
+      if (!/^[A-Za-z\s]+$/.test(value)) {
+        setFormFieldsError((prevErrors) => ({
+          ...prevErrors,
+          nameError: "Name should contain only letters",
+        }));
+      } else {
+        setFormFieldsError((prevErrors) => ({
+          ...prevErrors,
+          nameError: "",
+        }));
+      }
+    }
+    setFormFields((prevFields) => ({
+      ...prevFields,
+      [name]: value,
+    }));
+  };
+
+  const openRazorpay = (orderData) => {
+    if (totalCartPrice) {
+      var options = {
+        key: "rzp_live_W0t2SeLjFxX8SB",
+        key_secret: "TO1w1yoIo0Z5HXmRitcqpEqG",
+        amount: totalCartPrice * 100,
+        currency: "INR",
+        name: "TUNi",
+        timeout: 300,
+        description: "For Testing Purpose",
+        handler: async function (response) {
+          // Payment Successful!
+          try {
+            const newOrdersRef = doc(
+              firestore,
+              "AllOrderList",
+              currentUser.uid
+            );
+            const newOrdersList = collection(newOrdersRef, "OrderItemPlaced");
+
+            // Add cart items to the "new orders" collection
+            await Promise.all(
+              cartProducts.map(async (product) => {
+                await addDoc(newOrdersList, {
+                  ...product.data,
+                  totalPrice: totalCartPrice,
+                  orderAddress: formFields,
+                });
+              })
+            );
+
+            // Delete items from Firestore cart collection
+            await Promise.all(
+              cartProducts.map((product) =>
+                deleteItemFromFirestoreCartItem(product.id)
+              )
+            );
+
+            navigate("/TrackOrder");
+            toast.success("Your Product Placed");
+
+            window.location.reload();
+          } catch (error) {
+            console.error("Error processing order after payment: ", error);
+          }
+        },
+        prefill: {
+          name: formFields.name,
+          email: "",
+          contact: formFields.phoneNumber,
+        },
+        notes: {
+          address: formFields.address,
+        },
+        theme: {
+          color: "#CC7833",
+        },
+      };
+      var pay = new window.Razorpay(options);
+      pay.open();
+    } else {
+      alert("Please add some products to the basket!");
+    }
+  };
+
+  const deleteItemFromFirestoreCartItem = async (productId) => {
+    try {
+      const userDocRef = doc(
+        collection(firestore, "users", currentUser.uid, "cartCollection"),
+        productId
+      );
+      await deleteDoc(userDocRef);
+
+      console.log("Document successfully deleted from cart!");
+    } catch (error) {
+      console.error("Error removing product from cart: ", error);
+    }
+  };
+
+  return (
+    <>
+      <div className="col my-2">
+        <div className="d-flex justify-content-between">
+          <div className="fs-6">
+            <h4 className="fw-bold">
+              <i className="bi bi-currency-rupee"></i>
+              {totalCartPrice}
+            </h4>
+            <p className="bluecolor">Total payable</p>
+          </div>
+          <div className="bg_color_buy_now">
+            <button
+              className="btn px-5 rounded-pill"
+              onClick={() => setShowForm(!showForm)}
+              disabled={cartProducts.length === 0}
+            >
+              Buy Now
+            </button>
+          </div>
+        </div>
+      </div>
+      <Collapse in={showForm}>
+        <div>
+          <Form onSubmit={handleSubmitForm}>
+            <h5 className="fw-bold color_heading">Enter Your Details</h5>
+            <Form.Group className="mb-3" controlId="formName">
+              <Form.Label className="d-flex justify-content-start fs-6">
+                Name
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your name"
+                name="name"
+                value={formFields.name}
+                onChange={handleChange}
+              />
+              {formFieldsError.nameError && (
+                <Form.Text className="text-danger">
+                  <div className="font_size_error_message">
+                    {formFieldsError.nameError}
+                  </div>
+                </Form.Text>
+              )}
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formPincode">
+              <Form.Label className="d-flex justify-content-start fs-6">
+                Pincode
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your pincode"
+                name="pincode"
+                value={formFields.pincode}
+                onChange={handleChange}
+              />
+              {formFieldsError.pincodeError && (
+                <Form.Text className="text-danger font_size_error_message">
+                  <div className="font_size_error_message">
+                    {formFieldsError.pincodeError}
+                  </div>
+                </Form.Text>
+              )}
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formAddress">
+              <Form.Label className="d-flex justify-content-start fs-6">
+                Address
+              </Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="Enter your address"
+                name="address"
+                value={formFields.address}
+                onChange={handleChange}
+              />
+              {formFieldsError.addressError && (
+                <Form.Text className="text-danger font_size_error_message">
+                  <div className="font_size_error_message">
+                    {formFieldsError.addressError}
+                  </div>
+                </Form.Text>
+              )}
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formPhoneNumber">
+              <Form.Label className="d-flex justify-content-start fs-6">
+                Phone Number
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your phone number"
+                name="phoneNumber"
+                value={formFields.phoneNumber}
+                onChange={handleChange}
+              />
+              {formFieldsError.phoneNumberError && (
+                <Form.Text className="text-danger">
+                  <div className="font_size_error_message">
+                    {formFieldsError.phoneNumberError}
+                  </div>
+                </Form.Text>
+              )}
+            </Form.Group>
+
+            <Button
+              variant="primary"
+              type="submit"
+              className="px-5 rounded-pill"
+            >
+              Submit and Buy Now
+            </Button>
+          </Form>
+        </div>
+      </Collapse>
+    </>
+  );
+};
+
+export default Payment;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import "./Account.css";
+import Header from "../../Compoment/Header/Header";
+import Footer from "../../Compoment/Footer/Footer";
+import { firestore, auth } from "../../firebaseConfig";
+import {
+  doc,
+  collection,
+  getDocs,
+  addDoc,
+  setDoc,
+  query,
+  deleteDoc,
+  where,
+} from "firebase/firestore";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const Account = () => {
+  const fileInputRefImage = useRef(null);
+  const [orderProducts, setOrderProducts] = useState([]);
+  const [userId, setUserId] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserId(user.uid);
+        fetchOrderItems(user.uid);
+      } else {
+        setUserId(null);
+        setOrderProducts([]);
+        setTotalPrice(0);
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    let sum = 0;
+    orderProducts.forEach((product) => {
+      sum += product.data.totalPrice;
+    });
+    setTotalPrice(sum);
+  }, [orderProducts]);
+
+  const fetchOrderItems = async (userId) => {
+    try {
+      const userDocItem = collection(
+        firestore,
+        "AllOrderList",
+        userId,
+        "OrderAddress_History"
+      );
+      const userDocSnap = await getDocs(userDocItem);
+      const orderProducts = [];
+      userDocSnap.forEach((doc) => {
+        orderProducts.push({ id: doc.id, data: doc.data() });
+      });
+      setOrderProducts(orderProducts);
+      setLoading(false); // Set loading state to false when order products are fetched
+    } catch (error) {
+      console.error("Error fetching order products:", error);
+    }
+  };
+
+  // ------------------------------profile----------------------------------------------
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    phoneNumber: "",
+    profileUrl: "",
+  });
+  
+  const [imageUploaded, setImageUploaded] = useState(false);
+
+  useEffect(() => {
+    fetchProfile(userId);
+  }, [userId]);
+
+  const fetchProfile = async (userId) => {
+    try {
+      const userDocRef = doc(firestore, "users", userId);
+      const personalDetailsRef = collection(userDocRef, "personal_details");
+      const querySnapshot = await getDocs(personalDetailsRef);
+
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data();
+        setProfile(userData);
+        if (userData.profileUrl) {
+          setImageUploaded(true);
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+    }
+  };
+
+  const handleFileInputs = async (event) => {
+    const file = event.target.files[0];
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/bmp"];
+    
+    if (file && allowedTypes.includes(file.type)) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfile((prevProfile) => ({
+          ...prevProfile,
+          profileUrl: reader.result,
+        }));
+        setImageUploaded(true);
+      };
+      reader.readAsDataURL(file);
+
+      // Optionally, handle file upload logic to save the image to Firebase Storage and get the URL
+    } else {
+      toast.error("Invalid file type. Only bitmap, jpeg, png, and jpg are accepted.");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      [name]: value,
+    }));
+  };
+
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    phoneNumber: "",
+  });
+
+
+  const handleSubmit = async () => {
+    // Reset previous errors
+    setErrors({
+      name: "",
+      email: "",
+      phoneNumber: "",
+    });
+  
+    let hasError = false;
+  
+    // Field validation
+    if (!profile.name?.trim()) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        name: "Please enter your name.",
+      }));
+      hasError = true;
+    }
+  
+    if (!profile.email?.trim()) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "Please enter your email.",
+      }));
+      hasError = true;
+    } else if (!/\S+@\S+\.\S+/.test(profile.email)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "Please enter a valid email address.",
+      }));
+      hasError = true;
+    }
+  
+    if (!profile.phoneNumber?.trim()) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        phoneNumber: "Please enter your phone number.",
+      }));
+      hasError = true;
+    } else if (!/^\+91\d{10}$/.test(profile.phoneNumber)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        phoneNumber:
+          "Please enter a valid Indian phone number starting with +91 followed by 10 digits.",
+      }));
+      hasError = true;
+    }
+  
+    if (hasError) {
+      return;
+    }
+  
+    try {
+      // Your existing logic for updating profile
+      const userDocRef = doc(firestore, "users", userId);
+      const personalDetailsRef = collection(userDocRef, "personal_details");
+  
+      const querySnapshot = await getDocs(
+        query(
+          personalDetailsRef,
+          where("phoneNumber", "==", profile.phoneNumber)
+        )
+      );
+  
+      if (!querySnapshot.empty) {
+        const existingDocId = querySnapshot.docs[0].id;
+        const existingDocRef = doc(personalDetailsRef, existingDocId);
+        await setDoc(existingDocRef, profile, { merge: true });
+      } else {
+        await addDoc(personalDetailsRef, profile);
+      }
+      toast.success("Profile updated successfully");
+      console.log("Profile updated successfully");
+    } catch (err) {
+      console.error("Error updating profile:", err);
+    }
+  };
+  
+
+  const handleDeleteProduct = async (productId) => {
+    try {
+      const productDocRef = doc(
+        firestore,
+        "AllOrderList",
+        userId,
+        "OrderAddress_History",
+        productId
+      );
+      await deleteDoc(productDocRef);
+      setOrderProducts(
+        orderProducts.filter((product) => product.id !== productId)
+      );
+      toast.success("Product deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting product: ", error);
+      toast.error("Failed to delete product.");
+    }
+  };
+
+  const logout = async () => {
+    try {
+      localStorage.removeItem("rzp_device_id");
+      localStorage.clear();
+      localStorage.removeItem("rzp_checkout_anon_id");
+      toast.success("Successfully Logout");
+      navigate("/");
+      await auth.signOut();
+      window.location.reload();
+    } catch (error) {
+      console.error("Error logging out:", error.message);
+    }
+  };
+
+  return (
+    <div>
+      <Header />
+      <div className="container my-3 py-2">
+        <div className="row">
+          <div className="col-lg-12 col-md-12 col-12">
+            <ul
+              class="nav nav-pills mb-3 d-flex justify-content-between"
+              id="p"
+              role=""
+            >
+              <li class="nav-item" role="presentation">
+                <button
+                  className="nav-link  btn-custom"
+                  id="pills-Profile-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-Profile"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-Profile"
+                  aria-selected="true"
+                >
+                  {" "}
+                  <br />
+                  Profile{" "}
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="pills-Returns-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-Returns"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-Returns"
+                  aria-selected="false"
+                >
+                  {" "}
+                  <br />
+                  Returns/Exchange
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="pills-myorders-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-myorders"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-myorders"
+                  aria-selected="false"
+                >
+                  {" "}
+                  <br />
+                  My Orders
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="pills-Wishlist-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-Wishlist"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-Wishlist"
+                  aria-selected="false"
+                >
+                  {" "}
+                  <br />
+                  Wishlist
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="pills-tabContent">
+              <div
+                class="tab-pane fade show active"
+                id="pills-Profile"
+                role="tabpanel"
+                aria-labelledby="pills-Profile-tab"
+              >
+                <section id="profile">
+                  <div className="container">
+                    <div className="profile-img">
+                      {profile.profileUrl ? (
+                        <img
+                          src={profile.profileUrl}
+                          alt="Profile"
+                          className="img-fluid rounded-circle"
+                        />
+                      ) : (
+                        <div className="placeholder-profile-img">
+                          No Image Uploaded
+                        </div>
+                      )}
+                    </div>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <div className="profile-head">
+                          <h5>{profile.name || "Name"}</h5>
+                          <h6>{profile.email || "Email"}</h6>
+                          <p>{profile.phoneNumber || "Phone Number"}</p>
+                          <div className="upload-btn-wrapper">
+                            <button
+                              className="btn-upload"
+                              onClick={() => fileInputRefImage.current.click()}
+                            >
+                              Upload Image
+                            </button>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              ref={fileInputRefImage}
+                              style={{ display: "none" }}
+                              onChange={handleFileInputs}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="profile-update">
+                          <h4>Update Profile</h4>
+                          <div className="form-group">
+                            <label>Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="name"
+                              value={profile.name}
+                              onChange={handleChange}
+                            />
+                            {errors.name && (
+                              <div className="text-danger">{errors.name}</div>
+                            )}
+                          </div>
+                          <div className="form-group">
+                            <label>Email</label>
+                            <input
+                              type="email"
+                              className="form-control"
+                              name="email"
+                              value={profile.email}
+                              onChange={handleChange}
+                            />
+                            {errors.email && (
+                              <div className="text-danger">{errors.email}</div>
+                            )}
+                          </div>
+                          <div className="form-group">
+                            <label>Phone Number</label>
+                            <input
+                              type="tel"
+                              className="form-control"
+                              name="phoneNumber"
+                              value={profile.phoneNumber}
+                              onChange={handleChange}
+                            />
+                            {errors.phoneNumber && (
+                              <div className="text-danger">
+                                {errors.phoneNumber}
+                              </div>
+                            )}
+                          </div>
+                          <button
+                            className="btn btn-primary"
+                            onClick={handleSubmit}
+                          >
+                            Update Profile
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="pills-Returns"
+                role="tabpanel"
+                aria-labelledby="pills-Returns-tab"
+              >
+                <section id="returns">
+                  <div className="container">
+                    <h4>Returns/Exchange</h4>
+                    <div className="order-list">
+                      {loading ? (
+                        <p>Loading...</p>
+                      ) : orderProducts.length === 0 ? (
+                        <p>No orders found.</p>
+                      ) : (
+                        orderProducts.map((order) => (
+                          <div className="order-item" key={order.id}>
+                            <div className="order-info">
+                              <p>
+                                <strong>Order ID:</strong> {order.id}
+                              </p>
+                              <p>
+                                <strong>Product:</strong>{" "}
+                                {order.data.productName}
+                              </p>
+                              <p>
+                                <strong>Total Price:</strong>{" "}
+                                {order.data.totalPrice}
+                              </p>
+                              <p>
+                                <strong>Order Date:</strong>{" "}
+                                {order.data.orderDate}
+                              </p>
+                            </div>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => handleDeleteProduct(order.id)}
+                            >
+                              Delete Order
+                            </button>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="pills-myorders"
+                role="tabpanel"
+                aria-labelledby="pills-myorders-tab"
+              >
+                <section id="myorders">
+                  <div className="container">
+                    <h4>My Orders</h4>
+                    <div className="order-list">
+                      {loading ? (
+                        <p>Loading...</p>
+                      ) : orderProducts.length === 0 ? (
+                        <p>No orders found.</p>
+                      ) : (
+                        orderProducts.map((order) => (
+                          <div className="order-item" key={order.id}>
+                            <div className="order-info">
+                              <p>
+                                <strong>Order ID:</strong> {order.id}
+                              </p>
+                              <p>
+                                <strong>Product:</strong>{" "}
+                                {order.data.productName}
+                              </p>
+                              <p>
+                                <strong>Total Price:</strong>{" "}
+                                {order.data.totalPrice}
+                              </p>
+                              <p>
+                                <strong>Order Date:</strong>{" "}
+                                {order.data.orderDate}
+                              </p>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                    <div className="total-price">
+                      <h5>Total Price: {totalPrice}</h5>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="pills-Wishlist"
+                role="tabpanel"
+                aria-labelledby="pills-Wishlist-tab"
+              >
+                <section id="wishlist">
+                  <div className="container">
+                    <h4>Wishlist</h4>
+                    {/* Render Wishlist items here */}
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="logout-btn">
+          <button className="btn btn-danger" onClick={logout}>
+            Logout
+          </button>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default Account;

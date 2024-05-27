@@ -27,6 +27,10 @@ import Women6 from "./Assets/women6.avif"
 import OurStory from "./Assets/BRAND_STORY_2000_x_521_px_5.webp"
 import {Link} from "react-router-dom"
 
+import Air from "./Assets/aircraft.gif";
+import Flag from "./Assets/flag.jpg";
+import Support from "./Assets/24-hours-support.gif";
+import Payment from "./Assets/credit-card.gif";
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -191,15 +195,88 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="container-fluid py-4">
+      {/* <div className="container-fluid py-4">
         <div className="row">
           <div className="col">
             <img src={OurStory} alt="ourstory" className="img-fluid" />
           </div>
         </div>
 
-      </div>
+      </div> */}
+ <div className="container">
+        <div class="row">
+          <h4 className="d-flex justify-content-center text-center mb-3">
+            Why Choose Us?
+          </h4>
+          <div class="col-sm-4 mb-3 mb-sm-0">
+            <div
+              class="card border-0"
+            >
+              <div class="card-body  img_size_air">
+                <div className="d-flex justify-content-center text-center">
+                  <img src={Air} alt="air" data-aos="fade-left"
+                    data-aos-duration="1500"></img>
+                </div>
+                <br />
+                <h4 className="fw-bold d-flex justify-content-center text-center">
+                  FAST SHIPPING
+                </h4>
+                <div className="flag_img">
+                  <span className=" d-flex justify-content-center text-center">
+                    Free and Fast Shipping across India {"\u00a0"}
+                    {"\u00a0"}
+                    <img src={Flag} alt="flag_img"></img>{" "}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card border-0">
+              <div class="card-body  img_size_air">
+                <div className="d-flex justify-content-center text-center">
+                  <img src={Support} alt="air" data-aos="fade-left"
+                    data-aos-duration="1500"></img>
+                </div>
+                <br />
+                <h4 className="fw-bold d-flex justify-content-center text-center">
+                  SUPPORT 24/7
+                </h4>
+                <div className="flag_img">
+                  <span className=" d-flex justify-content-center text-center">
+                    You will speak with one of our courteous representatives
+                    within 24 hours..
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div
+              class="card border-0"
+            >
+              <div class="card-body  img_size_air">
+                <div className="d-flex justify-content-center text-center">
+                  <img src={Payment} alt="air" data-aos="fade-right"
+                    data-aos-duration="1500"></img>
+                </div>
+                <br />
+                <h4 className="fw-bold d-flex justify-content-center text-center">
+                  SECURE PAYMENT
+                </h4>
+                <div className="flag_img">
+                  <span className=" d-flex justify-content-center text-center">
+                    Your safety is our priority. All payments are 100% secure.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
 
+        </div>
+        <br />
+        <br />
+      </div>
 
     </>
   );

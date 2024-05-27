@@ -12,11 +12,12 @@ import HalfHandShirt from "./Pages/Shirts/HalfHandShirt/HalfHandShirt";
 import CollarShirt from "./Pages/Shirts/CollarShirt/CollarShirt";
 import RoundNeck from "./Pages/Tshirt/RoundNeck/RoundNeck";
 import VNeck from "./Pages/Tshirt/VNeck/VNeck";
-import MyAccount from "./Pages/MyAccount/MyAccount";
 import WomenPant from "./Pages/Women/WomenPant/WomenPant";
 import Summer from "./Pages/ComeingsoonPages/summer";
 import Oversize from "./Pages/ComeingsoonPages/oversize";
 import TrackOrder from "./Pages/TrackOrder/TrackOrder";
+import Contact from "./Pages/Contact/Contact";
+import Account from "./Pages/Account/Account";
 
 
 
@@ -25,8 +26,6 @@ function App() {
     <div className="App">
      <BrowserRouter>
       <Routes>
-       
-        
           <Route path="/" element={<AllHomePageImport />} />
           <Route path="/JoggerMen" element={<JoggerMen />} />
           <Route path="/SingleProducts/:productId" element={<SingleProduct />} />
@@ -40,7 +39,6 @@ function App() {
           <Route path="/HalfHandShirt" element={<HalfHandShirt />} />
           <Route path="/CollarShirt" element={<CollarShirt />} />
           <Route path="/Payment" element={<Payment />} />
-          <Route path="/MyAccount" element={<MyAccount />} />
           <Route path="/WomenPant" element={<WomenPant />} />
           <Route path="/Oversize" element={<Oversize />} />
           <Route path="/Summer" element={<Summer />} />
@@ -48,7 +46,8 @@ function App() {
 
 
 
-
+          <Route path="/Contact" element={<Contact />} />
+          <Route path="/Account" element={<Account />} />
 
           <Route path="/Login" element={<Login />} />
 
