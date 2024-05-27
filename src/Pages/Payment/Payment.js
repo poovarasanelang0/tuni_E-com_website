@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { v4 as uuidv4 } from "uuid";
+
 const Payment = ({ cartProducts }) => {
   const [formFields, setFormFields] = useState({
     username: "",
@@ -109,6 +111,116 @@ const Payment = ({ cartProducts }) => {
     });
   };
 
+  // const handleSubmitForm = async (e) => {
+  //   e.preventDefault();
+  //   // Validate all fields before submission
+  //   const {
+  //     username,
+  //     pincode,
+  //     phoneNumber,
+  //     address_Line1,
+  //     address_Line2,
+  //     city,
+  //     state,
+  //   } = formFields;
+  //   const errors = {};
+
+  //   if (!username.trim()) {
+  //     errors.usernameError = "Name is required";
+  //   } else if (!/^[A-Za-z\s]+$/.test(username.trim())) {
+  //     errors.usernameError = "Name should contain only letters";
+  //   }
+
+  //   if (!pincode.trim()) {
+  //     errors.pincodeError = "Pincode is required";
+  //   } else if (!/^\d{6}$/.test(pincode.trim())) {
+  //     errors.pincodeError = "Invalid pincode";
+  //   }
+
+  //   if (!address_Line1.trim()) {
+  //     errors.address_Line1Error = "Address is required";
+  //   }
+  //   if (!address_Line2.trim()) {
+  //     errors.address_Line2Error = "Address is required";
+  //   }
+  //   if (!city.trim()) {
+  //     errors.cityError = "City is required";
+  //   } else if (!/^[A-Za-z\s]+$/.test(city.trim())) {
+  //     errors.cityError = "City should contain only letters";
+  //   }
+  //   if (!state.trim()) {
+  //     errors.stateError = "State is required";
+  //   } else if (!/^[A-Za-z\s]+$/.test(state.trim())) {
+  //     errors.stateError = "State should contain only letters";
+  //   }
+
+  //   if (!phoneNumber.trim()) {
+  //     errors.phoneNumberError = "Phone Number is required";
+  //   } else if (!/^\d{10}$/.test(phoneNumber.trim())) {
+  //     errors.phoneNumberError = "Invalid phone number";
+  //   }
+
+  //   setFormFieldsError(errors);
+
+  //   const hasErrors = Object.values(errors).some((error) => error !== "");
+
+  //   // Check if either an old address is selected or a new address is entered
+  //   const addressSelected = selectedAddress || showNewAddressForm;
+
+  //   if (!hasErrors && addressSelected) {
+  //     const orderAddressData = selectedAddress
+  //       ? selectedAddress.data.orderAddress
+  //       : formFields;
+
+  //     const orderData = {
+  //       username: orderAddressData.username,
+  //       pincode: orderAddressData.pincode,
+  //       address_Line1: orderAddressData.address_Line1,
+  //       address_Line2: orderAddressData.address_Line2,
+  //       phoneNumber: orderAddressData.phoneNumber,
+  //       city: orderAddressData.city,
+  //       state: orderAddressData.state,
+  //       totalPrice: totalCartPrice,
+  //       cartProducts: cartProducts.map((product) => ({
+  //         brand: product.data.brand || "",
+  //         category: product.data.category || "",
+  //         color: product.data.color || "",
+  //         gender: product.data.gender || "",
+  //         id: product.data.id || "",
+  //         imageUrl: product.data.imageUrl || [],
+  //         itemCountcustomer: product.data.itemCountcustomer || 0,
+  //         name: product.data.name || "",
+  //         price: product.data.price || "",
+  //         sizecustomers: product.data.sizecustomers || "",
+  //       })),
+  //     };
+
+  //     // const userDocRef = doc(collection(firestore, "users"), currentUser.uid);
+  //     // const orderAddressRef = collection(userDocRef, "OrderAddress");
+  //     // await addDoc(orderAddressRef, orderData);
+
+  //     openRazorpay(orderData);
+  //   } else {
+  //     if (!addressSelected) {
+  //       toast.error("Please select an old address or enter a new one.");
+  //     } else {
+  //       toast.error("Please fill all required fields correctly.");
+  //     }
+  //   }
+  // };
+
+  const generateOrderID = () => {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+    return result;
+  };
+
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     // Validate all fields before submission
@@ -170,7 +282,10 @@ const Payment = ({ cartProducts }) => {
         ? selectedAddress.data.orderAddress
         : formFields;
 
+      const orderID = generateOrderID();
+
       const orderData = {
+        orderID, // Include the order ID in the order data
         username: orderAddressData.username,
         pincode: orderAddressData.pincode,
         address_Line1: orderAddressData.address_Line1,
@@ -192,11 +307,6 @@ const Payment = ({ cartProducts }) => {
           sizecustomers: product.data.sizecustomers || "",
         })),
       };
-
-      // const userDocRef = doc(collection(firestore, "users"), currentUser.uid);
-      // const orderAddressRef = collection(userDocRef, "OrderAddress");
-      // await addDoc(orderAddressRef, orderData);
-
       openRazorpay(orderData);
     } else {
       if (!addressSelected) {
@@ -252,24 +362,24 @@ const Payment = ({ cartProducts }) => {
           errors.address_Line1Error = "";
         }
         break;
-        case "city":
-          if (!value.trim()) {
-            errors.cityError = "City is required";
-          } else if (!/^[A-Za-z\s]+$/.test(value.trim())) {
-            errors.cityError = "City should contain only letters";
-          } else {
-            errors.cityError = "";
-          }
-          break;
-        case "state":
-          if (!value.trim()) {
-            errors.stateError = "State is required";
-          } else if (!/^[A-Za-z\s]+$/.test(value.trim())) {
-            errors.stateError = "State should contain only letters";
-          } else {
-            errors.stateError = "";
-          }
-          break;
+      case "city":
+        if (!value.trim()) {
+          errors.cityError = "City is required";
+        } else if (!/^[A-Za-z\s]+$/.test(value.trim())) {
+          errors.cityError = "City should contain only letters";
+        } else {
+          errors.cityError = "";
+        }
+        break;
+      case "state":
+        if (!value.trim()) {
+          errors.stateError = "State is required";
+        } else if (!/^[A-Za-z\s]+$/.test(value.trim())) {
+          errors.stateError = "State should contain only letters";
+        } else {
+          errors.stateError = "";
+        }
+        break;
       case "phoneNumber":
         if (!value.trim()) {
           errors.phoneNumberError = "Phone Number is required";
@@ -282,7 +392,7 @@ const Payment = ({ cartProducts }) => {
 
       default:
         break;
-    } 
+    }
 
     setFormFieldsError(errors);
   };
@@ -298,6 +408,7 @@ const Payment = ({ cartProducts }) => {
         timeout: 300,
         description: "For Testing Purpose",
         handler: async function (response) {
+          alert(response.razorpay_payment_id);
           try {
             const newOrdersRef = doc(
               firestore,
@@ -312,6 +423,7 @@ const Payment = ({ cartProducts }) => {
                   ...product.data,
                   totalPrice: totalCartPrice,
                   orderAddress: formFields,
+                  orderID: orderData.orderID, // Include the order ID
                 });
               })
             );
@@ -332,6 +444,7 @@ const Payment = ({ cartProducts }) => {
                   ...product.data,
                   orderAddress: formFields,
                   totalPrice: totalCartPrice,
+                  orderID: orderData.orderID, // Include the order ID
                 });
               })
             );
@@ -355,7 +468,7 @@ const Payment = ({ cartProducts }) => {
         },
         notes: {
           address_Line1: formFields.address_Line1,
-          address_Line2: formFields.address_Line1,
+          address_Line2: formFields.address_Line2,
         },
         theme: {
           color: "#CC7833",
@@ -367,6 +480,88 @@ const Payment = ({ cartProducts }) => {
       alert("Please add some products to the basket!");
     }
   };
+
+  // const openRazorpay = (orderData) => {
+  //   if (totalCartPrice) {
+  //     const options = {
+  //       key: "rzp_live_W0t2SeLjFxX8SB",
+  //       key_secret: "TO1w1yoIo0Z5HXmRitcqpEqG",
+  //       amount: totalCartPrice * 100,
+  //       currency: "INR",
+  //       name: "TUNi",
+  //       timeout: 300,
+  //       description: "For Testing Purpose",
+  //       handler: async function (response) {
+  //         // alert(response.razorpay_payment_id);
+  //         try {
+  //           const newOrdersRef = doc(
+  //             firestore,
+  //             "AllOrderList",
+  //             currentUser.uid
+  //           );
+  //           const newOrdersList = collection(newOrdersRef, "OrderItemPlaced");
+
+  //           await Promise.all(
+  //             cartProducts.map(async (product) => {
+  //               await addDoc(newOrdersList, {
+  //                 ...product.data,
+  //                 totalPrice: totalCartPrice,
+  //                 orderAddress: formFields,
+  //               });
+  //             })
+  //           );
+  //           const newOrderAddress = doc(
+  //             firestore,
+  //             "AllOrderList",
+  //             currentUser.uid
+  //           );
+
+  //           const newOrdersListAddress = collection(
+  //             newOrderAddress,
+  //             "OrderAddress_History"
+  //           );
+
+  //           await Promise.all(
+  //             cartProducts.map(async (product) => {
+  //               await addDoc(newOrdersListAddress, {
+  //                 ...product.data,
+  //                 orderAddress: formFields,
+  //                 totalPrice: totalCartPrice,
+  //               });
+  //             })
+  //           );
+  //           await Promise.all(
+  //             cartProducts.map((product) =>
+  //               deleteItemFromFirestoreCartItem(product.id)
+  //             )
+  //           );
+
+  //           navigate("/TrackOrder");
+  //           toast.success("Your Product Placed");
+  //           window.location.reload();
+  //         } catch (error) {
+  //           console.error("Error processing order after payment: ", error);
+  //         }
+  //       },
+  //       prefill: {
+  //         name: formFields.username,
+  //         email: "",
+  //         contact: formFields.phoneNumber,
+  //       },
+  //       notes: {
+  //         address_Line1: formFields.address_Line1,
+  //         address_Line2: formFields.address_Line1,
+  //       },
+  //       theme: {
+  //         color: "#CC7833",
+  //       },
+  //     };
+  //     const pay = new window.Razorpay(options);
+  //     pay.open();
+  //   } else {
+  //     alert("Please add some products to the basket!");
+  //   }
+  // };
 
   const deleteItemFromFirestoreCartItem = async (productId) => {
     try {

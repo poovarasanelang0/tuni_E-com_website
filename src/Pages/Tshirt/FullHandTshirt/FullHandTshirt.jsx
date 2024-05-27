@@ -23,13 +23,34 @@ import { firestore } from "../../../firebaseConfig";
 const FullHandTshirt = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); 
-
+  const [loading, setLoading] = useState(true);
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [priceRange, setPriceRange] = useState("all");
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState([]);
 
   const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);
   };
+  const handlePriceChange = (event) => {
+    setPriceRange(event.target.value);
+  };
+
+  const handleColorChange = (color) => {
+    setSelectedColors((prevColors) =>
+      prevColors.includes(color)
+        ? prevColors.filter((c) => c !== color)
+        : [...prevColors, color]
+    );
+  };
+  const handleSizeChange = (size) => {
+    setSelectedSizes((prevSizes) =>
+      prevSizes.includes(size)
+        ? prevSizes.filter((s) => s !== size)
+        : [...prevSizes, size]
+    );
+  };
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,13 +129,34 @@ const FullHandTshirt = () => {
     setSelectedCategory(category);
   };
 
-  const filteredProducts = selectedCategory
-    ? products
-    : products.filter(
-        (product) =>
-          product.category &&
-          product.category.toLowerCase() === selectedCategory.toLowerCase()
-      );
+  const filteredProducts = products.filter((product) => {
+    const isPriceMatch =
+      priceRange === "all" ||
+      (priceRange === "less500" && product.price < 500) ||
+      (priceRange === "500to1000" && product.price >= 500 && product.price <= 1000) ||
+      (priceRange === "1000to1500" && product.price >= 1000 && product.price <= 1500) ||
+      (priceRange === "1500to2000" && product.price >= 1500 && product.price <= 2000) ||
+      (priceRange === "more2000" && product.price > 2000);
+
+    const isColorMatch =
+      selectedColors.length === 0 || selectedColors.includes(product.color);
+
+      const isSizeMatch =
+      selectedSizes.length === 0 ||
+      selectedSizes.some((size) => product.sizes && product.sizes.includes(size));
+    
+
+    return isPriceMatch && isColorMatch && isSizeMatch;
+  })
+  .sort((a, b) => {
+    if (selectedFilter === "lowToHigh") {
+      return a.price - b.price;
+    } else if (selectedFilter === "highToLow") {
+      return b.price - a.price;
+    } else {
+      return 0; // No sorting
+    }
+  });
 
   const [selectedRadio, setSelectedRadio] = useState("exampleRadios1");
 
@@ -301,26 +343,19 @@ const FullHandTshirt = () => {
             <p className="text-secondary px-1">{filteredProducts.length} Items</p>
           </div>
           <div className="col-auto">
-            <select
+          <select
               className="form-select"
               value={selectedFilter}
               onChange={handleFilterChange}
             >
-              <option value="all" className="fw-bold">
-                {" "}
-                Sort : Featured
-              </option>
               <option value="small">Featured</option>
-              <option value="medium" className="py-1">
+              {/* <option value="medium" className="py-1">
                 New Arrivals
-              </option>
-              <option value="large" className="py-1">
-                Best Selling
-              </option>
-              <option value="small" className="py-1">
+              </option> */}
+              <option value="lowToHigh" className="py-1">
                 Price Low to High
               </option>
-              <option value="medium" className="py-1">
+              <option value="highToLow" className="py-1">
                 Price High to Low
               </option>
             </select>
@@ -416,246 +451,100 @@ const FullHandTshirt = () => {
             >
               {/* defaultExpanded */}
               <div className="accordion-container">
-                <div className="accordion-item">
-                  <MuiAccordion>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1-content"
-                      id="panel1-header"
-                    >
-                      <Typography>Price</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography>
-                        <div className="">
-                          <div className="form-check mx-5">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="flexRadioDefault"
-                              id="flexRadioDefault500"
-                              defaultChecked
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexRadioDefault500"
-                            >
-                              Less than ₹500
-                            </label>
-                          </div>
-                          <div className="form-check mx-5 my-3">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="flexRadioDefault"
-                              id="flexRadioDefault1000"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexRadioDefault1000"
-                            >
-                              ₹500 - ₹1000
-                            </label>
-                          </div>
-                          <div className="form-check mx-5 my-3">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="flexRadioDefault"
-                              id="flexRadioDefault1500"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexRadioDefault1500"
-                            >
-                              ₹1000 - ₹1500
-                            </label>
-                          </div>
-                          <div className="form-check mx-5 my-3">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="flexRadioDefault"
-                              id="flexRadioDefault2000"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexRadioDefault2000"
-                            >
-                              ₹1500 - ₹2000
-                            </label>
-                          </div>
-                          <div className="form-check mx-5 my-3">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="flexRadioDefault"
-                              id="flexRadioDefault2100"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexRadioDefault2100"
-                            >
-                              More than ₹2000
-                            </label>
-                          </div>
-                        </div>
-                      </Typography>
-                    </AccordionDetails>
-                  </MuiAccordion>
-                </div>
-                {/* 2nd */}
-                <div className="accordion-item">
-                  <MuiAccordion>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel2-content"
-                      id="panel2-header"
-                    >
-                      <Typography>Color</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography></Typography>
-                    </AccordionDetails>
-                  </MuiAccordion>
-                </div>
-                {/* 3nd */}
-                <div className="accordion-item">
-                  <MuiAccordion>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1-content"
-                      id="panel1-header"
-                    >
-                      <Typography>Size</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography>
-                        <div>
-                          <div className="form-check mx-5 my-3">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              defaultValue
-                              id="flexCheckCheckedS"
-                              defaultChecked
-                            />
-                            <label
-                              className="form-check-label mx-1"
-                              htmlFor="flexCheckCheckedS"
-                            >
-                              S
-                            </label>
-                          </div>
-                          <div className="form-check mx-5 my-3">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              defaultValue
-                              id="flexCheckDefaultm"
-                            />
-                            <label
-                              className="form-check-label mx-1"
-                              htmlFor="flexCheckDefaultm"
-                            >
-                              M
-                            </label>
-                          </div>
-                          <div className="form-check mx-5 my-3">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              defaultValue
-                              id="flexCheckDefaultl"
-                            />
-                            <label
-                              className="form-check-label mx-1 "
-                              htmlFor="flexCheckDefaultl"
-                            >
-                              L
-                            </label>
-                          </div>
-                          <div className="form-check mx-5 my-3">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              defaultValue
-                              id="flexCheckDefaultxl"
-                            />
-                            <label
-                              className="form-check-label mx-1"
-                              htmlFor="flexCheckDefaultxl"
-                            >
-                              XL
-                            </label>
-                          </div>
-                          <div className="form-check mx-5 my-3">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              defaultValue
-                              id="flexCheckDefaultxxl"
-                            />
-                            <label
-                              className="form-check-label mx-1"
-                              htmlFor="flexCheckDefaultxxl"
-                            >
-                              XXL
-                            </label>
-                          </div>
-                        </div>
-                      </Typography>
-                    </AccordionDetails>
-                  </MuiAccordion>
-                </div>
-                {/* 4nd */}
-                <div className="accordion-item">
-                  <MuiAccordion>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1-content"
-                      id="panel1-header"
-                    >
-                      <Typography>Availability</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography>
-                        <div>
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              defaultValue
-                              id="flexCheckDefault1"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexCheckDefault1"
-                            >
-                              In stock
-                            </label>
-                            <p className="ms-auto mx-4">(9)</p>
-                          </div>
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              defaultValue
-                              id="flexCheckDefault2"
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="flexCheckDefault2"
-                            >
-                              Out of stock
-                            </label>
-                            <p className="ms-auto mx-4">(1)</p>
-                          </div>
-                        </div>
-                      </Typography>
-                    </AccordionDetails>
-                  </MuiAccordion>
-                </div>
+              <div className="accordion-container">
+        {/* Price Filter */}
+        <div className="accordion-item">
+          <MuiAccordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>Price</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div>
+                {["all", "less500", "500to1000", "1000to1500", "1500to2000", "more2000"].map((range) => (
+                  <div className="form-check mx-5 my-3" key={range}>
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="priceRange"
+                      id={range}
+                      value={range}
+                      checked={priceRange === range}
+                      onChange={handlePriceChange}
+                    />
+                    <label className="form-check-label" htmlFor={range}>
+                      {range === "all"
+                        ? "All"
+                        : range === "less500"
+                        ? "Less than ₹500"
+                        : range === "500to1000"
+                        ? "₹500 - ₹1000"
+                        : range === "1000to1500"
+                        ? "₹1000 - ₹1500"
+                        : range === "1500to2000"
+                        ? "₹1500 - ₹2000"
+                        : "More than ₹2000"}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </AccordionDetails>
+          </MuiAccordion>
+        </div>
+
+        {/* Color Filter */}
+        <div className="accordion-item">
+          <MuiAccordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>Color</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div>
+                {["Red", "Blue", "Green", "Black", "White"].map((color) => (
+                  <div className="form-check mx-5 my-3" key={color}>
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id={color}
+                      checked={selectedColors.includes(color)}
+                      onChange={() => handleColorChange(color)}
+                    />
+                    <label className="form-check-label" htmlFor={color}>
+                      {color}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </AccordionDetails>
+          </MuiAccordion>
+        </div>
+
+        {/* Size Filter */}
+        {/* <div className="accordion-item">
+          <MuiAccordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>Size</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div>
+                {["S", "M", "L", "XL", "XXL"].map((size) => (
+                  <div className="form-check mx-5 my-3" key={size}>
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id={size}
+                      checked={selectedSizes.includes(size)}
+                      onChange={() => handleSizeChange(size)}
+                    />
+                    <label className="form-check-label" htmlFor={size}>
+                      {size}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </AccordionDetails>
+          </MuiAccordion>
+        </div> */}
+      </div>
               </div>
             </div>
           </div>

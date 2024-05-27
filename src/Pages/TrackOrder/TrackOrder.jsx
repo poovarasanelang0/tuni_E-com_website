@@ -266,7 +266,7 @@ const TrackOrder = () => {
                             </p>
                             <p className="small text-muted mb-0">
                               {" "}
-                              Product Id: {product.data.id}
+                              Order ID: {product.data.orderID}
                             </p>
                           </div>
                           <div className="shadow-sm border mb-4">
