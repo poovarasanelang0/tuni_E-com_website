@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth,GoogleAuthProvider,RecaptchaVerifier } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA9WZnlm6mgSpvACbJDVVDRoTb4B757_FA",
@@ -17,5 +18,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const firestore = getFirestore(app);
+const storage = getStorage(app);
 
-export { app, firestore ,auth,provider};
+
+export { app, firestore ,auth,provider,storage};

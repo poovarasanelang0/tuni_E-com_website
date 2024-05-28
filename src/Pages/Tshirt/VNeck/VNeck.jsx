@@ -216,43 +216,47 @@ const VNeck = () => {
                     to={`/SingleProducts/${product.id}`}
                     className="text-decoration-none border-0"
                   >
-                    <div className="card-container card_container1">
-                      <div className="card text-white">
-                        <div className="product_images">
-                          <img
-                            src={product.imageUrl}
-                            className="card-img fixed_img"
-                            alt={product.name}
-                          />
-                        </div>
-                        <div className="card-img-overlay">
-                          <span className="badge bg-success">BEST SELLER</span>
-                        </div>
-                        <div className="card-img-overlay d-flex">
-                          <div className="mt-auto">
-                            <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
-                              <i className="bi bi-star-fill text-warning"></i>{" "}
-                              4.5 | 20
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-black prices_details">
-                        <h5 className="mt-3">{product.name}</h5>
-                        <h4>{product.category}</h4>
-                        <h6 className="fw-bold">
-                          <i className="bi bi-currency-rupee"></i>
-                          {product.price} &nbsp;
-                          <del>
-                            <i className="bi bi-currency-rupee"></i>1,877
-                          </del>{" "}
-                          OFF
-                        </h6>
-                        <p className="price_msg_success">
-                          Lowest price in last 30 days
-                        </p>
-                      </div>
+                     <div className="card-container card_container1">
+                <div className="card text-white">
+                  <div className="product_images">
+                    <img
+                      src={product.imageUrl[0]}
+                      className="card-img front-img fixed_img"
+                      alt={product.name}
+                    />
+                    <img
+                      src={product.imageUrl[1]}
+                      className="card-img back-img fixed_img"
+                      alt={product.name}
+                    />
+                  </div>
+                  <div className="card-img-overlay">
+                    <span className="badge bg-success">BEST SELLER</span>
+                  </div>
+                  <div className="card-img-overlay d-flex">
+                    <div className="mt-auto">
+                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                      <i className="bi bi-star-fill text-warning"></i> {product.rating} 4.5 | 5.0{product.reviews}
+                      </span>
                     </div>
+                  </div>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="mt-3">{product.name}</h5>
+                  <h4>{product.category}</h4>
+                  <h6 className="fw-bold">
+                    <i className="bi bi-currency-rupee"></i>
+                    {product.price} &nbsp;
+                    <del>
+                      <i className="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    OFF
+                  </h6>
+                  <p className="price_msg_success">
+                    Lowest price in last 30 days
+                  </p>
+                </div>
+              </div>
                   </Link>
                 </div>
               ))}
@@ -272,50 +276,55 @@ const VNeck = () => {
       <div className="row">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <div key={product.id} className="col-lg-4 col-md-6 col-12">
-              <Link
-                to={`/SingleProducts/${product.id}`}
-                className="text-decoration-none border-0"
-              >
-                <div className="card-container card_container1">
-                  <div className="card text-white">
-                    <div className="product_images">
-                      <img
-                        src={product.imageUrl}
-                        className="card-img fixed_img"
-                        alt={product.name}
-                      />
-                    </div>
-                    <div className="card-img-overlay">
-                      <span className="badge bg-success">BEST SELLER</span>
-                    </div>
-                    <div className="card-img-overlay d-flex">
-                      <div className="mt-auto">
-                        <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
-                          <i className="bi bi-star-fill text-warning"></i> 4.5 |
-                          20
-                        </span>
-                      </div>
-                    </div>
+         
+            <div key={product.id}  className="col-lg-4 col-md-6 col-12">
+            <Link
+              to={`/SingleProducts/${product.id}`}
+              className="text-decoration-none border-0"
+            >
+              <div className="card-container card_container1">
+                <div className="card text-white">
+                  <div className="product_images">
+                    <img
+                      src={product.imageUrl[0]}
+                      className="card-img front-img fixed_img"
+                      alt={product.name}
+                    />
+                    <img
+                      src={product.imageUrl[1]}
+                      className="card-img back-img fixed_img"
+                      alt={product.name}
+                    />
                   </div>
-                  <div className="text-black prices_details">
-                    <h5 className="mt-3">{product.name}</h5>
-                    <h4>{product.category}</h4>
-                    <h6 className="fw-bold">
-                      <i className="bi bi-currency-rupee"></i>
-                      {product.price} &nbsp;
-                      <del>
-                        <i className="bi bi-currency-rupee"></i>1,877
-                      </del>{" "}
-                      OFF
-                    </h6>
-                    <p className="price_msg_success">
-                      Lowest price in last 30 days
-                    </p>
+                  <div className="card-img-overlay">
+                    <span className="badge bg-success">BEST SELLER</span>
+                  </div>
+                  <div className="card-img-overlay d-flex">
+                    <div className="mt-auto">
+                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                        <i className="bi bi-star-fill text-warning"></i> {product.rating} 4.5 | 5.0{product.reviews}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </Link>
-            </div>
+                <div className="text-black prices_details">
+                  <h5 className="mt-3">{product.name}</h5>
+                  <h4>{product.category}</h4>
+                  <h6 className="fw-bold">
+                    <i className="bi bi-currency-rupee"></i>
+                    {product.price} &nbsp;
+                    <del>
+                      <i className="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    OFF
+                  </h6>
+                  <p className="price_msg_success">
+                    Lowest price in last 30 days
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </div>
           ))
         ) : (
           <div className="col-12">

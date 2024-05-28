@@ -285,7 +285,7 @@ const Payment = ({ cartProducts }) => {
       const orderID = generateOrderID();
 
       const orderData = {
-        orderID, // Include the order ID in the order data
+        orderID, 
         username: orderAddressData.username,
         pincode: orderAddressData.pincode,
         address_Line1: orderAddressData.address_Line1,
@@ -423,7 +423,7 @@ const Payment = ({ cartProducts }) => {
                   ...product.data,
                   totalPrice: totalCartPrice,
                   orderAddress: formFields,
-                  orderID: orderData.orderID, // Include the order ID
+                  orderID: orderData.orderID, 
                 });
               })
             );

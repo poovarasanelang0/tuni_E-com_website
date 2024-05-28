@@ -521,7 +521,7 @@ const SingleProduct = () => {
 {/*--------------------------------rating------------------ */}
 <div className="row">
   <div className="col-12">
-    <RatingReviews />
+    <RatingReviews  productId={productId}/>
   </div>
 </div>
       </div>

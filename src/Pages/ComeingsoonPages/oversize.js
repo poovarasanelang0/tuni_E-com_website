@@ -1,5 +1,5 @@
 import React from 'react'
-import comeing from "../Women/Assets/get-well-soon.png"
+import comeing from "../JoggerMen/Assets/4-2-coming-soon-png.png"
 import Header from '../../Compoment/Header/Header'
 import Footer from '../../Compoment/Footer/Footer'
 const Oversize = () => {
