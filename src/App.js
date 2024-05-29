@@ -13,11 +13,13 @@ import CollarShirt from "./Pages/Shirts/CollarShirt/CollarShirt";
 import RoundNeck from "./Pages/Tshirt/RoundNeck/RoundNeck";
 import VNeck from "./Pages/Tshirt/VNeck/VNeck";
 import WomenPant from "./Pages/Women/WomenPant/WomenPant";
-import Summer from "./Pages/ComeingsoonPages/summer";
-import Oversize from "./Pages/ComeingsoonPages/oversize";
-import TrackOrder from "./Pages/TrackOrder/TrackOrder";
 import Contact from "./Pages/Contact/Contact";
 import Account from "./Pages/Account/Account";
+import MensCombo from "./Pages/Comboo/MensCombo/MensCombo";
+import WomensCombo from "./Pages/Comboo/WomensCombo/WomensCombo";
+import ComboGetSingle from "./Pages/Comboo/ComboGetSingle/ComboGetSingle";
+import SingleProductCombo from "./Pages/Comboo/SingleProductCombo/SingleProductCombo";
+
 
 
 
@@ -34,21 +36,16 @@ function App() {
           <Route path="/CollarTshirt" element={<CollarTshirt />} />
           <Route path="/RoundNeck" element={<RoundNeck />} />
           <Route path="/VNeck" element={<VNeck />} />
-          
           <Route path="/FullHandShirt" element={<FullHandShirt />} />
           <Route path="/HalfHandShirt" element={<HalfHandShirt />} />
           <Route path="/CollarShirt" element={<CollarShirt />} />
           <Route path="/Payment" element={<Payment />} />
           <Route path="/WomenPant" element={<WomenPant />} />
-          <Route path="/Oversize" element={<Oversize />} />
-          <Route path="/Summer" element={<Summer />} />
-          <Route path="/TrackOrder" element={<TrackOrder />} />
-
-
-
+          <Route path="/MensCombo" element={<MensCombo />} />
+          <Route path="/WomensCombo" element={<WomensCombo />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/Account" element={<Account />} />
-
+          <Route path="/SingleProductCombo" element={<SingleProductCombo />} />
           <Route path="/Login" element={<Login />} />
 
          

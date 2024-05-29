@@ -16,7 +16,7 @@ const Header = () => {
     </div>
    
    {/* 2nd header */}
-   <div className='container diff_padding'>
+   <div className='container'>
       <div className='row'>
       <DrawerAppBar />
       </div>

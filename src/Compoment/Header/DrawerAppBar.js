@@ -559,7 +559,7 @@ const DrawerAppBar = (props) => {
                       </div>
                     </div>
                   </div>
-                  <a href="/Summer" class="text-decoration-none text-black">
+                  <a href="/MensCombo" class="text-decoration-none text-black">
                     <li class="px-3 blink position-relative heading_hover">
                       <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
                         NEW
@@ -568,7 +568,7 @@ const DrawerAppBar = (props) => {
                     </li>
                   </a>
 
-                  <a href="/Summer" class="text-decoration-none text-black">
+                  <a href="/WomensCombo" class="text-decoration-none text-black">
                     <li class="px-3 blinks position-relative heading_hover">
                       <span class="badge bg-danger position-absolute top-0  start-100 translate-middle">
                         NEW

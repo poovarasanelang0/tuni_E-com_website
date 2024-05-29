@@ -37,11 +37,11 @@ const SingleProduct = () => {
     customPaging: function (i) {
       return (
         <a>
-          <img
+          {/* <img
             src={productDetails.imageUrl[i]}
             alt={`View ${i + 1}`}
             className="img-fluid"
-          />
+          /> */}
         </a>
       );
     },

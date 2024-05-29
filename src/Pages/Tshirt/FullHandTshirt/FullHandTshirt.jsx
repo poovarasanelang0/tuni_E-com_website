@@ -170,6 +170,28 @@ const FullHandTshirt = () => {
     // Add more conditions if you have more radio buttons
   };
 
+
+  const colors = [
+    { name: "Red", hex: "#FF0000" },
+    { name: "Blue", hex: "#0000FF" },
+    { name: "Green", hex: "#008000" },
+    { name: "Black", hex: "#000000" },
+    { name: "White", hex: "#FFFFFF" },
+    { name: "Brown", hex: "#964B00" },
+    { name: "Orange", hex: "#FFA500" },
+    { name: "Yellow", hex: "#FFFF00" },
+    { name: "DarkBlue", hex: "#00008B" },
+    { name: "Pink", hex: "#FFC0CB" },
+    { name: "Purple", hex: "##800080" },
+    { name: "	Silver", hex: "#C0C0C0" },
+
+    { name: "Maroon", hex: "#800000" },
+    { name: "LightBlue", hex: "#ADD8E6" },
+    { name: "	Gray", hex: "#808080" },
+    { name: "	Silver", hex: "#C0C0C0" },
+  ];
+
+
   const settings = {
     dots: true,
     infinite: true,
@@ -507,22 +529,39 @@ const FullHandTshirt = () => {
               <Typography>Color</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <div>
-                {["Red", "Blue", "Green", "Black", "White"].map((color) => (
-                  <div className="form-check mx-5 my-3" key={color}>
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id={color}
-                      checked={selectedColors.includes(color)}
-                      onChange={() => handleColorChange(color)}
-                    />
-                    <label className="form-check-label" htmlFor={color}>
-                      {color}
-                    </label>
-                  </div>
-                ))}
-              </div>
+            <div>
+                          {colors.map((color) => (
+                            <div
+                              className="form-check mx-5 my-3"
+                              key={color.name}
+                            >
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={color.name}
+                                checked={selectedColors.includes(color.name)}
+                                onChange={() => handleColorChange(color.name)}
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={color.name}
+                              >
+                                <span
+                                  style={{
+                                    display: "inline-block",
+                                    width: "20px",
+                                    height: "20px",
+                                    backgroundColor: color.hex,
+                                    marginRight: "10px",
+                                    border: "1px solid #000",
+                                    borderRadius: "50%",
+                                  }}
+                                ></span>
+                                {color.name}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
             </AccordionDetails>
           </MuiAccordion>
         </div>
