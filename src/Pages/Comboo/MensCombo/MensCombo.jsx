@@ -11,7 +11,7 @@ const MensCombo = () => {
       <Header />
       <div className="container my-5">
         <div className="row my-2 py-2">
-          <h4 className="fw-bold">Mens Combos</h4>
+          <h4 className="fw-bold py-1">Mens Combos</h4>
           <div className="col-lg-12 col-md-12 col-12">
             <div className="d-flex  smallscreen py-2">
               <div>

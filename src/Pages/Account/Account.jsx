@@ -257,7 +257,7 @@ const Account = () => {
   return (
     <div>
       <Header />
-      <div className="container my-3 py-2">
+      <div className="container my-4 py-2">
         <div className="row">
           <div className="col-lg-12 col-md-12 col-12">
             <ul

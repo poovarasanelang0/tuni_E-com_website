@@ -61,7 +61,7 @@ const SingleProductCombo = () => {
   return (
     <>
       <Header />
-      <div className="container my-1">
+      <div className="container my-5">
         <div className="row my-1">
           <h5 className="py-3">Combo Pack</h5>
           <div className="col-lg-8 col-md-12 col-12">

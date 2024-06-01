@@ -58,8 +58,8 @@ const Home = () => {
   return (
     <>
 
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid my-5">
+        <div className="row my-1">
           <div className="col-lg-12 col-md-12 col-12">
             <Carsoual />
           </div>

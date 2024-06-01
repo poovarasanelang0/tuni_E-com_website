@@ -9,7 +9,7 @@ import zIndex from '@mui/material/styles/zIndex';
 const Carsoual = () => {
   return (
     <>
-    <div className='container-fluid'>
+    <div className='container-fluid my-1'>
       <div className='row'>
         <div className='col-12'>
         <div id="carouselExampleIndicators" className="carousel slide " data-bs-ride="carousel">

@@ -6,7 +6,7 @@ const Contact = () => {
   return (
     <>
       <Header />
-      <div className="container " style={{ marginTop: "25px" }}>
+      <div className="container " style={{ marginTop: "45px" }}>
         <div className="row">
           <div className="col-12">
             <div className="text-muted">
