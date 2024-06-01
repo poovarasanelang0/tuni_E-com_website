@@ -17,8 +17,8 @@ import Contact from "./Pages/Contact/Contact";
 import Account from "./Pages/Account/Account";
 import MensCombo from "./Pages/Comboo/MensCombo/MensCombo";
 import WomensCombo from "./Pages/Comboo/WomensCombo/WomensCombo";
-import ComboGetSingle from "./Pages/Comboo/ComboGetSingle/ComboGetSingle";
 import SingleProductCombo from "./Pages/Comboo/SingleProductCombo/SingleProductCombo";
+import TrackOrder from "./Pages/TrackOrder/TrackOrder";
 
 
 
@@ -47,15 +47,7 @@ function App() {
           <Route path="/Account" element={<Account />} />
           <Route path="/SingleProductCombo" element={<SingleProductCombo />} />
           <Route path="/Login" element={<Login />} />
-
-         
-
-
-
-
-
-
-         
+          <Route path="/TrackOrder" element={<TrackOrder />} />         
         
       </Routes>
     </BrowserRouter>

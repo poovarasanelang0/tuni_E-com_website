@@ -170,7 +170,6 @@ const FullHandTshirt = () => {
     // Add more conditions if you have more radio buttons
   };
 
-
   const colors = [
     { name: "Red", hex: "#FF0000" },
     { name: "Blue", hex: "#0000FF" },
@@ -184,12 +183,11 @@ const FullHandTshirt = () => {
     { name: "Pink", hex: "#FFC0CB" },
     { name: "Purple", hex: "##800080" },
     { name: "	Silver", hex: "#C0C0C0" },
-
     { name: "Maroon", hex: "#800000" },
     { name: "LightBlue", hex: "#ADD8E6" },
     { name: "	Gray", hex: "#808080" },
-    { name: "	Silver", hex: "#C0C0C0" },
   ];
+
 
 
   const settings = {
@@ -359,8 +357,8 @@ const FullHandTshirt = () => {
   return (
     <>
       <Header />
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid mt-5">
+        <div className="row ">
           <div className="col my-3">
             <img src={Tshirt} alt="JoggerImg" className="img-fluid" />
           </div>
@@ -395,9 +393,11 @@ const FullHandTshirt = () => {
       </div>
       <div className="container">
         <div className="row">
-          <div className="col-12">
-            <div className="d-flex justify-content-center">
-              <div className="form-check">
+          <div className="col-lg-12 col-md-12 col-12">
+          <div className="d-flex justify-content-center flex-wrap">
+
+              <div className="smallscreenRadio">
+              <div className="form-check d-inline-block">
                 <input
                   className="form-check-input"
                   type="radio"
@@ -411,7 +411,7 @@ const FullHandTshirt = () => {
                 </label>
               </div>
 
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -425,7 +425,7 @@ const FullHandTshirt = () => {
                   Plain Full Hand T-shirt{" "}
                 </label>
               </div>
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -439,7 +439,7 @@ const FullHandTshirt = () => {
                   Printed Full Hand T-shirt{" "}
                 </label>
               </div>
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -452,6 +452,7 @@ const FullHandTshirt = () => {
                 <label className="form-check-label" htmlFor="check">
                 Check Full Hand T-shirt{" "}
                 </label>
+              </div>
               </div>
             </div>
           </div>

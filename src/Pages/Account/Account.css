@@ -41,3 +41,8 @@
     color: inherit; /* Ensure the text color inherits from the parent element */
     text-decoration: none; /* Remove underline */
   }
+
+
+  .democheckdown{
+    margin-top: 20vh;
+  }

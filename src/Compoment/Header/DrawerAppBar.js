@@ -132,6 +132,7 @@ const DrawerAppBar = (props) => {
     setOpenModal(false);
   };
 
+  // small screen
   const drawer = (
     <Box>
       <Typography variant="h6">
@@ -319,6 +320,51 @@ const DrawerAppBar = (props) => {
             </ListItem>
           </List>
         </Typography>
+
+        <Typography>
+          <ListItem>
+            <Link
+              to="/MensCombo"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                marginTop: "-24px",
+              }}
+            >
+              <ListItemButton>
+                <h6
+                  className="fw-bold fs-6 blinksmall"
+                  style={{ marginLeft: "-20px" }}
+                >
+                  Men's Combo <span className="badge text-bg-danger">New</span>
+                </h6>
+              </ListItemButton>
+            </Link>
+          </ListItem>
+        </Typography>
+        <Typography>
+          <ListItem>
+            <Link
+              to="/WomensCombo"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                marginTop: "-24px",
+              }}
+            >
+              <ListItemButton>
+                <h6
+                  className="fw-bold fs-6 blinksmall"
+                  style={{ marginLeft: "-20px" }}
+                >
+                  Women's Combo{" "}
+                  <span className="badge text-bg-danger">New</span>
+                </h6>
+              </ListItemButton>
+            </Link>
+          </ListItem>
+        </Typography>
+
         <Typography>
           <div className="small_nav_bar_heading fw-bold fs-5 mx-3">Women</div>
           <ListItem>
@@ -345,12 +391,12 @@ const DrawerAppBar = (props) => {
 
   return (
     <>
-      <div className="container" style={{ zIndex: "2" }}>
+      <div className="contai" style={{ zIndex: "2" }}>
         <Box sx={{ display: "flex" }}>
           <CssBaseline />
           <AppBar
             component="nav"
-            sx={{ backgroundColor: "#F8F8F8", marginTop: "50px" }}
+            sx={{ backgroundColor: "#F8F8F8", marginTop: "30px" }}
           >
             <Toolbar>
               <IconButton
@@ -568,7 +614,10 @@ const DrawerAppBar = (props) => {
                     </li>
                   </a>
 
-                  <a href="/WomensCombo" class="text-decoration-none text-black">
+                  <a
+                    href="/WomensCombo"
+                    class="text-decoration-none text-black"
+                  >
                     <li class="px-3 blinks position-relative heading_hover">
                       <span class="badge bg-danger position-absolute top-0  start-100 translate-middle">
                         NEW
@@ -606,7 +655,10 @@ const DrawerAppBar = (props) => {
                             to="/TrackOrder"
                             className="text-decoration-none text-black"
                           >
-                            <MenuItem onClick={handleClose} className="subdropdown_hover">
+                            <MenuItem
+                              onClick={handleClose}
+                              className="subdropdown_hover"
+                            >
                               Track Order
                             </MenuItem>
                           </Link>
@@ -615,20 +667,31 @@ const DrawerAppBar = (props) => {
                             className="text-decoration-none text-black"
                           >
                             {" "}
-                            <MenuItem onClick={handleClose} className="subdropdown_hover">Contact</MenuItem>
+                            <MenuItem
+                              onClick={handleClose}
+                              className="subdropdown_hover"
+                            >
+                              Contact
+                            </MenuItem>
                           </Link>
                           <Link
                             to="/Account"
                             className="text-decoration-none text-black"
                           >
                             {" "}
-                            <MenuItem onClick={handleClose} className="subdropdown_hover">
+                            <MenuItem
+                              onClick={handleClose}
+                              className="subdropdown_hover"
+                            >
                               My account
                             </MenuItem>
                           </Link>
                           {user ? (
                             <IconButton color="inherit">
-                              <Button onClick={logout} className="text-black subdropdown_hover" >
+                              <Button
+                                onClick={logout}
+                                className="text-black subdropdown_hover"
+                              >
                                 Logout
                               </Button>
                             </IconButton>
@@ -737,7 +800,7 @@ const DrawerAppBar = (props) => {
               {drawer}
             </Drawer>
           </Box>
-          <Box component="main" sx={{ p: 4 }}>
+          <Box component="main" sx={{ p: 1 }}>
             <Toolbar />
           </Box>
         </Box>

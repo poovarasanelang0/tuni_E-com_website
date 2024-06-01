@@ -3,12 +3,12 @@ import Slider from "react-slick";
 import "./SingleProductCombo.css";
 import Header from "../../../Compoment/Header/Header";
 import Footer from "../../../Compoment/Footer/Footer";
+import RatingReviews from "../../Rating/RatingReviews";
 
 const SingleProductCombo = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
   
-  // Define details for each image
   const imageDetails = [
     {
       title: "Green White Tshirt Family Matching Combo",
@@ -61,8 +61,8 @@ const SingleProductCombo = () => {
   return (
     <>
       <Header />
-      <div className="container my-4">
-        <div className="row my-2">
+      <div className="container my-1">
+        <div className="row my-1">
           <h5 className="py-3">Combo Pack</h5>
           <div className="col-lg-8 col-md-12 col-12">
             <div className="my-1">
@@ -146,6 +146,14 @@ const SingleProductCombo = () => {
               <div><button className="bg-primary border-0 px-3 py-1 text-white ">Add to Cart</button></div>
             </div>
           </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-12 col-md-12 col-12">
+            <div>
+              <RatingReviews />
+            </div>
+          </div>
+
         </div>
       </div>
       <Footer />

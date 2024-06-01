@@ -149,6 +149,19 @@ background: rgb(124,38,220);
 
 
 
+  @keyframes blinksmall {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  .blinksmall {
+    animation: blink 1s infinite;
+  }
+  
+
+
+
 
   .heading_hover {
     position: relative;
@@ -173,8 +186,6 @@ background: rgb(124,38,220);
 .heading_hover:hover::after {
     width: 100%;
 }
-
-
 .subdropdown_hover:hover{
   color: blue;
   font-size: 13px;

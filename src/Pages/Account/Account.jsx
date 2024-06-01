@@ -556,7 +556,7 @@ const Account = () => {
                   </div>
                 </div>
               </div>
-              {/* ----------------------myorders loan---------------------------------- */}
+              {/* ----------------------myorders ---------------------------------- */}
               <div
                 class="tab-pane fade"
                 id="pills-myorders"
@@ -565,6 +565,7 @@ const Account = () => {
                 tabindex="0"
               >
                 <div className="col">
+                  <h4 className="fw-bold py-1 px-1 text-primary">My Order History.</h4>
                   <div
                     className="scrollable-container"
                     style={{ maxHeight: "400px", overflowY: "auto" }}

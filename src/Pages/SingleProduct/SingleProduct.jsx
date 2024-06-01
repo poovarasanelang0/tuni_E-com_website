@@ -305,7 +305,7 @@ const SingleProduct = () => {
       <Header />
       <div className="container my-5 fontfamily">
         <div className="row">
-          <div className="col-lg-6 col-md-12 col-12">
+          <div className="col-lg-6 col-md-12 col-12 my-4">
             <div className="slider-container">
               <Slider {...settings} ref={sliderRef}>
                 {productDetails.imageUrl.map((imageUrl, index) => (
@@ -319,11 +319,11 @@ const SingleProduct = () => {
                 ))}
               </Slider>
             </div>
-            <div className="small-images-container mt-3">
+            <div className="small-images-container mt-2 ">
               {productDetails.imageUrl.map((imageUrl, index) => (
                 <div
                   key={index}
-                  className="small-image-box"
+                  className="small-image-box px-1 "
                   onClick={() => handleSmallImageClick(index)}
                 >
                   <img

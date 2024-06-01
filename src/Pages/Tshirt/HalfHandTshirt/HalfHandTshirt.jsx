@@ -188,11 +188,9 @@ const HalfHandTshirt = () => {
     { name: "Pink", hex: "#FFC0CB" },
     { name: "Purple", hex: "##800080" },
     { name: "	Silver", hex: "#C0C0C0" },
-
     { name: "Maroon", hex: "#800000" },
     { name: "LightBlue", hex: "#ADD8E6" },
     { name: "	Gray", hex: "#808080" },
-    { name: "	Silver", hex: "#C0C0C0" },
   ];
 
 
@@ -362,8 +360,8 @@ const HalfHandTshirt = () => {
   return (
     <>
       <Header />
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid mt-5">
+        <div className="row ">
           <div className="col my-3">
             <img src={Tshirt} alt="JoggerImg" className="img-fluid" />
           </div>
@@ -400,9 +398,11 @@ const HalfHandTshirt = () => {
       </div>
       <div className="container">
         <div className="row">
-          <div className="col-12">
-            <div className="d-flex justify-content-center">
-              <div className="form-check">
+        <div className="col-lg-12 col-md-12 col-12">
+          <div className="d-flex justify-content-center flex-wrap">
+
+              <div className="smallscreenRadio">
+              <div className="form-check d-inline-block">
                 <input
                   className="form-check-input"
                   type="radio"
@@ -416,7 +416,7 @@ const HalfHandTshirt = () => {
                 </label>
               </div>
 
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -430,7 +430,7 @@ const HalfHandTshirt = () => {
                   Plain Half Hand T-shirt{" "}
                 </label>
               </div>
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -444,7 +444,7 @@ const HalfHandTshirt = () => {
                   Printed Half Hand T-shirt{" "}
                 </label>
               </div>
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -455,8 +455,9 @@ const HalfHandTshirt = () => {
                   onChange={() => handleRadioChange("check")}
                 />
                 <label className="form-check-label" htmlFor="check">
-                  Check Half Hand T-shirt{" "}
+                Check Full Hand T-shirt{" "}
                 </label>
+              </div>
               </div>
             </div>
           </div>

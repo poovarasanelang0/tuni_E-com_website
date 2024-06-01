@@ -167,8 +167,6 @@ const CollarTshirt = () => {
     // Add more conditions if you have more radio buttons
   };
 
-
-
   const colors = [
     { name: "Red", hex: "#FF0000" },
     { name: "Blue", hex: "#0000FF" },
@@ -186,8 +184,6 @@ const CollarTshirt = () => {
     { name: "LightBlue", hex: "#ADD8E6" },
     { name: "	Gray", hex: "#808080" },
   ];
-
-
 
   const settings = {
     dots: true,
@@ -233,47 +229,48 @@ const CollarTshirt = () => {
                     to={`/SingleProducts/${product.id}`}
                     className="text-decoration-none border-0"
                   >
-                     <div className="card-container card_container1">
-                <div className="card text-white">
-                  <div className="product_images">
-                    <img
-                      src={product.imageUrl[0]}
-                      className="card-img front-img fixed_img"
-                      alt={product.name}
-                    />
-                    <img
-                      src={product.imageUrl[1]}
-                      className="card-img back-img fixed_img"
-                      alt={product.name}
-                    />
-                  </div>
-                  <div className="card-img-overlay">
-                    <span className="badge bg-success">BEST SELLER</span>
-                  </div>
-                  <div className="card-img-overlay d-flex">
-                    <div className="mt-auto">
-                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
-                      <i className="bi bi-star-fill text-warning"></i> {product.rating} 4.5 | 5.0{product.reviews}
-                      </span>
+                    <div className="card-container card_container1">
+                      <div className="card text-white">
+                        <div className="product_images">
+                          <img
+                            src={product.imageUrl[0]}
+                            className="card-img front-img fixed_img"
+                            alt={product.name}
+                          />
+                          <img
+                            src={product.imageUrl[1]}
+                            className="card-img back-img fixed_img"
+                            alt={product.name}
+                          />
+                        </div>
+                        <div className="card-img-overlay">
+                          <span className="badge bg-success">BEST SELLER</span>
+                        </div>
+                        <div className="card-img-overlay d-flex">
+                          <div className="mt-auto">
+                            <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                              <i className="bi bi-star-fill text-warning"></i>{" "}
+                              {product.rating} 4.5 | 5.0{product.reviews}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-black prices_details">
+                        <h5 className="mt-3">{product.name}</h5>
+                        <h4>{product.category}</h4>
+                        <h6 className="fw-bold">
+                          <i className="bi bi-currency-rupee"></i>
+                          {product.price} &nbsp;
+                          <del>
+                            <i className="bi bi-currency-rupee"></i>1,877
+                          </del>{" "}
+                          OFF
+                        </h6>
+                        <p className="price_msg_success">
+                          Lowest price in last 30 days
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="text-black prices_details">
-                  <h5 className="mt-3">{product.name}</h5>
-                  <h4>{product.category}</h4>
-                  <h6 className="fw-bold">
-                    <i className="bi bi-currency-rupee"></i>
-                    {product.price} &nbsp;
-                    <del>
-                      <i className="bi bi-currency-rupee"></i>1,877
-                    </del>{" "}
-                    OFF
-                  </h6>
-                  <p className="price_msg_success">
-                    Lowest price in last 30 days
-                  </p>
-                </div>
-              </div>
                   </Link>
                 </div>
               ))}
@@ -337,54 +334,55 @@ const CollarTshirt = () => {
             //     </div>
             //   </Link>
             // </div>
-            <div key={product.id}  className="col-lg-4 col-md-6 col-12">
-            <Link
-              to={`/SingleProducts/${product.id}`}
-              className="text-decoration-none border-0"
-            >
-              <div className="card-container card_container1">
-                <div className="card text-white">
-                  <div className="product_images">
-                    <img
-                      src={product.imageUrl[0]}
-                      className="card-img front-img fixed_img"
-                      alt={product.name}
-                    />
-                    <img
-                      src={product.imageUrl[1]}
-                      className="card-img back-img fixed_img"
-                      alt={product.name}
-                    />
-                  </div>
-                  <div className="card-img-overlay">
-                    <span className="badge bg-success">BEST SELLER</span>
-                  </div>
-                  <div className="card-img-overlay d-flex">
-                    <div className="mt-auto">
-                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
-                      <i className="bi bi-star-fill text-warning"></i> {product.rating} 4.5 | 5.0{product.reviews}
-                      </span>
+            <div key={product.id} className="col-lg-4 col-md-6 col-12">
+              <Link
+                to={`/SingleProducts/${product.id}`}
+                className="text-decoration-none border-0"
+              >
+                <div className="card-container card_container1">
+                  <div className="card text-white">
+                    <div className="product_images">
+                      <img
+                        src={product.imageUrl[0]}
+                        className="card-img front-img fixed_img"
+                        alt={product.name}
+                      />
+                      <img
+                        src={product.imageUrl[1]}
+                        className="card-img back-img fixed_img"
+                        alt={product.name}
+                      />
+                    </div>
+                    <div className="card-img-overlay">
+                      <span className="badge bg-success">BEST SELLER</span>
+                    </div>
+                    <div className="card-img-overlay d-flex">
+                      <div className="mt-auto">
+                        <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                          <i className="bi bi-star-fill text-warning"></i>{" "}
+                          {product.rating} 4.5 | 5.0{product.reviews}
+                        </span>
+                      </div>
                     </div>
                   </div>
+                  <div className="text-black prices_details">
+                    <h5 className="mt-3">{product.name}</h5>
+                    <h4>{product.category}</h4>
+                    <h6 className="fw-bold">
+                      <i className="bi bi-currency-rupee"></i>
+                      {product.price} &nbsp;
+                      <del>
+                        <i className="bi bi-currency-rupee"></i>1,877
+                      </del>{" "}
+                      OFF
+                    </h6>
+                    <p className="price_msg_success">
+                      Lowest price in last 30 days
+                    </p>
+                  </div>
                 </div>
-                <div className="text-black prices_details">
-                  <h5 className="mt-3">{product.name}</h5>
-                  <h4>{product.category}</h4>
-                  <h6 className="fw-bold">
-                    <i className="bi bi-currency-rupee"></i>
-                    {product.price} &nbsp;
-                    <del>
-                      <i className="bi bi-currency-rupee"></i>1,877
-                    </del>{" "}
-                    OFF
-                  </h6>
-                  <p className="price_msg_success">
-                    Lowest price in last 30 days
-                  </p>
-                </div>
-              </div>
-            </Link>
-          </div>
+              </Link>
+            </div>
           ))
         ) : (
           <div className="col-12">
@@ -400,8 +398,8 @@ const CollarTshirt = () => {
   return (
     <>
       <Header />
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid mt-5">
+        <div className="row mt-5 ">
           <div className="col my-3">
             <img src={JoggerImg} alt="JoggerImg" className="img-fluid" />
           </div>
@@ -438,9 +436,11 @@ const CollarTshirt = () => {
       </div>
       <div className="container">
         <div className="row">
-          <div className="col-12">
-            <div className="d-flex justify-content-center">
-              <div className="form-check">
+        <div className="col-lg-12 col-md-12 col-12">
+          <div className="d-flex justify-content-center flex-wrap">
+
+              <div className="smallscreenRadio">
+              <div className="form-check d-inline-block">
                 <input
                   className="form-check-input"
                   type="radio"
@@ -454,7 +454,7 @@ const CollarTshirt = () => {
                 </label>
               </div>
 
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -468,8 +468,7 @@ const CollarTshirt = () => {
                   Plain Collar T-shirt{" "}
                 </label>
               </div>
-
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -483,7 +482,7 @@ const CollarTshirt = () => {
                   Printed Collar T-shirt{" "}
                 </label>
               </div>
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -494,8 +493,9 @@ const CollarTshirt = () => {
                   onChange={() => handleRadioChange("check")}
                 />
                 <label className="form-check-label" htmlFor="check">
-                  check Collar T-shirt{" "}
+                Check Collar T-shirt{" "}
                 </label>
+              </div>
               </div>
             </div>
           </div>
@@ -583,7 +583,7 @@ const CollarTshirt = () => {
                         <Typography>Color</Typography>
                       </AccordionSummary>
                       <AccordionDetails>
-                      <div>
+                        <div>
                           {colors.map((color) => (
                             <div
                               className="form-check mx-5 my-3"

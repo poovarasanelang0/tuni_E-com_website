@@ -8,6 +8,7 @@ const AllHomePageImport = () => {
   return (
     <>
     <Header />
+  
     <Home />
     <HomeProduct />
 

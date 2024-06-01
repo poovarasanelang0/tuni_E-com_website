@@ -379,7 +379,7 @@ const HomeProduct = () => {
         </div>
         <div className="row">
           <div className="col">
-            <img src={CashGif} alt="Verfiy" className="img-fluid" />
+            {/* <img src={CashGif} alt="Verfiy" className="img-fluid" /> */}
           </div>
         </div>
       </div>

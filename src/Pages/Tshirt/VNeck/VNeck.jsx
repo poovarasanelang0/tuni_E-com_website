@@ -363,8 +363,8 @@ const VNeck = () => {
   return (
     <>
       <Header />
-      <div className="container-fluid">
-        <div className="row">
+      <div className="container-fluid mt-5">
+        <div className="row ">
           <div className="col my-3">
             <img src={Tshirt} alt="JoggerImg" className="img-fluid" />
           </div>
@@ -401,9 +401,11 @@ const VNeck = () => {
       </div>
       <div className="container">
         <div className="row">
-          <div className="col-12">
-            <div className="d-flex justify-content-center">
-              <div className="form-check">
+        <div className="col-lg-12 col-md-12 col-12">
+          <div className="d-flex justify-content-center flex-wrap">
+
+              <div className="smallscreenRadio">
+              <div className="form-check d-inline-block">
                 <input
                   className="form-check-input"
                   type="radio"
@@ -413,11 +415,11 @@ const VNeck = () => {
                   onChange={() => handleRadioChange("all")}
                 />
                 <label className="form-check-label mx-1" htmlFor="all">
-                  All Vneck T-shirt
+                  All V-Neck T-shirt
                 </label>
               </div>
 
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -428,10 +430,10 @@ const VNeck = () => {
                   onChange={() => handleRadioChange("Plain")}
                 />
                 <label className="form-check-label" htmlFor="Plain">
-                  Plain Vneck T-shirt{" "}
+                  Plain V-Neck T-shirt{" "}
                 </label>
               </div>
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -442,10 +444,10 @@ const VNeck = () => {
                   onChange={() => handleRadioChange("Printed")}
                 />
                 <label className="form-check-label" htmlFor="Printed">
-                  Printed Vneck T-shirt{" "}
+                  Printed V-Neck T-shirt{" "}
                 </label>
               </div>
-              <div className="form-check mx-1" onClick={handleNextButtonClick}>
+              <div className="form-check mx-1 d-inline-block" onClick={handleNextButtonClick}>
                 <input
                   className="form-check-input"
                   name="flexRadioDefault"
@@ -456,8 +458,9 @@ const VNeck = () => {
                   onChange={() => handleRadioChange("check")}
                 />
                 <label className="form-check-label" htmlFor="check">
-                  Check Vneck T-shirt{" "}
+                Check V-NeckT-shirt{" "}
                 </label>
+              </div>
               </div>
             </div>
           </div>

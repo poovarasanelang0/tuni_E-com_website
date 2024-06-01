@@ -93,4 +93,16 @@
     opacity: 1;
   }
   
-
+  .smallscreenRadio .form-check {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  /* Styling for small screens */
+  @media (max-width: 768px) {
+    .smallscreenRadio .form-check {
+      display: block;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+  }
