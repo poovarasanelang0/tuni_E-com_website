@@ -45,7 +45,9 @@ function App() {
           <Route path="/WomensCombo" element={<WomensCombo />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/Account" element={<Account />} />
-          <Route path="/SingleProductCombo" element={<SingleProductCombo />} />
+          {/* <Route path="/SingleProductCombo" element={<SingleProductCombo />} /> */}
+          <Route path="/SingleProductCombo/:productId" element={<SingleProductCombo />} />
+
           <Route path="/Login" element={<Login />} />
           <Route path="/TrackOrder" element={<TrackOrder />} />         
         

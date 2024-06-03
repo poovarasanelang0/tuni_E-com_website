@@ -307,7 +307,7 @@ const HalfHandTshirt = () => {
                   <div className="product_images">
                     <img
                       src={product.imageUrl[0]}
-                      className="card-img front-img fixed_img"
+                      className="card-img front-img   "
                       alt={product.name}
                     />
                     <img

@@ -1,35 +1,46 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "./SingleProductCombo.css";
 import Header from "../../../Compoment/Header/Header";
 import Footer from "../../../Compoment/Footer/Footer";
 import RatingReviews from "../../Rating/RatingReviews";
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  deleteDoc,
+  updateDoc,
+  setDoc,
+  getDocs,
+} from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const SingleProductCombo = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
-  
+
   const imageDetails = [
     {
       title: "Green White Tshirt Family Matching Combo",
       description: "Green White Crew Neck Men Tshirt",
-      sizes: ["S", "M", "L", "XL", "XXL"]
+      sizes: ["S", "M", "L", "XL", "XXL"],
     },
     {
       title: "Blue Red Hoodie Combo",
       description: "Blue Red Hoodie for Men and Women",
-      sizes: ["M", "L", "XL"]
+      sizes: ["M", "L", "XL"],
     },
     {
       title: "Black Jeans Combo",
       description: "Black Jeans for Men and Women",
-      sizes: ["S", "M", "L"]
+      sizes: ["S", "M", "L"],
     },
     {
       title: "Pink White Dress Combo",
       description: "Pink White Dress for Women",
-      sizes: ["L", "XL", "XXL"]
-    }
+      sizes: ["L", "XL", "XXL"],
+    },
   ];
 
   const settings = {
@@ -46,18 +57,47 @@ const SingleProductCombo = () => {
   };
 
   const sliderRef = useRef(null);
-
   const handleSmallImageClick = (index) => {
     if (sliderRef.current) {
       sliderRef.current.slickGoTo(index);
     }
   };
-  
-
-
   const handleSizeClick = (size) => {
     setSelectedSize(size);
   };
+
+  const navigate = useNavigate();
+  const [showCart, setShowCart] = useState(false);
+  const [countDown, setCountDown] = useState("");
+  const [cart, setCart] = useState([]);
+  const { productId } = useParams();
+  const [productDetailsCombo, setProductDetailsCombo] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const auth = getAuth();
+  const firestore = getFirestore();
+
+  useEffect(() => {
+    const fetchProductDetailsCombo = async () => {
+      try {
+        const comboProductsRef = collection(firestore, "combo_products");
+        const comboProductSnapshot = await getDocs(comboProductsRef);
+        const product = comboProductSnapshot.docs.find(
+          (doc) => doc.id === productId
+        );
+        if (product.exists()) {
+          const data = { ...product.data(), id: product.id };
+          setProductDetailsCombo(data);
+          console.log("combo-get-single-fetch:;", data);
+        } else {
+          console.log("Product not found");
+        }
+      } catch (error) {
+        console.log("error:combo:", error);
+      }
+    };
+    fetchProductDetailsCombo();
+  }, [productId]);
+
   return (
     <>
       <Header />
@@ -67,7 +107,7 @@ const SingleProductCombo = () => {
           <div className="col-lg-8 col-md-12 col-12">
             <div className="my-1">
               <div className="slider-container_combo1">
-                <Slider {...settings} ref={sliderRef}>
+                <Slider {...settings} ref={sliderRef}>  
                   <div className="slider-container_combo">
                     <img
                       src="https://tusokonline.com/cdn/shop/files/Slide10_a4e4f5f2-2ec7-4486-b6ee-af7c577c3ec8_576x.jpg?v=1714834044"
@@ -141,9 +181,16 @@ const SingleProductCombo = () => {
               </div>
               <div className="price-box my-2">
                 <h3>Price:</h3>
-                <p><i class="bi bi-currency-rupee"></i>2777.00 (For set of 4 pieces)</p>
+                <p>
+                  <i class="bi bi-currency-rupee"></i>2777.00 (For set of 4
+                  pieces)
+                </p>
               </div>
-              <div><button className="bg-primary border-0 px-3 py-1 text-white ">Add to Cart</button></div>
+              <div>
+                <button className="bg-primary border-0 px-3 py-1 text-white ">
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -153,7 +200,6 @@ const SingleProductCombo = () => {
               <RatingReviews />
             </div>
           </div>
-
         </div>
       </div>
       <Footer />
