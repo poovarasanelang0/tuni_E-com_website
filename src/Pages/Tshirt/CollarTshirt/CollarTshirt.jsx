@@ -19,8 +19,13 @@ import "slick-carousel/slick/slick-theme.css";
 import "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../../firebaseConfig";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const CollarTshirt = () => {
+  useEffect(() => {
+    AOS.init();
+  }, [])
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -229,7 +234,7 @@ const CollarTshirt = () => {
                     to={`/SingleProducts/${product.id}`}
                     className="text-decoration-none border-0"
                   >
-                    <div className="card-container card_container1">
+                    <div className="card-container card_container1" data-aos="zoom-in">
                       <div className="card text-white">
                         <div className="product_images">
                           <img
@@ -339,7 +344,7 @@ const CollarTshirt = () => {
                 to={`/SingleProducts/${product.id}`}
                 className="text-decoration-none border-0"
               >
-                <div className="card-container card_container1">
+                <div className="card-container card_container1" data-aos="zoom-in">
                   <div className="card text-white">
                     <div className="product_images">
                       <img

@@ -52,7 +52,7 @@ const AddToCart = () => {
       });
 
       setCartProducts(cartProducts);
-      console.log(cartProducts, "cartProducts ADDTOCART");
+      // console.log(cartProducts, "cartProducts ADDTOCART");
     } catch (error) {
       console.error("Error fetching cart products:", error);
     }

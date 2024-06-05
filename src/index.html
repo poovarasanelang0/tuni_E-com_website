@@ -1973,3 +1973,785 @@ const CollarTshirt = () => {
 };
 
 export default CollarTshirt;
+
+
+
+
+
+
+import React , {useEffect} from "react";
+import "./Combo.css";
+import { Container, Row, Col } from "reactstrap";
+import img001 from "../../assests/images/001.jpg";
+import img002 from "../../assests/images/002.jpg";
+import img003 from "../../assests/images/003.jpg";
+import img004 from "../../assests/images/img004.jpg";
+import img005 from "../../assests/images/img005.jpg";
+import img006 from "../../assests/images/img006.jpg";
+import img007 from "../../assests/images/img007.jpg";
+import img008 from "../../assests/images/img008.jpg";
+import img009 from "../../assests/images/img009.jpg";
+import img010 from "../../assests/images/img010.jpg";
+import img011 from "../../assests/images/img011.jpg";
+import img012 from "../../assests/images/img012.jpg";
+
+
+
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+const Combo = () => {
+  useEffect(() => {
+    AOS.init();
+  }, []);
+
+  // const combos = [
+  //   { img: img001, alt: "Combo 1", reviews: 467, title: "Sapphirery Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img002, alt: "Combo 2", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img003, alt: "Combo 3", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img004, alt: "Combo 4", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img005, alt: "Combo 4", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img006, alt: "Combo 4", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img007, alt: "Combo 4", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img008, alt: "Combo 4", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img009, alt: "Combo 4", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img010, alt: "Combo 4", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img011, alt: "Combo 4", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+  //   { img: img012, alt: "Combo 4", reviews: 467, title: "Sapphire Luxury Co-ord", price: 1949, oldPrice: 1877, description: "Ivory Couple Matching Shirts" },
+
+
+
+  // ];
+
+  return (
+    <>
+      <div>
+        <Container>
+          <Row>
+            <Col lg="3 " className="align-items-center my-3 my-4">
+              <div className="border border-warning-subtle" data-aos="fade-down">
+                <h2 className="mx-4">Mens Combo</h2>
+              </div>
+            </Col>
+            <Col lg="12" >
+              <div className="border_line" data-aos="fade-right">
+              <div className="contenttitle">
+                <h4>Select Combos :</h4>
+                <div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault1"
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexRadioDefault1"
+                    >
+                      All
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault1"
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexRadioDefault1"
+                    >
+                      Combo 1
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault1"
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexRadioDefault1"
+                    >
+                      Combo 2
+                    </label>
+                  </div>
+                </div>
+              </div>
+              </div>
+              
+            </Col>
+          </Row>
+          {/* <Row>
+            <Col>
+            <div className="d-flex align-items-center gap-3">
+            <div className="card_container1" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }} >
+                  <img src={img001} className="card-img-top"  alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage2" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img002} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage3" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img003} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage4" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img004} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+          
+            </div>              
+           </Col>
+
+          </Row> */}
+          <Row>
+          <Col>
+            <div className="d-flex align-items-center gap-3 my-4">
+            <div className="card_container1" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }} >
+                  <img src={img001} className="card-img-top"  alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage2" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img002} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage3" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img003} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage4" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img004} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+          
+            </div>              
+           </Col>
+           
+          </Row>
+          <Row>
+          <Col>
+            <div className="d-flex align-items-center gap-3">
+            <div className="card_container1" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }} >
+                  <img src={img005} className="card-img-top"  alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage2" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img006} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage3" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img007} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage4" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img008} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+          
+            </div>              
+           </Col>
+          </Row>
+          <Row>
+          <Col>
+            <div className="d-flex align-items-center gap-3">
+            <div className="card_container1" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }} >
+                  <img src={img009} className="card-img-top"  alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage2" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img010} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage3" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img011} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="containerimage4" data-aos="zoom-in-up">
+            <div>    
+            <div className="card" style={{ width: "16rem" }}>
+                  <img src={img012} className="card-img-top" alt="..." />
+                  <div className="card-img-overlay ">
+                    <span className="btn btn-warning ">BEST SELLER </span>
+                  </div>   
+                </div>
+              </div>
+              <div>
+                <div className="my-2">
+                  <span >
+                  <i class="bi bi-star-fill text-warning "></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i><i class="bi bi-star-fill text-warning"></i> {} 467 reviews</span>
+                </div>
+                <div className="text-black prices_details">
+                  <h5 className="fontstyle">Sapphire Luxury Co-ord</h5>
+                  <div>
+                  <h6 className="fw-bold">
+                    <i class="bi bi-currency-rupee"></i>1,949.00&nbsp;
+                    <del className="text-muted">
+                      <i class="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    
+                  </h6>
+                  </div>
+                 
+                  <p className="text-muted">
+                    Ivory Couple Matching Shirts
+                  </p>
+                </div>
+              </div>
+            </div>
+          
+            </div>              
+           </Col>
+          </Row>
+        </Container>
+      </div>
+    </>
+  );
+};
+
+export default Combo;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+
+const renderProductCardsLargeScreen = () => {
+  const [hoveredProductId, setHoveredProductId] = useState(null);
+
+  const handleMouseEnter = (productId) => {
+    setHoveredProductId(productId);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredProductId(null);
+  };
+
+  return (
+    <div className="row">
+      {filteredProducts.length > 0 ? (
+        filteredProducts.map((product) => (
+          <div key={product.id} className="col-lg-3 col-md-6 col-12">
+            <Link
+              to={`/SingleProductCombo/${product.id}`}
+              className="text-decoration-none border-0"
+            >
+              <div
+                className="card-container card_containerCombo"
+                onMouseEnter={() => handleMouseEnter(product.id)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="card text-white">
+                  <div className="">
+                    {hoveredProductId === product.id ? (
+                      <video
+                        src={product.videoUrl}
+                        className="card-img fixed_img_combo"
+                        autoPlay
+                        loop
+                        muted
+                      />
+                    ) : (
+                      <img
+                        src={product.tumbnail}
+                        className="card-img fixed_img_combo"
+                        alt={product.name}
+                      />
+                    )}
+                  </div>
+                  <div className="card-img-overlay">
+                    <span className="badge bg-success">BEST SELLER</span>
+                  </div>
+                  <div className="card-img-overlay d-flex">
+                    <div className="mt-auto">
+                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                        <i className="bi bi-star-fill text-warning"></i>{" "}
+                        {product.rating} 4.5 | 5.0{product.reviews}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="text-black prices_details">
+                  <div className="my-2">
+                    <span>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-half text-warning"></i>{" "}
+                      467 reviews
+                    </span>
+                  </div>
+                  <h5 className="mt-1">
+                    {product.name} {product.category}
+                  </h5>
+                  <h6 className="fw-bold">
+                    <i className="bi bi-currency-rupee"></i>
+                    {product.price} &nbsp;
+                    <del>
+                      <i className="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    OFF
+                  </h6>
+                  <p className="price_msg_success">
+                    Lowest price in last 30 days
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </div>
+        ))
+      ) : (
+        <div className="col-12">
+          <p className="text-center text-danger">
+            There are no products available in this category.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default renderProductCardsLargeScreen;

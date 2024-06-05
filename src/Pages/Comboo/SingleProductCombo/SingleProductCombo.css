@@ -8,5 +8,19 @@
   }
   
 
+  .combo_single{
+height: auto;
+width: 100%;
+border-radius: 20px;
+  }
+
+
+  .combo_single img{
+   object-fit: cover;
+   border-radius: 10px;
+
+
+      }
+    
 
  

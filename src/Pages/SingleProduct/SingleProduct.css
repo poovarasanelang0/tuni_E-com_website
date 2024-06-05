@@ -133,6 +133,7 @@ border: none;
     width: 50px; 
     height: 60px; 
     overflow: hidden;
+    border-radius: 8px;
   }
   
   .small-image-box img {

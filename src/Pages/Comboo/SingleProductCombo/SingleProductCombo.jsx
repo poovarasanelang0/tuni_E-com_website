@@ -1,47 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";import { useParams, Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "./SingleProductCombo.css";
-import Header from "../../../Compoment/Header/Header";
+import Header from "../../../Compoment/Header/Header"
 import Footer from "../../../Compoment/Footer/Footer";
 import RatingReviews from "../../Rating/RatingReviews";
-import {
-  collection,
-  addDoc,
-  getFirestore,
-  deleteDoc,
-  updateDoc,
-  setDoc,
-  getDocs,
-} from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const SingleProductCombo = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
-
-  const imageDetails = [
-    {
-      title: "Green White Tshirt Family Matching Combo",
-      description: "Green White Crew Neck Men Tshirt",
-      sizes: ["S", "M", "L", "XL", "XXL"],
-    },
-    {
-      title: "Blue Red Hoodie Combo",
-      description: "Blue Red Hoodie for Men and Women",
-      sizes: ["M", "L", "XL"],
-    },
-    {
-      title: "Black Jeans Combo",
-      description: "Black Jeans for Men and Women",
-      sizes: ["S", "M", "L"],
-    },
-    {
-      title: "Pink White Dress Combo",
-      description: "Pink White Dress for Women",
-      sizes: ["L", "XL", "XXL"],
-    },
-  ];
+  const [productDetailsCombo, setProductDetailsCombo] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const { productId } = useParams();
+  const auth = getAuth();
+  const firestore = getFirestore();
 
   const settings = {
     customPaging: function (i) {
@@ -66,16 +39,6 @@ const SingleProductCombo = () => {
     setSelectedSize(size);
   };
 
-  const navigate = useNavigate();
-  const [showCart, setShowCart] = useState(false);
-  const [countDown, setCountDown] = useState("");
-  const [cart, setCart] = useState([]);
-  const { productId } = useParams();
-  const [productDetailsCombo, setProductDetailsCombo] = useState(null);
-  const [userId, setUserId] = useState(null);
-  const auth = getAuth();
-  const firestore = getFirestore();
-
   useEffect(() => {
     const fetchProductDetailsCombo = async () => {
       try {
@@ -87,7 +50,7 @@ const SingleProductCombo = () => {
         if (product.exists()) {
           const data = { ...product.data(), id: product.id };
           setProductDetailsCombo(data);
-          console.log("combo-get-single-fetch:;", data);
+          console.log("combo-get-single-fetch:", data);
         } else {
           console.log("Product not found");
         }
@@ -98,6 +61,45 @@ const SingleProductCombo = () => {
     fetchProductDetailsCombo();
   }, [productId]);
 
+  if (!productDetailsCombo) {
+    return <div>Loading...</div>;
+  }
+
+  const getSizeOptions = (name) => {
+    const lowerCaseName = name.toLowerCase();
+    if (lowerCaseName.includes("pant") || lowerCaseName.includes("jeans")) {
+      return ["28", "30", "32", "34", "36", "38"];
+    } else {
+      return ["S", "M", "L", "XL", "XXL"];
+    }
+  };
+  
+
+  const handleAddToCombo = () => {
+    const currentProduct = productDetailsCombo.combo_details[selectedImageIndex];
+    if (selectedSize || currentProduct.name.toLowerCase().includes("accessory")) {
+      setSelectedItems((prevItems) => [
+        ...prevItems,
+        { ...currentProduct, size: selectedSize },
+      ]);
+      setSelectedSize("");
+    }
+  };
+console.log(selectedItems,"selectedItemsselectedItems");
+  const isAddToCartEnabled = () => {
+    const requiredSelections = productDetailsCombo.combo_count === "6" ? 4 : 8;
+    return selectedItems.length >= requiredSelections;
+  };
+
+  const isAddToComboEnabled = () => {
+    const requiredSelections = productDetailsCombo.combo_count === "6" ? 4 : 8;
+    return selectedItems.length < requiredSelections;
+  };
+
+  const currentProduct = productDetailsCombo.combo_details[selectedImageIndex];
+  const sizeOptions = getSizeOptions(currentProduct.name);
+  const isAccessory = currentProduct.name.toLowerCase().includes("accessory");
+
   return (
     <>
       <Header />
@@ -105,91 +107,92 @@ const SingleProductCombo = () => {
         <div className="row my-1">
           <h5 className="py-3">Combo Pack</h5>
           <div className="col-lg-8 col-md-12 col-12">
+            <div className="small-images-container mt-3">
+              {productDetailsCombo.combo_details.map((detail, index) => (
+                <div
+                  key={index}
+                  className={`small-image-box ${selectedItems.some(item => item.id === detail.id) ? 'selected' : ''}`}
+                  onClick={() => handleSmallImageClick(index)}
+                >
+                  <img
+                    src={detail.imageturls}
+                    className="img-fluid"
+                    alt={`Thumbnail ${index + 1}`}
+                  />
+                </div>
+              ))}
+            </div>
             <div className="my-1">
               <div className="slider-container_combo1">
-                <Slider {...settings} ref={sliderRef}>  
-                  <div className="slider-container_combo">
-                    <img
-                      src="https://tusokonline.com/cdn/shop/files/Slide10_a4e4f5f2-2ec7-4486-b6ee-af7c577c3ec8_576x.jpg?v=1714834044"
-                      className="img-fluid"
-                      alt="Slide 1"
-                    />
-                  </div>
-                  <div className="slider-container_combo">
-                    <img
-                      src="https://tusokonline.com/cdn/shop/files/Slide4_61f3fde9-fe1a-4f21-bdb1-c9e57a88df11_576x.jpg?v=1714834055"
-                      className="img-fluid"
-                      alt="Slide 2"
-                    />
-                  </div>
-                  <div className="slider-container_combo">
-                    <img
-                      src="https://tusokonline.com/cdn/shop/files/Slide1_2cc55f8c-afa9-4cc8-9a58-44c657b3fd10_576x.jpg?v=1714834067"
-                      className="img-fluid"
-                      alt="Slide 3"
-                    />
-                  </div>
-                  <div className="slider-container_combo">
-                    <img
-                      src="https://tusokonline.com/cdn/shop/files/Slide2_ba912504-354d-4435-87c0-4be083230399_576x.jpg?v=1714834083"
-                      className="img-fluid"
-                      alt="Slide 4"
-                    />
-                  </div>
+                <Slider {...settings} ref={sliderRef}>
+                  {productDetailsCombo.combo_details.map((detail, index) => (
+                    <div key={index} className="combo_single">
+                      <img
+                        src={detail.imageturls}
+                        alt={`View ${index + 1}`}
+                        className="img-fluid img-container"
+                      />
+                    </div>
+                  ))}
                 </Slider>
-              </div>
-              <div className="small-images-container mt-3">
-                {[
-                  "Slide10_a4e4f5f2-2ec7-4486-b6ee-af7c577c3ec8_576x.jpg?v=1714834044",
-                  "Slide4_61f3fde9-fe1a-4f21-bdb1-c9e57a88df11_576x.jpg?v=1714834055",
-                  "Slide1_2cc55f8c-afa9-4cc8-9a58-44c657b3fd10_576x.jpg?v=1714834067",
-                  "Slide2_ba912504-354d-4435-87c0-4be083230399_576x.jpg?v=1714834083",
-                ].map((src, index) => (
-                  <div
-                    key={index}
-                    className="small-image-box"
-                    onClick={() => handleSmallImageClick(index)}
-                  >
-                    <img
-                      src={`https://tusokonline.com/cdn/shop/files/${src}`}
-                      className="img-fluid"
-                      alt={`Thumbnail ${index + 1}`}
-                    />
-                  </div>
-                ))}
               </div>
             </div>
           </div>
           <div className="col-lg-4 col-md-12 col-12">
-            <div className="">
-              <h1>{imageDetails[selectedImageIndex].title}</h1>
-              <p>{imageDetails[selectedImageIndex].description}</p>
-              <div className="size-options mx-3">
-                {imageDetails[selectedImageIndex].sizes.map((size, index) => (
+            <div className="mx-2 mt-5 pt-3">
+              <div className="">
+                <h5 className="fw-bold">{currentProduct.name}</h5>
+                <p>{currentProduct.description}</p>
+                {!isAccessory && (
+                  <div className="size-options">
+                    {sizeOptions.map((size) => (
+                      <button
+                        key={size}
+                        className={`btn me-2 mb-2 ${
+                          selectedSize === size
+                            ? "btn-dark text-light"
+                            : "btn-outline-secondary"
+                        }`}
+                        onClick={() => handleSizeClick(size)}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <div className="accessory-select">
                   <button
-                    key={index}
-                    onClick={() => handleSizeClick(size)}
-                    className={`btn  ${
-                      selectedSize === size
-                        ? "btn-primary"
-                        : "btn-outline-primary"
-                    } mx-1 my-1`}
+                    className="btn btn-primary rounded-pill"
+                    onClick={handleAddToCombo}
+                    disabled={!isAddToComboEnabled()}
                   >
-                    {size}
+                    Add To Combo
                   </button>
-                ))}
-              </div>
-              <div className="price-box my-2">
-                <h3>Price:</h3>
-                <p>
-                  <i class="bi bi-currency-rupee"></i>2777.00 (For set of 4
-                  pieces)
-                </p>
-              </div>
-              <div>
-                <button className="bg-primary border-0 px-3 py-1 text-white ">
-                  Add to Cart
-                </button>
+                </div>
+                <div className="price-box my-2">
+                  <h3>Price:</h3>
+                  <p>
+                    <i className="bi bi-currency-rupee"></i>
+                    {productDetailsCombo.price} (For set of 4 pieces)
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted">
+                    Tax included. Shipping calculated at checkout
+                  </p>
+                  <p className="text-danger font_size_bought">
+                    <i className="bi bi-cart-check-fill">{"\u00a0"}</i>455 people
+                    bought this in last 7 days
+                  </p>
+                </div>
+                <div className="text-center bg_color_buy_now">
+                  <button
+                    className="btn px-5 rounded-pill"
+                    disabled={!isAddToCartEnabled()}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
               </div>
             </div>
           </div>

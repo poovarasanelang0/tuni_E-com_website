@@ -16,6 +16,7 @@ const MensCombo = () => {
 
   const handleRadioChange = (category) => {
     setSelectedCategory(category);
+    console.log(category, ":::category");
   };
 
   useEffect(() => {
@@ -37,13 +38,13 @@ const MensCombo = () => {
   }, []);
 
   const filteredProducts = productDetails.filter((product) => {
-    if (product.category !== "Men") {
+    if (product.gender !== "Men") {
       return false;
     }
-    if (selectedCategory === "Combo1" && product.combo_count === "6 Iteam") {
+    if (selectedCategory === "Combo1" && product.combo_count === "6") {
       return true;
     }
-    if (selectedCategory === "Combo2" && product.combo_count === "12 Iteam") {
+    if (selectedCategory === "Combo2" && product.combo_count === "12") {
       return true;
     }
     if (selectedCategory === "all") {
@@ -68,6 +69,17 @@ const MensCombo = () => {
       },
     ],
   };
+
+  const [hoveredProductId, setHoveredProductId] = useState(null);
+
+  const handleMouseEnter = (productId) => {
+    setHoveredProductId(productId);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredProductId(null);
+  };
+
 
   const isSmallScreen = () => {
     return window.innerWidth < 768;
@@ -95,14 +107,14 @@ const MensCombo = () => {
                     to={`/SingleProductCombo/${product.id}`}
                     className="text-decoration-none border-0"
                   >
-                    <div className="card-container card_container1">
+                    <div className="card-container card_containerCombo">
                       <div className="card text-white">
                         <div className="product_images">
                           {product.combo_details.map((comboDetail, index) => (
                             <img
                               key={index}
-                              src={comboDetail.imageturls}
-                              className="card-img fixed_img"
+                              src={comboDetail.tumbnail}
+                              className="card-img fixed_img_combo "
                               alt={comboDetail.name}
                             />
                           ))}
@@ -156,50 +168,72 @@ const MensCombo = () => {
           filteredProducts.map((product) => (
             <div key={product.id} className="col-lg-3 col-md-6 col-12">
               <Link
-                to={`/SingleProductCombo/${product.id}`}
-                className="text-decoration-none border-0"
+              to={`/SingleProductCombo/${product.id}`}
+              className="text-decoration-none border-0"
+            >
+              <div
+                className="card-container card_containerCombo"
+                onMouseEnter={() => handleMouseEnter(product.id)}
+                onMouseLeave={handleMouseLeave}
               >
-                <div className="card-container card_container2">
-                  <div className="card text-white">
-                    <div className="">
-                      {product.combo_details.map((comboDetail, index) => (
-                        <img
-                          key={index}
-                          src={comboDetail.imageturls}
-                          className="card-img fixed_img"
-                          alt={comboDetail.name}
-                        />
-                      ))}
-                    </div>
-                    <div className="card-img-overlay">
-                      <span className="badge bg-success">BEST SELLER</span>
-                    </div>
-                    <div className="card-img-overlay d-flex">
-                      <div className="mt-auto">
-                        <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
-                          <i className="bi bi-star-fill text-warning"></i>{" "}
-                          {product.rating} 4.5 | 5.0{product.reviews}
-                        </span>
-                      </div>
-                    </div>
+                <div className="card text-white">
+                  <div className="">
+                    {hoveredProductId === product.id ? (
+                      <video
+                        src={product.videoUrl}
+                        className="card-img fixed_img_combo"
+                        autoPlay
+                        loop
+                        muted
+                      />
+                    ) : (
+                      <img
+                        src={product.tumbnail}
+                        className="card-img fixed_img_combo"
+                        alt={product.name}
+                      />
+                    )}
                   </div>
-                  <div className="text-black prices_details">
-                    <h5 className="mt-3">{product.name}</h5>
-                    <h4>{product.category}</h4>
-                    <h6 className="fw-bold">
-                      <i className="bi bi-currency-rupee"></i>
-                      {product.price} &nbsp;
-                      <del>
-                        <i className="bi bi-currency-rupee"></i>1,877
-                      </del>{" "}
-                      OFF
-                    </h6>
-                    <p className="price_msg_success">
-                      Lowest price in last 30 days
-                    </p>
+                  <div className="card-img-overlay">
+                    <span className="badge bg-success">BEST SELLER</span>
+                  </div>
+                  <div className="card-img-overlay d-flex">
+                    <div className="mt-auto">
+                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                        <i className="bi bi-star-fill text-warning"></i>{" "}
+                        {product.rating} 4.5 | 5.0{product.reviews}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </Link>
+                <div className="text-black prices_details">
+                  <div className="my-2">
+                    <span>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-half text-warning"></i>{" "}
+                      467 reviews
+                    </span>
+                  </div>
+                  <h5 className="mt-1">
+                    {product.name} {product.category}
+                  </h5>
+                  <h6 className="fw-bold">
+                    <i className="bi bi-currency-rupee"></i>
+                    {product.price} &nbsp;
+                    <del>
+                      <i className="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    OFF
+                  </h6>
+                  <p className="price_msg_success">
+                    Lowest price in last 30 days
+                  </p>
+                </div>
+              </div>
+            </Link>
             </div>
           ))
         ) : (
@@ -218,7 +252,7 @@ const MensCombo = () => {
       <Header />
       <div className="container my-5">
         <div className="row my-1 py-1">
-          <h4 className="fw-bold py-1">Mens Combos</h4>
+          <h4 className="fw-bold">Mens Combos</h4>
           <div className="col-lg-12 col-md-12 col-12">
             <div className="d-flex smallscreen py-2">
               <div>
@@ -270,7 +304,7 @@ const MensCombo = () => {
         </div>
 
         <div className="row">
-          <div className="col-lg-12 col-md-12 col-12 my-3">
+          <div className="col-lg-12 col-md-12 col-12 my-2">
             <div></div>
             {loading ? (
               <div className="text-center">

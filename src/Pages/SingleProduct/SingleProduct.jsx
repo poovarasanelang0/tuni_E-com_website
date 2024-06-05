@@ -1,6 +1,3 @@
-
-// ---------------------------------------------------------------------------------------------------------------------------------
-
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
@@ -313,7 +310,7 @@ const SingleProduct = () => {
                     <img
                       src={index === 0 ? productDetails.imageUrl[0] : imageUrl}
                       alt={`View ${index + 1}`}
-                      className="img-fluid img-container "
+                      className="img-fluid img-container"
                     />
                   </div>
                 ))}
