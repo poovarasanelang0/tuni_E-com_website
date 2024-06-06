@@ -15,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { v4 as uuidv4 } from "uuid";
 
-const Payment = ({ cartProducts }) => {
+const Payment = ({ cartProducts , productDetailsCombo }) => {
   const [formFields, setFormFields] = useState({
     username: "",
     phoneNumber: "",
@@ -481,88 +481,7 @@ const Payment = ({ cartProducts }) => {
     }
   };
 
-  // const openRazorpay = (orderData) => {
-  //   if (totalCartPrice) {
-  //     const options = {
-  //       key: "rzp_live_W0t2SeLjFxX8SB",
-  //       key_secret: "TO1w1yoIo0Z5HXmRitcqpEqG",
-  //       amount: totalCartPrice * 100,
-  //       currency: "INR",
-  //       name: "TUNi",
-  //       timeout: 300,
-  //       description: "For Testing Purpose",
-  //       handler: async function (response) {
-  //         // alert(response.razorpay_payment_id);
-  //         try {
-  //           const newOrdersRef = doc(
-  //             firestore,
-  //             "AllOrderList",
-  //             currentUser.uid
-  //           );
-  //           const newOrdersList = collection(newOrdersRef, "OrderItemPlaced");
-
-  //           await Promise.all(
-  //             cartProducts.map(async (product) => {
-  //               await addDoc(newOrdersList, {
-  //                 ...product.data,
-  //                 totalPrice: totalCartPrice,
-  //                 orderAddress: formFields,
-  //               });
-  //             })
-  //           );
-  //           const newOrderAddress = doc(
-  //             firestore,
-  //             "AllOrderList",
-  //             currentUser.uid
-  //           );
-
-  //           const newOrdersListAddress = collection(
-  //             newOrderAddress,
-  //             "OrderAddress_History"
-  //           );
-
-  //           await Promise.all(
-  //             cartProducts.map(async (product) => {
-  //               await addDoc(newOrdersListAddress, {
-  //                 ...product.data,
-  //                 orderAddress: formFields,
-  //                 totalPrice: totalCartPrice,
-  //               });
-  //             })
-  //           );
-  //           await Promise.all(
-  //             cartProducts.map((product) =>
-  //               deleteItemFromFirestoreCartItem(product.id)
-  //             )
-  //           );
-
-  //           navigate("/TrackOrder");
-  //           toast.success("Your Product Placed");
-  //           window.location.reload();
-  //         } catch (error) {
-  //           console.error("Error processing order after payment: ", error);
-  //         }
-  //       },
-  //       prefill: {
-  //         name: formFields.username,
-  //         email: "",
-  //         contact: formFields.phoneNumber,
-  //       },
-  //       notes: {
-  //         address_Line1: formFields.address_Line1,
-  //         address_Line2: formFields.address_Line1,
-  //       },
-  //       theme: {
-  //         color: "#CC7833",
-  //       },
-  //     };
-  //     const pay = new window.Razorpay(options);
-  //     pay.open();
-  //   } else {
-  //     alert("Please add some products to the basket!");
-  //   }
-  // };
-
+  
   const deleteItemFromFirestoreCartItem = async (productId) => {
     try {
       const userDocRef = doc(
@@ -609,13 +528,14 @@ const Payment = ({ cartProducts }) => {
             <p className="bluecolor">Total payable</p>
           </div>
           <div className="bg_color_buy_now">
-            <button
-              className="btn px-5 rounded-pill"
-              onClick={() => setShowForm(!showForm)}
-              disabled={cartProducts.length === 0}
-            >
-              Buy Now
-            </button>
+          <button
+  className="btn px-5 rounded-pill"
+  onClick={() => setShowForm(!showForm)}
+  disabled={cartProducts.length === 0 && productDetailsCombo.length === 0}
+>
+  Buy Now
+</button>
+
           </div>
         </div>
       </div>

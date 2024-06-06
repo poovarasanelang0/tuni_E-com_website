@@ -3,6 +3,7 @@ import Product_add from "../../Pages/SingleProduct/Product_add";
 import Payment from "../../Pages/Payment/Payment";
 import Gpaypayment from "../../Pages/SingleProduct/Assets/secure-transaction.svg";
 import Devlimg from "../../Pages/SingleProduct/Assets/delivery-sec.svg";
+import Combosproducts from "./Combosproducts";
 
 const CartItem = ({
   cartProducts,

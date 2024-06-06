@@ -364,6 +364,27 @@ const DrawerAppBar = (props) => {
             </Link>
           </ListItem>
         </Typography>
+        <Typography>
+          <ListItem>
+            <Link
+              to="/WomensCombo"
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                marginTop: "-24px",
+              }}
+            >
+              <ListItemButton>
+                <h6
+                  className="fw-bold fs-6 fadeBlink"
+                  style={{ marginLeft: "-20px" }}
+                >
+                  Co-Living Combos <span className="badge text-bg-danger">New</span>
+                </h6>
+              </ListItemButton>
+            </Link>
+          </ListItem>
+        </Typography>
 
         <Typography>
           <div className="small_nav_bar_heading fw-bold fs-5 mx-3">Women</div>
@@ -606,7 +627,7 @@ const DrawerAppBar = (props) => {
                     </div>
                   </div>
                   <a href="/MensCombo" class="text-decoration-none text-black">
-                    <li class="px-3 blink position-relative heading_hover">
+                    <li class="px-3 bounceBlink position-relative">
                       <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
                         NEW
                       </span>
@@ -618,11 +639,23 @@ const DrawerAppBar = (props) => {
                     href="/WomensCombo"
                     class="text-decoration-none text-black"
                   >
-                    <li class="px-3 blinks position-relative heading_hover">
+                    <li class="px-3 blinks position-relative ">
                       <span class="badge bg-danger position-absolute top-0  start-100 translate-middle">
                         NEW
                       </span>
                       Women's Combo Offers
+                    </li>
+                  </a>
+
+                  <a
+                    href="/WomensCombo"
+                    class="text-decoration-none text-black"
+                  >
+                    <li class="px-3 fadeBlink  position-relative ">
+                      <span class="badge bg-danger position-absolute top-0  start-100 translate-middle">
+                        NEW
+                      </span>
+                      Co-Living Combos
                     </li>
                   </a>
                 </ul>

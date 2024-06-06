@@ -1,11 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";import { useParams, Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 import Slider from "react-slick";
 import "./SingleProductCombo.css";
-import Header from "../../../Compoment/Header/Header"
+import Header from "../../../Compoment/Header/Header";
 import Footer from "../../../Compoment/Footer/Footer";
 import RatingReviews from "../../Rating/RatingReviews";
-import { collection, getDocs, getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  deleteDoc,
+  updateDoc,
+  setDoc,
+} from "firebase/firestore";
+import { doc, getDoc, getDocs } from "firebase/firestore";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import CartItem from "../../../Compoment/AddToCart/CartItem";
+import Combosproducts from "../../../Compoment/AddToCart/Combosproducts"
 
 const SingleProductCombo = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -15,6 +28,52 @@ const SingleProductCombo = () => {
   const { productId } = useParams();
   const auth = getAuth();
   const firestore = getFirestore();
+  const [userId, setUserId] = useState(null);
+  const [cartProducts, setCartProducts] = useState([]);
+
+// this one cartitem added fetch  or get the products
+const fetchCartProducts = async (userId) => {
+  if (!userId) return;
+  try {
+    const userDocRef = collection(
+      firestore,
+      "users",
+      userId,
+      "cartCollection_Combos"
+    );
+    const querySnapshot = await getDocs(userDocRef);
+
+    const cartProducts = [];
+    querySnapshot.forEach((doc) => {
+      cartProducts.push({ id: doc.id, data: doc.data() });
+    });
+    productDetailsCombo(cartProducts);
+
+  } catch (error) {
+    console.error("Error fetching cart products:", error);
+  }
+};
+
+
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid);
+         fetchCartProducts(user.uid); // Fetch cart products on user login
+      } else {
+        setUserId(null);
+        setProductDetailsCombo([]); // Clear cart products on user logout
+      }
+    });
+    return () => unsubscribe();
+  }, [auth]);
+
+  useEffect(() => {
+    if (userId) {
+       fetchCartProducts(userId); // Fetch cart products when userId changes
+    }
+  }, [userId]);
 
   const settings = {
     customPaging: function (i) {
@@ -39,6 +98,9 @@ const SingleProductCombo = () => {
     setSelectedSize(size);
   };
 
+
+
+  // this one product details get 
   useEffect(() => {
     const fetchProductDetailsCombo = async () => {
       try {
@@ -65,19 +127,73 @@ const SingleProductCombo = () => {
     return <div>Loading...</div>;
   }
 
+
+// this one product database added 
+const handleAddToCart = async () => {
+  try {
+    // Get the currently logged-in user
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      console.error("User is not logged in. Cannot add to cart.");
+      toast.error("User is not logged in. Cannot add to cart");
+
+      return;
+    }
+
+    if (!selectedItems) {
+      console.error("Please select a size before adding to cart");
+      return;
+    }
+
+    const firestore = getFirestore();
+    const userDocRef = doc(firestore, "users", user.uid);
+    const cartDocRef = doc(
+      userDocRef,
+      "cartCollection_Combos",
+      productId
+    );
+    const productWithSizeAndCount = {
+      ...selectedItems,productDetailsCombo,
+      // sizecustomers: selectedSize,
+       itemCountcustomer: 1,
+    };
+    await setDoc(cartDocRef, productWithSizeAndCount, selectedItems);
+
+    console.log(
+      "Product added to the user's cart subcollection successfully!"
+    );
+
+    // Fetch and update the cart products
+     fetchCartProducts(user.uid);
+  } catch (error) {
+    console.error("Error adding product to cart: ", error);
+  }
+};
+
+console.log(cartProducts,"combos");
+
+
+// to displayed diffent size 
   const getSizeOptions = (name) => {
     const lowerCaseName = name.toLowerCase();
     if (lowerCaseName.includes("pant") || lowerCaseName.includes("jeans")) {
       return ["28", "30", "32", "34", "36", "38"];
+    } else if (lowerCaseName.includes("shoe")) {
+      return ["6", "7", "8", "9", "10", "11"];
     } else {
       return ["S", "M", "L", "XL", "XXL"];
     }
   };
-  
 
   const handleAddToCombo = () => {
-    const currentProduct = productDetailsCombo.combo_details[selectedImageIndex];
-    if (selectedSize || currentProduct.name.toLowerCase().includes("accessory")) {
+    const currentProduct =
+      productDetailsCombo.combo_details[selectedImageIndex];
+    if (
+      selectedSize ||
+      currentProduct.name.toLowerCase().includes("accessory")
+    ) {
       setSelectedItems((prevItems) => [
         ...prevItems,
         { ...currentProduct, size: selectedSize },
@@ -85,7 +201,14 @@ const SingleProductCombo = () => {
       setSelectedSize("");
     }
   };
-console.log(selectedItems,"selectedItemsselectedItems");
+  console.log("selectedItems::=>", selectedItems);
+
+  const handleRemoveFromCombo = (id) => {
+    setSelectedItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  };
+
+  console.log(selectedItems, "selectedItems");
+
   const isAddToCartEnabled = () => {
     const requiredSelections = productDetailsCombo.combo_count === "6" ? 4 : 8;
     return selectedItems.length >= requiredSelections;
@@ -93,8 +216,49 @@ console.log(selectedItems,"selectedItemsselectedItems");
 
   const isAddToComboEnabled = () => {
     const requiredSelections = productDetailsCombo.combo_count === "6" ? 4 : 8;
-    return selectedItems.length < requiredSelections;
+    return (
+      selectedItems.length < requiredSelections &&
+      !selectedItems.some(
+        (item) =>
+          item.id === productDetailsCombo.combo_details[selectedImageIndex].id
+      )
+    );
   };
+
+  const handleRemoveFromCart = async (productId) => {
+    try {
+      const userDocRef = doc(
+        collection(firestore, "users", userId, "cartCollection"),
+        productId
+      );
+      // console.log(productId,"productIdproductIdproductIdproductIdproductId");
+      await deleteDoc(userDocRef);
+      console.log("Document successfully deleted from cart!");
+      toast.success("Successfully Clear CartItem");
+
+      // Fetch and display the updated cart products
+      fetchCartProducts(userId);
+    } catch (error) {
+      console.error("Error removing product from cart: ", error);
+    }
+  };
+
+  const handleQuantityChange = async (productId, newQuantity) => {
+    try {
+      const userDocRef = doc(
+        collection(firestore, "users", userId, "cartCollection"),
+        productId
+      );
+      await updateDoc(userDocRef, { itemCountcustomer: newQuantity });
+      console.log("Item count updated successfully!");
+
+      // Fetch and update the cart products
+      fetchCartProducts(userId);
+    } catch (error) {
+      console.error("Error updating item count:", error);
+    }
+  };
+
 
   const currentProduct = productDetailsCombo.combo_details[selectedImageIndex];
   const sizeOptions = getSizeOptions(currentProduct.name);
@@ -111,7 +275,11 @@ console.log(selectedItems,"selectedItemsselectedItems");
               {productDetailsCombo.combo_details.map((detail, index) => (
                 <div
                   key={index}
-                  className={`small-image-box ${selectedItems.some(item => item.id === detail.id) ? 'selected' : ''}`}
+                  className={`small-image-box ${
+                    selectedItems.some((item) => item.id === detail.id)
+                      ? "selected"
+                      : ""
+                  }`}
                   onClick={() => handleSmallImageClick(index)}
                 >
                   <img
@@ -142,7 +310,7 @@ console.log(selectedItems,"selectedItemsselectedItems");
             <div className="mx-2 mt-5 pt-3">
               <div className="">
                 <h5 className="fw-bold">{currentProduct.name}</h5>
-                <p>{currentProduct.description}</p>
+                <p className="text-muted">{currentProduct.description}</p>
                 {!isAccessory && (
                   <div className="size-options">
                     {sizeOptions.map((size) => (
@@ -160,6 +328,7 @@ console.log(selectedItems,"selectedItemsselectedItems");
                     ))}
                   </div>
                 )}
+
                 <div className="accessory-select">
                   <button
                     className="btn btn-primary rounded-pill"
@@ -168,12 +337,53 @@ console.log(selectedItems,"selectedItemsselectedItems");
                   >
                     Add To Combo
                   </button>
+                  {selectedItems.some(
+                    (item) => item.id === currentProduct.id
+                  ) && (
+                    <button
+                      className="btn border-0 text-danger rounded-pill ms-2"
+                      onClick={() => handleRemoveFromCombo(currentProduct.id)}
+                    >
+                      Remove From Combo
+                    </button>
+                  )}
                 </div>
+                <h5 className="py-3 fw-bold">Selected Items</h5>
+                {selectedItems.map((item, index) => (
+                  <div key={index} className="selected-item d-flex">
+                    <img
+                      src={item.imageturls}
+                      alt={item.name}
+                      className="img-fluid"
+                      style={{
+                        height: "5vh",
+                        width: "5vh",
+                        borderRadius: "5px",
+                      }}
+                    />
+                    <p className="mx-1">
+                      {item.name} - Size:{" "}
+                      <span className="fw-bold">{item.size}</span>
+                    </p>
+                    <button
+                      type="button"
+                      class="btn btn-link border-0 text-danger ms-auto "
+                      style={{ marginTop: "-16px" }}
+                      onClick={() => handleRemoveFromCombo(item.id)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+
                 <div className="price-box my-2">
                   <h3>Price:</h3>
-                  <p>
+                  <p className="">
                     <i className="bi bi-currency-rupee"></i>
-                    {productDetailsCombo.price} (For set of 4 pieces)
+                    <span className="fw-bold fs-5">
+                      {productDetailsCombo.price}{" "}
+                    </span>{" "}
+                    <span className="text-muted">(For set of 4 pieces)</span>
                   </p>
                 </div>
                 <div>
@@ -181,14 +391,18 @@ console.log(selectedItems,"selectedItemsselectedItems");
                     Tax included. Shipping calculated at checkout
                   </p>
                   <p className="text-danger font_size_bought">
-                    <i className="bi bi-cart-check-fill">{"\u00a0"}</i>455 people
-                    bought this in last 7 days
+                    <i className="bi bi-cart-check-fill">{"\u00a0"}</i>455
+                    people bought this in last 7 days
                   </p>
                 </div>
                 <div className="text-center bg_color_buy_now">
                   <button
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight1"
+                    aria-controls="offcanvasRight1"
                     className="btn px-5 rounded-pill"
                     disabled={!isAddToCartEnabled()}
+                    onClick={handleAddToCart}
                   >
                     Add to Cart
                   </button>
@@ -197,6 +411,34 @@ console.log(selectedItems,"selectedItemsselectedItems");
             </div>
           </div>
         </div>
+
+        <div>
+          <div
+            className="offcanvas offcanvas-end"
+            tabIndex={-1}
+            id="offcanvasRight1"
+            aria-labelledby="offcanvasRightLabel"
+          >
+            <div className="offcanvas-header">
+              <h5 className="offcanvas-title" id="offcanvasRightLabel">
+                Shopping Cart
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"
+              />
+            </div>
+            <div className="offcanvas-body">
+              <Combosproducts  />
+              
+{/* <CartItem  productDetailsCombo={productDetailsCombo}  handleRemoveFromCart={handleRemoveFromCart} selectedItems={selectedItems}
+                      handleQuantityChange={handleQuantityChange}/> */}
+            </div>
+          </div>
+        </div>
+
         <div className="row">
           <div className="col-lg-12 col-md-12 col-12">
             <div>

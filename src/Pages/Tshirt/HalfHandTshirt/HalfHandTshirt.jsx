@@ -267,7 +267,8 @@ const HalfHandTshirt = () => {
                   </div>
                 </div>
                 <div className="text-black prices_details">
-                  <h5 className="mt-3">{product.name}</h5>
+                <h5 className="mt-3">{product.name} {product.category}</h5>
+                 
                   <h4>{product.category}</h4>
                   <h6 className="fw-bold">
                     <i className="bi bi-currency-rupee"></i>
@@ -277,6 +278,16 @@ const HalfHandTshirt = () => {
                     </del>{" "}
                     OFF
                   </h6>
+                  <div className="my-2">
+                    <span>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-half text-warning"></i>{" "}
+                      79 reviews
+                    </span>
+                  </div>
                   <p className="price_msg_success">
                     Lowest price in last 30 days
                   </p>
@@ -333,8 +344,8 @@ const HalfHandTshirt = () => {
                   </div>
                 </div>
                 <div className="text-black prices_details">
-                  <h5 className="mt-3">{product.name}</h5>
-                  <h4>{product.category}</h4>
+                <h5 className="mt-3">{product.name} {product.category}</h5>
+                 
                   <h6 className="fw-bold">
                     <i className="bi bi-currency-rupee"></i>
                     {product.price} &nbsp;
@@ -343,6 +354,16 @@ const HalfHandTshirt = () => {
                     </del>{" "}
                     OFF
                   </h6>
+                  <div className="my-2">
+                    <span>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-half text-warning"></i>{" "}
+                      79 reviews
+                    </span>
+                  </div>
                   <p className="price_msg_success">
                     Lowest price in last 30 days
                   </p>

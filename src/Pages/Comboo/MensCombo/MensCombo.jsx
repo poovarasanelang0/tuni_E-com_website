@@ -80,7 +80,6 @@ const MensCombo = () => {
     setHoveredProductId(null);
   };
 
-
   const isSmallScreen = () => {
     return window.innerWidth < 768;
   };
@@ -107,17 +106,28 @@ const MensCombo = () => {
                     to={`/SingleProductCombo/${product.id}`}
                     className="text-decoration-none border-0"
                   >
-                    <div className="card-container card_containerCombo">
+                    <div
+                      className="card-container card_containerCombo"
+                      onMouseEnter={() => handleMouseEnter(product.id)}
+                      onMouseLeave={handleMouseLeave}
+                    >
                       <div className="card text-white">
-                        <div className="product_images">
-                          {product.combo_details.map((comboDetail, index) => (
-                            <img
-                              key={index}
-                              src={comboDetail.tumbnail}
-                              className="card-img fixed_img_combo "
-                              alt={comboDetail.name}
+                        <div className="">
+                          {hoveredProductId === product.id ? (
+                            <video
+                              src={product.videoUrl}
+                              className="card-img fixed_img_combo"
+                              autoPlay
+                              loop
+                              muted
                             />
-                          ))}
+                          ) : (
+                            <img
+                              src={product.tumbnail}
+                              className="card-img fixed_img_combo"
+                              alt={product.name}
+                            />
+                          )}
                         </div>
                         <div className="card-img-overlay">
                           <span className="badge bg-success">BEST SELLER</span>
@@ -133,6 +143,7 @@ const MensCombo = () => {
                       </div>
                       <div className="text-black prices_details">
                         <h5 className="mt-3">{product.name}</h5>
+                      
                         <h4>{product.category}</h4>
                         <h6 className="fw-bold">
                           <i className="bi bi-currency-rupee"></i>
@@ -142,6 +153,16 @@ const MensCombo = () => {
                           </del>{" "}
                           OFF
                         </h6>
+                        <div className="my-2">
+                      <span>
+                        <i className="bi bi-star-fill text-warning"></i>
+                        <i className="bi bi-star-fill text-warning"></i>
+                        <i className="bi bi-star-fill text-warning"></i>
+                        <i className="bi bi-star-fill text-warning"></i>
+                        <i className="bi bi-star-half text-warning"></i> 467
+                        reviews
+                      </span>
+                    </div>
                         <p className="price_msg_success">
                           Lowest price in last 30 days
                         </p>
@@ -168,72 +189,73 @@ const MensCombo = () => {
           filteredProducts.map((product) => (
             <div key={product.id} className="col-lg-3 col-md-6 col-12">
               <Link
-              to={`/SingleProductCombo/${product.id}`}
-              className="text-decoration-none border-0"
-            >
-              <div
-                className="card-container card_containerCombo"
-                onMouseEnter={() => handleMouseEnter(product.id)}
-                onMouseLeave={handleMouseLeave}
+                to={`/SingleProductCombo/${product.id}`}
+                className="text-decoration-none border-0"
               >
-                <div className="card text-white">
-                  <div className="">
-                    {hoveredProductId === product.id ? (
-                      <video
-                        src={product.videoUrl}
-                        className="card-img fixed_img_combo"
-                        autoPlay
-                        loop
-                        muted
-                      />
-                    ) : (
-                      <img
-                        src={product.tumbnail}
-                        className="card-img fixed_img_combo"
-                        alt={product.name}
-                      />
-                    )}
-                  </div>
-                  <div className="card-img-overlay">
-                    <span className="badge bg-success">BEST SELLER</span>
-                  </div>
-                  <div className="card-img-overlay d-flex">
-                    <div className="mt-auto">
-                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
-                        <i className="bi bi-star-fill text-warning"></i>{" "}
-                        {product.rating} 4.5 | 5.0{product.reviews}
-                      </span>
+                <div
+                  className="card-container card_containerCombo"
+                  onMouseEnter={() => handleMouseEnter(product.id)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <div className="card text-white">
+                    <div className="">
+                      {hoveredProductId === product.id ? (
+                        <video
+                          src={product.videoUrl}
+                          className="card-img fixed_img_combo"
+                          autoPlay
+                          loop
+                          muted
+                        />
+                      ) : (
+                        <img
+                          src={product.tumbnail}
+                          className="card-img fixed_img_combo"
+                          alt={product.name}
+                        />
+                      )}
+                    </div>
+                    <div className="card-img-overlay">
+                      <span className="badge bg-success">BEST SELLER</span>
+                    </div>
+                    <div className="card-img-overlay d-flex">
+                      <div className="mt-auto">
+                        <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                          <i className="bi bi-star-fill text-warning"></i>{" "}
+                          {product.rating} 4.5 | 5.0{product.reviews}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="text-black prices_details">
-                  <div className="my-2">
-                    <span>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-half text-warning"></i>{" "}
-                      467 reviews
-                    </span>
+                  <div className="text-black prices_details">
+                   
+                    <h5 className="mt-1">
+                      {product.name} {product.category}
+                    </h5>
+                    <h6 className="fw-bold">
+                      <i className="bi bi-currency-rupee"></i>
+                      {product.price} &nbsp;
+                      <del>
+                        <i className="bi bi-currency-rupee"></i>1,877
+                      </del>{" "}
+                      OFF
+                    </h6>
+                    <div className="my-2">
+                      <span>
+                        <i className="bi bi-star-fill text-warning"></i>
+                        <i className="bi bi-star-fill text-warning"></i>
+                        <i className="bi bi-star-fill text-warning"></i>
+                        <i className="bi bi-star-fill text-warning"></i>
+                        <i className="bi bi-star-half text-warning"></i> 467
+                        reviews
+                      </span>
+                    </div>
+                    <p className="price_msg_success">
+                      Lowest price in last 30 days
+                    </p>
                   </div>
-                  <h5 className="mt-1">
-                    {product.name} {product.category}
-                  </h5>
-                  <h6 className="fw-bold">
-                    <i className="bi bi-currency-rupee"></i>
-                    {product.price} &nbsp;
-                    <del>
-                      <i className="bi bi-currency-rupee"></i>1,877
-                    </del>{" "}
-                    OFF
-                  </h6>
-                  <p className="price_msg_success">
-                    Lowest price in last 30 days
-                  </p>
                 </div>
-              </div>
-            </Link>
+              </Link>
             </div>
           ))
         ) : (
