@@ -28,6 +28,7 @@ import CartItem from "../../Compoment/AddToCart/CartItem";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RatingReviews from "../Rating/RatingReviews";
+import AddToCart from "../../Compoment/AddToCart/AddToCart";
 
 const SingleProduct = () => {
   const settings = {
@@ -59,38 +60,93 @@ const SingleProduct = () => {
   const { productId } = useParams();
   const [productDetails, setProductDetails] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [productDetailsCombo, setProductDetailsCombo] = useState([]);
 
   const auth = getAuth();
   const firestore = getFirestore();
+
+  // combo products
+  const fetchCartProductsCombos = async (userId) => {
+    if (!userId) return;
+
+    try {
+      const firestore = getFirestore();
+      const userDocRef = collection(
+        firestore,
+        "users",
+        userId,
+        "cartCollection_Combos"
+      );
+
+      const querySnapshot = await getDocs(userDocRef);
+
+      const cartProducts = [];
+      querySnapshot.forEach((doc) => {
+        cartProducts.push({ id: doc.id, data: doc.data() });
+      });
+
+      // Assuming setProductDetailsCombo is a function to update your state or context
+      setProductDetailsCombo(cartProducts);
+      console.log(cartProducts, "addtocartpages +++cartProducts+++combos");
+    } catch (error) {
+      console.error("Error fetching cart products:", error);
+    }
+  };
+
+  const handleRemoveFromCartCombos = (productId) => {
+    const updatedCartProducts = productDetailsCombo.filter(
+      (comboProduct) => comboProduct.id !== productId
+    );
+    setProductDetailsCombo(updatedCartProducts);
+    toast.success("Successfully Cleared Combo Item");
+    deleteComboItemFromFirestore(productId);
+  };
+
+  const deleteComboItemFromFirestore = async (productId) => {
+    try {
+      const userDocRef = doc(
+        collection(firestore, "users", userId, "cartCollection_Combos"),
+        productId
+      );
+      await deleteDoc(userDocRef);
+
+      console.log("Combo document successfully deleted from cart!");
+    } catch (error) {
+      console.error("Error removing combo product from cart: ", error);
+      fetchCartProductsCombos(userId);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserId(user.uid);
         fetchCartProducts(user.uid); // Fetch cart products on user login
+        fetchCartProductsCombos(user.uid);
       } else {
         setUserId(null);
         setCartProducts([]); // Clear cart products on user logout
+        setProductDetailsCombo([]); // Clear combo products
       }
     });
     return () => unsubscribe();
   }, [auth]);
 
-  const handleQuantityChange = async (productId, newQuantity) => {
-    try {
-      const userDocRef = doc(
-        collection(firestore, "users", userId, "cartCollection"),
-        productId
-      );
-      await updateDoc(userDocRef, { itemCountcustomer: newQuantity });
-      console.log("Item count updated successfully!");
+  // const handleQuantityChange = async (productId, newQuantity) => {
+  //   try {
+  //     const userDocRef = doc(
+  //       collection(firestore, "users", userId, "cartCollection"),
+  //       productId
+  //     );
+  //     await updateDoc(userDocRef, { itemCountcustomer: newQuantity });
+  //     console.log("Item count updated successfully!");
 
-      // Fetch and update the cart products
-      fetchCartProducts(userId);
-    } catch (error) {
-      console.error("Error updating item count:", error);
-    }
-  };
+  //     // Fetch and update the cart products
+  //     fetchCartProducts(userId);
+  //   } catch (error) {
+  //     console.error("Error updating item count:", error);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -177,6 +233,49 @@ const SingleProduct = () => {
 
   // addtocart integaration
 
+  // const handleAddToCart = async () => {
+  //   try {
+  //     // Get the currently logged-in user
+  //     const auth = getAuth();
+  //     const user = auth.currentUser;
+
+  //     if (!user) {
+  //       console.error("User is not logged in. Cannot add to cart.");
+  //       toast.error("User is not logged in. Cannot add to cart");
+
+  //       return;
+  //     }
+
+  //     if (!selectedSize) {
+  //       console.error("Please select a size before adding to cart");
+  //       return;
+  //     }
+
+  //     const firestore = getFirestore();
+  //     const userDocRef = doc(firestore, "users", user.uid);
+  //     const cartDocRef = doc(
+  //       userDocRef,
+  //       "cartCollection",
+  //       productId + selectedSize
+  //     );
+  //     const productWithSizeAndCount = {
+  //       ...productDetails,
+  //       sizecustomers: selectedSize,
+  //       itemCountcustomer: 1,
+  //     };
+  //     await setDoc(cartDocRef, productWithSizeAndCount, productDetails);
+
+  //     console.log(
+  //       "Product added to the user's cart subcollection successfully!"
+  //     );
+
+  //     // Fetch and update the cart products
+  //     fetchCartProducts(user.uid);
+  //   } catch (error) {
+  //     console.error("Error adding product to cart: ", error);
+  //   }
+  // };
+
   const handleAddToCart = async () => {
     try {
       // Get the currently logged-in user
@@ -213,7 +312,6 @@ const SingleProduct = () => {
         "Product added to the user's cart subcollection successfully!"
       );
 
-      // Fetch and update the cart products
       fetchCartProducts(user.uid);
     } catch (error) {
       console.error("Error adding product to cart: ", error);
@@ -269,22 +367,69 @@ const SingleProduct = () => {
       console.error("Error removing product from cart: ", error);
     }
   };
-
-  const calculateTotalPrice = (cartProducts) => {
-    let totalPrice = 0;
-    // Add a null check before calling forEach
-    if (cartProducts) {
-      cartProducts.forEach((cartProduct) => {
-        const price = parseInt(cartProduct.data.price);
-        const count = parseInt(cartProduct.data.itemCountcustomer);
-        // console.log(count, "countcountcount");
-        totalPrice += price * count;
+  const handleQuantityChange = (productId, newQuantity, isCombo = false) => {
+    if (isCombo) {
+      const updatedCombos = productDetailsCombo.map((comboProduct) => {
+        if (comboProduct.id === productId) {
+          return {
+            ...comboProduct,
+            data: { ...comboProduct.data, itemCountcustomer: newQuantity },
+          };
+        }
+        return comboProduct;
       });
+      setProductDetailsCombo(updatedCombos);
+    } else {
+      const updatedCartProducts = cartProducts.map((cartProduct) => {
+        if (cartProduct.id === productId) {
+          return {
+            ...cartProduct,
+            data: { ...cartProduct.data, itemCountcustomer: newQuantity },
+          };
+        }
+        return cartProduct;
+      });
+      setCartProducts(updatedCartProducts);
     }
+
+    updateQuantityInFirestore(productId, newQuantity, isCombo);
+  };
+
+  const updateQuantityInFirestore = async (productId, newQuantity, isCombo = false) => {
+    try {
+      const collectionName = isCombo ? "cartCollection_Combos" : "cartCollection";
+      const userDocRef = doc(collection(firestore, "users", userId, collectionName), productId);
+      await updateDoc(userDocRef, { itemCountcustomer: newQuantity });
+      console.log("Item count updated successfully!");
+    } catch (error) {
+      console.error("Error updating item count:", error);
+      // If there's an error, revert the local state back to the previous state
+      if (isCombo) {
+        fetchCartProductsCombos(userId);
+      } else {
+        fetchCartProducts(userId);
+      }
+    }
+  };
+
+  const calculateTotalPrice = (cartProducts, productDetailsCombo) => {
+    let totalPrice = 0;
+    cartProducts.forEach((cartProduct) => {
+      const price = parseInt(cartProduct.data.price);
+      const count = parseInt(cartProduct.data.itemCountcustomer);
+      totalPrice += price * count;
+    });
+    productDetailsCombo.forEach((comboProduct) => {
+      const price = parseInt(comboProduct.data.productDetailsCombo.price);
+      const count = parseInt(comboProduct.data.itemCountcustomer);
+      totalPrice += price * count;
+    });
+    console.log(totalPrice,"totalPricetotalPrice");
+
     return totalPrice;
   };
 
-  const totalCartPrice = calculateTotalPrice(cartProducts);
+  const totalCartPrice = calculateTotalPrice(cartProducts, productDetailsCombo);
 
   if (!productDetails) {
     return <p>Loading...</p>;
@@ -294,7 +439,7 @@ const SingleProduct = () => {
       sliderRef.current.slickGoTo(index);
     }
   };
-  const allSizes = [ "S", "M", "L", "XL", "XXL"];
+  const allSizes = ["S", "M", "L", "XL", "XXL"];
   const availableSizes = productDetails.size;
 
   return (
@@ -507,6 +652,8 @@ const SingleProduct = () => {
                       handleRemoveFromCart={handleRemoveFromCart}
                       handleQuantityChange={handleQuantityChange}
                       totalCartPrice={totalCartPrice}
+                      handleRemoveFromCartCombos={handleRemoveFromCartCombos}
+                      productDetailsCombo={productDetailsCombo}
                     />
                   </div>
                 </div>
@@ -514,13 +661,13 @@ const SingleProduct = () => {
             </div>
           </div>
         </div>
-        
-{/*--------------------------------rating------------------ */}
-<div className="row">
-  <div className="col-12">
-    <RatingReviews  productId={productId}/>
-  </div>
-</div>
+
+        {/*--------------------------------rating------------------ */}
+        <div className="row">
+          <div className="col-12">
+            <RatingReviews productId={productId} />
+          </div>
+        </div>
       </div>
       <Footer />
     </>
@@ -528,10 +675,6 @@ const SingleProduct = () => {
 };
 
 export default SingleProduct;
-
-
-
-
 
 // import React, { useState, useEffect, useRef } from "react";
 // import { useParams, Link, useNavigate } from "react-router-dom";
@@ -580,7 +723,7 @@ export default SingleProduct;
 //   const [userId, setUserId] = useState(null);
 //   const [cartProducts, setCartProducts] = useState([]);
 //   const auth = getAuth();
-  
+
 //   useEffect(() => {
 //     const unsubscribe = onAuthStateChanged(auth, (user) => {
 //       if (user) {
@@ -743,8 +886,8 @@ export default SingleProduct;
 //     }
 //   };
 
-  // const allSizes = [ "S", "M", "L", "XL", "XXL"];
-  // const availableSizes = productDetails.size;
+// const allSizes = [ "S", "M", "L", "XL", "XXL"];
+// const availableSizes = productDetails.size;
 
 //   return (
 //     <>
@@ -817,23 +960,23 @@ export default SingleProduct;
 
 //               <div className="product-size">
 //                 <div className="d-flex">
-                  // <p className="mb-0 fs-4 me-4">Size:</p>
-                  // <div className="size-options">
-                  //   {allSizes.map((size) => (
-                  //     <button
-                  //       key={size}
-                  //       className={`btn me-2 mb-2 ${
-                  //         selectedSize === size
-                  //           ? "btn-dark text-light"
-                  //           : "btn-outline-secondary"
-                  //       }`}
-                  //       onClick={() => handleSizeClick(size)}
-                  //       disabled={!availableSizes.includes(size)}
-                  //     >
-                  //       {size}
-                  //     </button>
-                  //   ))}
-                  // </div>
+// <p className="mb-0 fs-4 me-4">Size:</p>
+// <div className="size-options">
+//   {allSizes.map((size) => (
+//     <button
+//       key={size}
+//       className={`btn me-2 mb-2 ${
+//         selectedSize === size
+//           ? "btn-dark text-light"
+//           : "btn-outline-secondary"
+//       }`}
+//       onClick={() => handleSizeClick(size)}
+//       disabled={!availableSizes.includes(size)}
+//     >
+//       {size}
+//     </button>
+//   ))}
+// </div>
 //                 </div>
 //               </div>
 

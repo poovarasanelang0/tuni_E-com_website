@@ -4,81 +4,150 @@ import Payment from "../../Pages/Payment/Payment";
 import Gpaypayment from "../../Pages/SingleProduct/Assets/secure-transaction.svg";
 import Devlimg from "../../Pages/SingleProduct/Assets/delivery-sec.svg";
 import Combosproducts from "./Combosproducts";
+import NormalProducts from "./NormalProducts";
 
 const CartItem = ({
   cartProducts,
   handleRemoveFromCart,
   handleQuantityChange,
   totalCartPrice,
+  handleRemoveFromCartCombos,
+  productDetailsCombo,
 }) => {
   return (
     <div className="conta">
       <div>
-        {cartProducts.length > 0 ? (
-          cartProducts &&
-          cartProducts.map((cartProduct) => (
-            <div className="map_function" key={cartProduct.id}>
-              <div className="row align-items-center">
-                <div className="col-md-4">
-                  <div className="addecardimg text-center">
-                    <img
-                      src={cartProduct.data.imageUrl}
-                      alt="Addedeimg"
-                      className="img-fluid"
-                    />
-                  </div>
-                </div>
-                <div className="col-md-8">
-                  <div>
-                    <h6 className="fw-bold">{cartProduct.data.name}</h6>
-                    <div className="d-flex ">
-                      <i className="bi bi-currency-rupee fw-bold">
-                        {cartProduct.data.price}
-                      </i>{" "}
-                      {"\u00a0"}
-                      {"\u00a0"}
-                      <span className="Success_color fw-bold fs-5">OFF</span>
-                    </div>
-                    <h6 className="fw-bold">
-                      <span className="text-secondary">Color :</span>{" "}
-                      {cartProduct.data.color}
-                    </h6>
-                    <h6 className="fw-bold">
-                      <span className="text-secondary">Size :</span>{" "}
-                      {cartProduct.data.sizecustomers}
-                    </h6>
-                    <p className="Success_color">
-                      Lowest price in last 30 days
-                    </p>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div style={{ marginTop: "-16px" }}>
-                        <p className="text-muted">Quantity:</p>
-                        <Product_add
-                          initialQuantity={cartProduct.data.itemCountcustomer}
-                          onQuantityChange={(newQuantity) =>
-                            handleQuantityChange(cartProduct.id, newQuantity)
-                          }
+      {(cartProducts?.length > 0 || productDetailsCombo?.length > 0) ? (
+          <>
+          
+            {/* {cartProducts.length > 0 &&
+              cartProducts.map((cartProduct) => ( */}
+       {cartProducts?.length > 0 && cartProducts.map((cartProduct) => (
+
+                <div className="map_function" key={cartProduct.id}>
+                  <div className="row align-items-center">
+                    <div className="col-md-4">
+                      <div className="addecardimg text-center">
+                        <img
+                          src={cartProduct.data.imageUrl}
+                          alt="Addedeimg"
+                          className="img-fluid"
                         />
                       </div>
-                      <div className="font_size" style={{ marginTop: "10px" }}>
-                        <button
-                          className="btn btn-link border-0 fw-bold px-3 py-1 rounded-pill"
-                          onClick={() => handleRemoveFromCart(cartProduct.id)}
-                        >
-                          Remove
-                        </button>
+                    </div>
+                    <div className="col-md-8">
+                      <div className="">
+                        <h6 className="fw-bold d-flex justify-content-start ">
+                          {cartProduct.data.name}
+                        </h6>
+                        <div className="d-flex ">
+                          <i className="bi bi-currency-rupee fw-bold">
+                            {cartProduct.data.price}
+                          </i>{" "}
+                          {"\u00a0"}
+                          {"\u00a0"}
+                          <span className="Success_color fw-bold fs-5">
+                            OFF
+                          </span>
+                        </div>
+                        <h6 className="fw-bold d-flex justify-content-start">
+                          <span className="text-secondary">Color :</span>{" "}
+                          {cartProduct.data.color}
+                        </h6>
+                        <h6 className="fw-bold d-flex justify-content-start">
+                          <span className="text-secondary">Size :</span>{" "}
+                          {cartProduct.data.sizecustomers}
+                        </h6>
+                        <p className="Success_color fs-6">
+                          Lowest price in last 30 days
+                        </p>
+                        <div className="d-flex justify-content-between align-items-center">
+                          <div style={{ marginTop: "-16px" }}>
+                            <p className="text-muted fs-6">Quantity:</p>
+                            <Product_add
+                              initialQuantity={
+                                cartProduct.data.itemCountcustomer
+                              }
+                              onQuantityChange={(newQuantity) =>
+                                handleQuantityChange(
+                                  cartProduct.id,
+                                  newQuantity
+                                )
+                              }
+                            />
+                          </div>
+                          <div
+                            className="font_size"
+                            style={{ marginTop: "10px" }}
+                          >
+                            <button
+                              className="btn btn-link border-0 fw-bold px-3 py-1 rounded-pill"
+                              onClick={() =>
+                                handleRemoveFromCart(cartProduct.id)
+                              }
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr />
+                </div>
+        ))}
+      {productDetailsCombo?.length > 0 && productDetailsCombo.map((comboProduct) => (
+
+                <div key={comboProduct.id}>
+                  <div className="row">
+                    <div className="col-md-4">
+                      <img
+                        src={comboProduct.data.productDetailsCombo.tumbnail}
+                        alt="C"
+                        className="img-fluid py-1"
+                        style={{
+                          height: "10vh",
+                          width: "7vh",
+                          borderRadius: "5px",
+                        }}
+                      />
+                    </div>
+                    <div className="col-md-8">
+                      <div className=" d-flex align-items-center">
+                        <p style={{ fontSize: "20px", marginTop: "10px" }}>
+                          {comboProduct.data.productDetailsCombo.price}
+                        </p>
+
+                        <span className="mx-2">
+                        <Product_add 
+                            initialQuantity={comboProduct.data.itemCountcustomer}
+                            onQuantityChange={(newQuantity) =>
+                              handleQuantityChange(comboProduct.id, newQuantity, true)
+                            }
+                          />
+                        </span>
+                        <div className="ms-auto">
+                          <button
+                            className="btn btn-link border-0 fw-bold rounded-pill"
+                            onClick={() =>
+                              handleRemoveFromCartCombos(comboProduct.id)
+                            }
+                            style={{ marginTop: "-14px", fontSize: "14px" }}
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <hr />
-            </div>
-          ))
+       ))}
+          </>
         ) : (
           <p className="fs-6 text-danger">No items in the cart</p>
         )}
       </div>
+
       <div className="col">
         <img src={Gpaypayment} alt="Gpaypayment" className="img-fluid" />
       </div>
@@ -125,10 +194,13 @@ const CartItem = ({
       </div>
       {/* Sticky Footer for Shopping Cart */}
       <div className="sticky-bottom bg-light p-3 w-100">
-        <Payment cartProducts={cartProducts} />
+        <Payment
+          cartProducts={cartProducts}
+          productDetailsCombo={productDetailsCombo}
+        />
       </div>
     </div>
   );
-};
+};  
 
 export default CartItem;

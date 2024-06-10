@@ -15,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { v4 as uuidv4 } from "uuid";
 
-const Payment = ({ cartProducts , productDetailsCombo }) => {
+const Payment = ({ cartProducts, productDetailsCombo }) => {
   const [formFields, setFormFields] = useState({
     username: "",
     phoneNumber: "",
@@ -39,15 +39,25 @@ const Payment = ({ cartProducts , productDetailsCombo }) => {
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
 
-  const calculateTotalPrice = (cartProducts) => {
-    return cartProducts.reduce((total, product) => {
-      const price = parseInt(product.data.price);
-      const count = parseInt(product.data.itemCountcustomer);
-      return total + price * count;
-    }, 0);
+  const calculateTotalPrice = (cartProducts, productDetailsCombo) => {
+    let totalPrice = 0;
+    cartProducts.forEach((cartProduct) => {
+      const price = parseInt(cartProduct.data.price);
+      const count = parseInt(cartProduct.data.itemCountcustomer);
+      totalPrice += price * count;
+    });
+    productDetailsCombo.forEach((comboProduct) => {
+      const price = parseInt(comboProduct.data.productDetailsCombo.price);
+      const count = parseInt(comboProduct.data.itemCountcustomer);
+      totalPrice += price * count;
+    });
+    console.log(totalPrice, "totalPricetotalPrice");
+
+    return totalPrice;
   };
 
-  const totalCartPrice = calculateTotalPrice(cartProducts);
+  const totalCartPrice = calculateTotalPrice(cartProducts, productDetailsCombo);
+
   const [currentUser, setCurrentUser] = useState(null);
   const [oldAddresses, setOldAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -285,7 +295,7 @@ const Payment = ({ cartProducts , productDetailsCombo }) => {
       const orderID = generateOrderID();
 
       const orderData = {
-        orderID, 
+        orderID,
         username: orderAddressData.username,
         pincode: orderAddressData.pincode,
         address_Line1: orderAddressData.address_Line1,
@@ -306,7 +316,15 @@ const Payment = ({ cartProducts , productDetailsCombo }) => {
           price: product.data.price || "",
           sizecustomers: product.data.sizecustomers || "",
         })),
+
+        comboProducts: productDetailsCombo.map((comboProduct) => ({
+          brand: comboProduct.data.productDetailsCombo.brand || "",
+          id: comboProduct.data.productDetailsCombo.id || "",
+          imageUrl: comboProduct.data.productDetailsCombo.tumbnail || [],
+          itemCountcustomer: comboProduct.data.itemCountcustomer || 0,
+        })),
       };
+      console.log(orderData, "::orderData");
       openRazorpay(orderData);
     } else {
       if (!addressSelected) {
@@ -397,6 +415,90 @@ const Payment = ({ cartProducts , productDetailsCombo }) => {
     setFormFieldsError(errors);
   };
 
+  // const openRazorpay = (orderData) => {
+  //   if (totalCartPrice) {
+  //     const options = {
+  //       key: "rzp_live_W0t2SeLjFxX8SB",
+  //       key_secret: "TO1w1yoIo0Z5HXmRitcqpEqG",
+  //       amount: totalCartPrice * 100,
+  //       currency: "INR",
+  //       name: "TUNi",
+  //       timeout: 300,
+  //       description: "For Testing Purpose",
+  //       handler: async function (response) {
+  //         // alert(response.razorpay_payment_id);
+  //         try {
+  //           const newOrdersRef = doc(
+  //             firestore,
+  //             "AllOrderList",
+  //             currentUser.uid
+  //           );
+  //           const newOrdersList = collection(newOrdersRef, "OrderItemPlaced");
+
+  //           await Promise.all(
+  //             cartProducts.map(async (product) => {
+  //               await addDoc(newOrdersList, {
+  //                 ...product.data,
+  //                 totalPrice: totalCartPrice,
+  //                 orderAddress: formFields,
+  //                 orderID: orderData.orderID,
+  //               });
+  //             })
+  //           );
+  //           const newOrderAddress = doc(
+  //             firestore,
+  //             "AllOrderList",
+  //             currentUser.uid
+  //           );
+
+  //           const newOrdersListAddress = collection(
+  //             newOrderAddress,
+  //             "OrderAddress_History"
+  //           );
+
+  //           await Promise.all(
+  //             cartProducts.map(async (product) => {
+  //               await addDoc(newOrdersListAddress, {
+  //                 ...product.data,
+  //                 orderAddress: formFields,
+  //                 totalPrice: totalCartPrice,
+  //                 orderID: orderData.orderID, // Include the order ID
+  //               });
+  //             })
+  //           );
+  //           await Promise.all(
+  //             cartProducts.map((product) =>
+  //               deleteItemFromFirestoreCartItem(product.id)
+  //             )
+  //           );
+
+  //           navigate("/TrackOrder");
+  //           toast.success("Your Product Placed");
+  //           window.location.reload();
+  //         } catch (error) {
+  //           console.error("Error processing order after payment: ", error);
+  //         }
+  //       },
+  //       prefill: {
+  //         name: formFields.username,
+  //         email: "",
+  //         contact: formFields.phoneNumber,
+  //       },
+  //       notes: {
+  //         address_Line1: formFields.address_Line1,
+  //         address_Line2: formFields.address_Line2,
+  //       },
+  //       theme: {
+  //         color: "#CC7833",
+  //       },
+  //     };
+  //     const pay = new window.Razorpay(options);
+  //     pay.open();
+  //   } else {
+  //     alert("Please add some products to the basket!");
+  //   }
+  // };
+
   const openRazorpay = (orderData) => {
     if (totalCartPrice) {
       const options = {
@@ -408,7 +510,6 @@ const Payment = ({ cartProducts , productDetailsCombo }) => {
         timeout: 300,
         description: "For Testing Purpose",
         handler: async function (response) {
-          alert(response.razorpay_payment_id);
           try {
             const newOrdersRef = doc(
               firestore,
@@ -417,40 +518,70 @@ const Payment = ({ cartProducts , productDetailsCombo }) => {
             );
             const newOrdersList = collection(newOrdersRef, "OrderItemPlaced");
 
+            // Adding cart products to the database
             await Promise.all(
               cartProducts.map(async (product) => {
                 await addDoc(newOrdersList, {
                   ...product.data,
                   totalPrice: totalCartPrice,
                   orderAddress: formFields,
-                  orderID: orderData.orderID, 
+                  orderID: orderData.orderID,
                 });
               })
             );
+
+            const newOrdersListCombo = collection(newOrdersRef, "OrderItemPlaced_Combo");
+            await Promise.all(
+              productDetailsCombo.map(async (comboProduct) => {
+                await addDoc(newOrdersListCombo, {
+                  ...comboProduct.data,
+                  totalPrice: totalCartPrice,
+                  orderAddress: formFields,
+                  orderID: orderData.orderID,
+                });
+              })
+            );
+
             const newOrderAddress = doc(
               firestore,
               "AllOrderList",
               currentUser.uid
             );
-
             const newOrdersListAddress = collection(
               newOrderAddress,
               "OrderAddress_History"
             );
 
+            // Adding address history for cart products
             await Promise.all(
               cartProducts.map(async (product) => {
                 await addDoc(newOrdersListAddress, {
                   ...product.data,
                   orderAddress: formFields,
                   totalPrice: totalCartPrice,
-                  orderID: orderData.orderID, // Include the order ID
+                  orderID: orderData.orderID,
                 });
               })
             );
+
+            // Adding address history for combo products
+            await Promise.all(
+              productDetailsCombo.map(async (comboProduct) => {
+                await addDoc(newOrdersListAddress, {
+                  ...comboProduct.data.productDetailsCombo,
+                  orderAddress: formFields,
+                  totalPrice: totalCartPrice,
+                  orderID: orderData.orderID,
+                });
+              })
+            );
+
             await Promise.all(
               cartProducts.map((product) =>
                 deleteItemFromFirestoreCartItem(product.id)
+              ),
+              productDetailsCombo.map((product) =>
+              deleteItemFromFirestoreCartItem_Combos(product.id)
               )
             );
 
@@ -481,7 +612,6 @@ const Payment = ({ cartProducts , productDetailsCombo }) => {
     }
   };
 
-  
   const deleteItemFromFirestoreCartItem = async (productId) => {
     try {
       const userDocRef = doc(
@@ -493,6 +623,20 @@ const Payment = ({ cartProducts , productDetailsCombo }) => {
       console.error("Error removing product from cart: ", error);
     }
   };
+
+
+  const deleteItemFromFirestoreCartItem_Combos = async (productId) => {
+    try {
+      const userDocRef = doc(
+        collection(firestore, "users", currentUser.uid, "cartCollection_Combos"),
+        productId
+      );
+      await deleteDoc(userDocRef);
+    } catch (error) {
+      console.error("Error removing product from cart: ", error);
+    }
+  };
+
 
   const uniqueAddresses = new Set();
 
@@ -528,14 +672,15 @@ const Payment = ({ cartProducts , productDetailsCombo }) => {
             <p className="bluecolor">Total payable</p>
           </div>
           <div className="bg_color_buy_now">
-          <button
-  className="btn px-5 rounded-pill"
-  onClick={() => setShowForm(!showForm)}
-  disabled={cartProducts.length === 0 && productDetailsCombo.length === 0}
->
-  Buy Now
-</button>
-
+            <button
+              className="btn px-5 rounded-pill"
+              onClick={() => setShowForm(!showForm)}
+              disabled={
+                cartProducts.length === 0 && productDetailsCombo.length === 0
+              }
+            >
+              Buy Now
+            </button>
           </div>
         </div>
       </div>
@@ -787,7 +932,9 @@ const Payment = ({ cartProducts , productDetailsCombo }) => {
               variant="primary"
               type="submit"
               className="my-2"
-              disabled={cartProducts.length === 0}
+              disabled={
+                cartProducts.length === 0 && productDetailsCombo.length === 0
+              }
             >
               Pay Now
             </Button>

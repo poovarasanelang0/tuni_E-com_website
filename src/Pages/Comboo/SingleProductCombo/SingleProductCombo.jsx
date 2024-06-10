@@ -18,12 +18,16 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import CartItem from "../../../Compoment/AddToCart/CartItem";
-import Combosproducts from "../../../Compoment/AddToCart/Combosproducts"
+import Combosproducts from "../../../Compoment/AddToCart/Combosproducts";
+import AddToCart from "../../../Compoment/AddToCart/AddToCart";
 
 const SingleProductCombo = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState("");
   const [productDetailsCombo, setProductDetailsCombo] = useState(null);
+  const [productDetailsComboSingle, setProductDetailsComboSingle] =
+    useState(null);
+
   const [selectedItems, setSelectedItems] = useState([]);
   const { productId } = useParams();
   const auth = getAuth();
@@ -31,39 +35,16 @@ const SingleProductCombo = () => {
   const [userId, setUserId] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
 
-// this one cartitem added fetch  or get the products
-const fetchCartProducts = async (userId) => {
-  if (!userId) return;
-  try {
-    const userDocRef = collection(
-      firestore,
-      "users",
-      userId,
-      "cartCollection_Combos"
-    );
-    const querySnapshot = await getDocs(userDocRef);
-
-    const cartProducts = [];
-    querySnapshot.forEach((doc) => {
-      cartProducts.push({ id: doc.id, data: doc.data() });
-    });
-    productDetailsCombo(cartProducts);
-
-  } catch (error) {
-    console.error("Error fetching cart products:", error);
-  }
-};
-
-
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserId(user.uid);
-         fetchCartProducts(user.uid); // Fetch cart products on user login
+        fetchCartProducts(user.uid); // Fetch cart products on user login
+        fetchCartProductsCombos(user.uid);
       } else {
         setUserId(null);
-        setProductDetailsCombo([]); // Clear cart products on user logout
+        setCartProducts([]); // Clear cart products on user logout
+        setProductDetailsCombo([]); // Clear combo products
       }
     });
     return () => unsubscribe();
@@ -71,9 +52,54 @@ const fetchCartProducts = async (userId) => {
 
   useEffect(() => {
     if (userId) {
-       fetchCartProducts(userId); // Fetch cart products when userId changes
+      fetchCartProducts(userId); // Fetch cart products when userId changes
     }
   }, [userId]);
+
+  // this one cartitem added fetch  or get the products
+  const fetchCartProducts = async (userId) => {
+    if (!userId) return;
+    try {
+      const userDocRef = collection(
+        firestore,
+        "users",
+        userId,
+        "cartCollection"
+      );
+      const querySnapshot = await getDocs(userDocRef);
+
+      const cartProducts = [];
+      querySnapshot.forEach((doc) => {
+        cartProducts.push({ id: doc.id, data: doc.data() });
+      });
+
+      setCartProducts(cartProducts);
+    } catch (error) {
+      console.error("Error fetching cart products:", error);
+    }
+  };
+  const fetchCartProductsCombos = async (userId) => {
+    if (!userId) return;
+    try {
+      const userDocRef = collection(
+        firestore,
+        "users",
+        userId,
+        "cartCollection_Combos"
+      );
+      const querySnapshot = await getDocs(userDocRef);
+
+      const cartProducts = [];
+      querySnapshot.forEach((doc) => {
+        cartProducts.push({ id: doc.id, data: doc.data() });
+      });
+
+      setProductDetailsComboSingle(cartProducts);
+      console.log(cartProducts, "addtocartpages +++cartProducts+++combos");
+    } catch (error) {
+      console.error("Error fetching cart products:", error);
+    }
+  };
 
   const settings = {
     customPaging: function (i) {
@@ -98,9 +124,7 @@ const fetchCartProducts = async (userId) => {
     setSelectedSize(size);
   };
 
-
-
-  // this one product details get 
+  // this one product details get
   useEffect(() => {
     const fetchProductDetailsCombo = async () => {
       try {
@@ -127,55 +151,89 @@ const fetchCartProducts = async (userId) => {
     return <div>Loading...</div>;
   }
 
+  // this one product database added
+  // const handleAddToCart = async () => {
+  //   try {
+  //     // Get the currently logged-in user
+  //     const auth = getAuth();
+  //     const user = auth.currentUser;
 
-// this one product database added 
-const handleAddToCart = async () => {
-  try {
-    // Get the currently logged-in user
-    const auth = getAuth();
-    const user = auth.currentUser;
+  //     if (!user) {
+  //       console.error("User is not logged in. Cannot add to cart.");
+  //       toast.error("User is not logged in. Cannot add to cart");
 
-    if (!user) {
-      console.error("User is not logged in. Cannot add to cart.");
-      toast.error("User is not logged in. Cannot add to cart");
+  //       return;
+  //     }
 
-      return;
+  //     if (!selectedItems) {
+  //       console.error("Please select a size before adding to cart");
+  //       return;
+  //     }
+
+  //     const firestore = getFirestore();
+  //     const userDocRef = doc(firestore, "users", user.uid);
+  //     const cartDocRef = doc(userDocRef, "cartCollection_Combos",productId);
+  //     const productWithSizeAndCount = {
+  //       selectedItems: selectedItems,
+  //       productDetailsCombo,
+  //       itemCountcustomer: 1,
+
+  //     };
+  //     await setDoc(cartDocRef, productWithSizeAndCount, selectedItems);
+
+  //     console.log(
+  //       "Product added to the user's cart subcollection successfully!"
+  //     );
+
+  //     // Fetch and update the cart products
+  //     fetchCartProductsCombos(user.uid);
+  //   } catch (error) {
+  //     console.error("Error adding product to cart: ", error);
+  //   }
+  // };
+
+  const handleAddToCart = async () => {
+    try {
+      // Get the currently logged-in user
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error("User is not logged in. Cannot add to cart.");
+        toast.error("User is not logged in. Cannot add to cart");
+        return;
+      }
+
+      if (!selectedItems) {
+        console.error("Please select a size before adding to cart");
+        return;
+      }
+
+      const firestore = getFirestore();
+      const userDocRef = doc(firestore, "users", user.uid);
+      const cartCollectionRef = collection(userDocRef, "cartCollection_Combos");
+
+      const productWithSizeAndCount = {
+        selectedItems: selectedItems,
+        productDetailsCombo,
+        itemCountcustomer: 1,
+      };
+
+      // Use addDoc to create a new document with a random ID in the cartCollection_Combos subcollection
+      await addDoc(cartCollectionRef, productWithSizeAndCount);
+
+      console.log(
+        "Product added to the user's cart subcollection successfully!"
+      );
+
+      // Fetch and update the cart products
+      fetchCartProductsCombos(user.uid);
+    } catch (error) {
+      console.error("Error adding product to cart: ", error);
     }
+  };
 
-    if (!selectedItems) {
-      console.error("Please select a size before adding to cart");
-      return;
-    }
-
-    const firestore = getFirestore();
-    const userDocRef = doc(firestore, "users", user.uid);
-    const cartDocRef = doc(
-      userDocRef,
-      "cartCollection_Combos",
-      productId
-    );
-    const productWithSizeAndCount = {
-      ...selectedItems,productDetailsCombo,
-      // sizecustomers: selectedSize,
-       itemCountcustomer: 1,
-    };
-    await setDoc(cartDocRef, productWithSizeAndCount, selectedItems);
-
-    console.log(
-      "Product added to the user's cart subcollection successfully!"
-    );
-
-    // Fetch and update the cart products
-     fetchCartProducts(user.uid);
-  } catch (error) {
-    console.error("Error adding product to cart: ", error);
-  }
-};
-
-console.log(cartProducts,"combos");
-
-
-// to displayed diffent size 
+  // to displayed diffent size
   const getSizeOptions = (name) => {
     const lowerCaseName = name.toLowerCase();
     if (lowerCaseName.includes("pant") || lowerCaseName.includes("jeans")) {
@@ -201,7 +259,6 @@ console.log(cartProducts,"combos");
       setSelectedSize("");
     }
   };
-  console.log("selectedItems::=>", selectedItems);
 
   const handleRemoveFromCombo = (id) => {
     setSelectedItems((prevItems) => prevItems.filter((item) => item.id !== id));
@@ -225,44 +282,133 @@ console.log(cartProducts,"combos");
     );
   };
 
-  const handleRemoveFromCart = async (productId) => {
-    try {
-      const userDocRef = doc(
-        collection(firestore, "users", userId, "cartCollection"),
-        productId
-      );
-      // console.log(productId,"productIdproductIdproductIdproductIdproductId");
-      await deleteDoc(userDocRef);
-      console.log("Document successfully deleted from cart!");
-      toast.success("Successfully Clear CartItem");
-
-      // Fetch and display the updated cart products
-      fetchCartProducts(userId);
-    } catch (error) {
-      console.error("Error removing product from cart: ", error);
-    }
-  };
-
-  const handleQuantityChange = async (productId, newQuantity) => {
-    try {
-      const userDocRef = doc(
-        collection(firestore, "users", userId, "cartCollection"),
-        productId
-      );
-      await updateDoc(userDocRef, { itemCountcustomer: newQuantity });
-      console.log("Item count updated successfully!");
-
-      // Fetch and update the cart products
-      fetchCartProducts(userId);
-    } catch (error) {
-      console.error("Error updating item count:", error);
-    }
-  };
-
-
   const currentProduct = productDetailsCombo.combo_details[selectedImageIndex];
   const sizeOptions = getSizeOptions(currentProduct.name);
   const isAccessory = currentProduct.name.toLowerCase().includes("accessory");
+
+  // normal
+
+  const handleQuantityChange = (productId, newQuantity, isCombo = false) => {
+    if (isCombo) {
+      const updatedCombos = productDetailsComboSingle.map((comboProduct) => {
+        if (comboProduct.id === productId) {
+          return {
+            ...comboProduct,
+            data: { ...comboProduct.data, itemCountcustomer: newQuantity },
+          };
+        }
+        return comboProduct;
+      });
+      setProductDetailsComboSingle(updatedCombos);
+    } else {
+      const updatedCartProducts = cartProducts.map((cartProduct) => {
+        if (cartProduct.id === productId) {
+          return {
+            ...cartProduct,
+            data: { ...cartProduct.data, itemCountcustomer: newQuantity },
+          };
+        }
+        return cartProduct;
+      });
+      setCartProducts(updatedCartProducts);
+    }
+
+    updateQuantityInFirestore(productId, newQuantity, isCombo);
+  };
+
+  const updateQuantityInFirestore = async (productId, newQuantity, isCombo = false) => {
+    try {
+      const collectionName = isCombo ? "cartCollection_Combos" : "cartCollection";
+      const userDocRef = doc(collection(firestore, "users", userId, collectionName), productId);
+      await updateDoc(userDocRef, { itemCountcustomer: newQuantity });
+      console.log("Item count updated successfully!");
+    } catch (error) {
+      console.error("Error updating item count:", error);
+      // If there's an error, revert the local state back to the previous state
+      if (isCombo) {
+        fetchCartProductsCombos(userId);
+      } else {
+        fetchCartProducts(userId);
+      }
+    }
+  };
+
+  const handleRemoveFromCart = (productId) => {
+    const updatedCartProducts = cartProducts.filter(
+      (cartProduct) => cartProduct.id !== productId
+    );
+    setCartProducts(updatedCartProducts);
+    toast.success("Successfully Clear CartItem");
+    deleteItemFromFirestore(productId);
+  };
+
+  const handleRemoveFromCartCombos = (productId) => {
+    const updatedCartProducts = productDetailsComboSingle.filter(
+      (comboProduct) => comboProduct.id !== productId
+    );
+    setProductDetailsComboSingle(updatedCartProducts);
+    toast.success("Successfully Cleared Combo Item");
+    deleteComboItemFromFirestore(productId);
+  };
+
+  const deleteComboItemFromFirestore = async (productId) => {
+    try {
+      const userDocRef = doc(
+        collection(firestore, "users", userId, "cartCollection_Combos"),
+        productId
+      );
+      await deleteDoc(userDocRef);
+
+      console.log("Combo document successfully deleted from cart!");
+    } catch (error) {
+      console.error("Error removing combo product from cart: ", error);
+      fetchCartProductsCombos(userId);
+    }
+  };
+
+  const deleteItemFromFirestore = async (productId) => {
+    try {
+      const userDocRef = doc(
+        collection(firestore, "users", userId, "cartCollection"),
+        productId
+      );
+      await deleteDoc(userDocRef);
+
+      console.log("Document successfully deleted from cart!");
+    } catch (error) {
+      console.error("Error removing product from cart: ", error);
+      // If there's an error, revert the local state back to the previous state
+      fetchCartProducts(userId);
+    }
+  };
+
+  const calculateTotalPrice = (cartProducts, productDetailsComboSingle) => {
+    let totalPrice = 0;
+  
+    if (cartProducts && Array.isArray(cartProducts)) {
+      cartProducts.forEach((cartProduct) => {
+        const price = parseInt(cartProduct.data.price);
+        const count = parseInt(cartProduct.data.itemCountcustomer);
+        totalPrice += price * count;
+      });
+    }
+  
+    if (productDetailsComboSingle && Array.isArray(productDetailsComboSingle)) {
+      productDetailsComboSingle.forEach((comboProduct) => {
+        const price = parseInt(comboProduct.data.productDetailsCombo.price);
+        const count = parseInt(comboProduct.data.itemCountcustomer);
+        totalPrice += price * count;
+      });
+    }
+  
+    console.log(totalPrice, "totalPricetotalPrice");
+  
+    return totalPrice;
+  };
+  
+  // Assuming cartProducts and productDetailsComboSingle are passed correctly
+  const totalCartPrice = calculateTotalPrice(cartProducts, productDetailsComboSingle);
+  
 
   return (
     <>
@@ -431,10 +577,14 @@ console.log(cartProducts,"combos");
               />
             </div>
             <div className="offcanvas-body">
-              <Combosproducts  />
-              
-{/* <CartItem  productDetailsCombo={productDetailsCombo}  handleRemoveFromCart={handleRemoveFromCart} selectedItems={selectedItems}
-                      handleQuantityChange={handleQuantityChange}/> */}
+              <CartItem
+                cartProducts={cartProducts}
+                handleRemoveFromCart={handleRemoveFromCart}
+                handleQuantityChange={handleQuantityChange}
+                totalCartPrice={totalCartPrice}
+                handleRemoveFromCartCombos={handleRemoveFromCartCombos}
+                productDetailsCombo={productDetailsComboSingle}
+              />
             </div>
           </div>
         </div>

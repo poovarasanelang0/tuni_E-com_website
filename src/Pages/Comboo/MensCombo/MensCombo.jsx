@@ -304,7 +304,7 @@ const MensCombo = () => {
                   onChange={() => handleRadioChange("Combo1")}
                 />
                 <label className="form-check-label fw-bold" htmlFor="Combo1">
-                  Combo 1{" "}
+                  Combo 1 Set of 4{" "}
                 </label>
               </div>
               <div className="form-check mx-1 ">
@@ -318,7 +318,7 @@ const MensCombo = () => {
                   onChange={() => handleRadioChange("Combo2")}
                 />
                 <label className="form-check-label fw-bold" htmlFor="Combo2">
-                  Combo 2{" "}
+                  Combo 2 Set of 8{" "}
                 </label>
               </div>
             </div>

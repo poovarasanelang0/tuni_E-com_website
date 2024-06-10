@@ -20,7 +20,8 @@ import WomensCombo from "./Pages/Comboo/WomensCombo/WomensCombo";
 import SingleProductCombo from "./Pages/Comboo/SingleProductCombo/SingleProductCombo";
 import TrackOrder from "./Pages/TrackOrder/TrackOrder";
 
-
+import PrivacyPolicy from "./Pages/PrivacyPolicy/PrivacyPolicy";
+import TermConditions from "./Pages/Terms & Conditions/TermConditions";
 
 
 function App() {
@@ -49,7 +50,11 @@ function App() {
           <Route path="/SingleProductCombo/:productId" element={<SingleProductCombo />} />
 
           <Route path="/Login" element={<Login />} />
-          <Route path="/TrackOrder" element={<TrackOrder />} />         
+          <Route path="/TrackOrder" element={<TrackOrder />} />  
+          <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} /> 
+          <Route path="/TermConditions" element={<TermConditions />} />         
+
+
         
       </Routes>
     </BrowserRouter>

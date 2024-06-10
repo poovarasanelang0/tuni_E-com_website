@@ -1,5 +1,75 @@
 .bg_color_footer{
-    background:rgb(44, 26, 120);
-    font-family: 'Times New Roman', Times, serif;
+    background-color: rgb(44,26,120);
+}
+.bg_color_footer{
+    color: white;
+}
 
+.Categories_field{
+   
+    font-size: 13px;
+}
+.Needhelp_field{
+    font-size: 13px;
+}
+.company_field{
+    font-size: 13px;
+}
+.address_field{
+    font-size: 13px;
+}
+.p_subcribe{
+    font-size:13px;
+}
+address_field {
+    height: auto; /* Adjust according to your need */
+    width: 100%; /* Adjust according to your need */
+    letter-spacing: 1px;
+    line-height: 1.6;
+}
+.img1 img{
+  height: 30px;
+  width: 30px;
+}
+.img2 img{
+    height: 30px;
+    width: 30px;
+}
+.img1{
+    border: 1px solid rgb(186, 184, 184);
+    padding: 14px;
+}
+
+.img2{
+    border: 1px solid rgb(186, 184, 184);
+    padding: 14px;
+}
+.img3{
+    border: 1px solid  rgb(186, 184, 184);
+    padding: 10px;
+}
+.cardimg img{
+    width: auto ;
+    height: 17px;
+}
+.cardimg{
+    padding-top: 20px;
+    padding-left: 80px;
+}
+.social_media{
+    padding-top: 10px;
+}
+.apple_android{
+    margin-left: 40px;
+}
+.Tuni{
+    text-align: center ;
+    font-size: 10px;
+}
+.social_media{
+    font-size: 30px;
+}
+
+.hovercolorfooter ul li:hover{
+    color: rgb(104, 247, 233);
 }
