@@ -21,6 +21,8 @@ import "react-toastify/dist/ReactToastify.css";
 const Account = () => {
   const fileInputRefImage = useRef(null);
   const [orderProducts, setOrderProducts] = useState([]);
+  const [orderProductsCombos, setOrderProductsCombos] = useState([]);
+
   const [userId, setUserId] = useState(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -31,17 +33,19 @@ const Account = () => {
       if (user) {
         setUserId(user.uid);
         fetchOrderItems(user.uid);
+        fetchOrderItemsCombos(user.uid);
       } else {
         setUserId(null);
         setOrderProducts([]);
+        setOrderProductsCombos([]);
         setTotalPrice(0);
         setLoading(false);
       }
     });
-
+  
     return () => unsubscribe();
   }, []);
-
+  
   useEffect(() => {
     let sum = 0;
     orderProducts.forEach((product) => {
@@ -70,6 +74,27 @@ const Account = () => {
     }
   };
 
+
+  const fetchOrderItemsCombos = async (userId) => {
+    try {
+      const userDocItem = collection(
+        firestore,
+        "AllOrderList",
+        userId,
+        "OrderAddress_History_Combos"
+      );
+      const userDocSnap = await getDocs(userDocItem);
+      const orderProductsCombos = [];
+      userDocSnap.forEach((doc) => {
+        orderProductsCombos.push({ id: doc.id, data: doc.data() });
+      });
+      setOrderProductsCombos(orderProductsCombos);
+      setLoading(false); // Set loading state to false when order products are fetched
+    } catch (error) {
+      console.error("Error fetching combo order products:", error);
+    }
+  };
+  
   // ------------------------------profile----------------------------------------------
   const [profile, setProfile] = useState({
     name: "",
@@ -231,6 +256,25 @@ const Account = () => {
       );
       await deleteDoc(productDocRef);
       setOrderProducts(
+        orderProducts.filter((product) => product.id !== productId)
+      );
+      toast.success("Product deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting product: ", error);
+      toast.error("Failed to delete product.");
+    }
+  };
+  const handleDeleteProductCombos = async (productId) => {
+    try {
+      const productDocRef = doc(
+        firestore,
+        "AllOrderList",
+        userId,
+        "OrderAddress_History_Combos",
+        productId
+      );
+      await deleteDoc(productDocRef);
+      setOrderProductsCombos(
         orderProducts.filter((product) => product.id !== productId)
       );
       toast.success("Product deleted successfully.");
@@ -557,7 +601,7 @@ const Account = () => {
                 </div>
               </div>
               {/* ----------------------myorders ---------------------------------- */}
-              <div
+              {/* <div
                 class="tab-pane fade"
                 id="pills-myorders"
                 role="tabpanel"
@@ -570,7 +614,7 @@ const Account = () => {
                     className="scrollable-container"
                     style={{ maxHeight: "400px", overflowY: "auto" }}
                   >
-                    {orderProducts.length === 0 ? (
+                    {orderProducts.length === 0 || orderProductsCombos.length === 0 ? (
                       <div className="alert alert-info" role="alert">
                         No order products in history.
                       </div>
@@ -632,10 +676,183 @@ const Account = () => {
                           </div>
                         </div>
                       ))
+
+                      orderProductsCombos.map((product,index) => (
+                        <div>
+
+                        </div>
+                      ))
                     )}
                   </div>
                 </div>
+              </div> */}
+              <div
+  class="tab-pane fade"
+  id="pills-myorders"
+  role="tabpanel"
+  aria-labelledby="pills-myorders-tab"
+  tabindex="0"
+>
+  <div className="col">
+    <h4 className="fw-bold py-1 px-1 text-primary">My Order History.</h4>
+    <div
+      className="scrollable-container"
+      style={{ maxHeight: "400px", overflowY: "auto" }}
+    >
+      {orderProducts.length === 0 && orderProductsCombos.length === 0 ? (
+        <div className="alert alert-info" role="alert">
+          No order products in history.
+        </div>
+      ) : (
+        <>
+          {orderProducts.map((product) => (
+            <div className="card" key={product.id}>
+              <div className="card-body">
+                <div className="border">
+                  <div className="c">
+                    <div className="row">
+                      <div className="col-md-1 col-sm-6">
+                        <img
+                          src={product.data.imageUrl[0]}
+                          className="img-fluid"
+                          alt={product.data.name}
+                        />
+                      </div>
+                      <div className="col-md-1 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                        <p className="text-muted mb-0 small">
+                          {product.data.name}
+                        </p>
+                      </div>
+                      <div className="col-md-2 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                        <p className="text-muted mb-0 small">
+                          Color: {product.data.color}
+                        </p>
+                      </div>
+                      <div className="col-md-2 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                        <p className="text-muted mb-0 small">
+                          Size: {product.data.sizecustomers}
+                        </p>
+                      </div>
+                      <div className="col-md-2 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                        <p className="text-muted mb-0 small">
+                          Qty: {product.data.itemCountcustomer}
+                        </p>
+                      </div>
+                      <div className="col-md-2 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                        <p className="text-muted mb-0 small">
+                          Price:{" "}
+                          <i className="bi bi-currency-rupee"></i>{" "}
+                          {product.data.totalPrice}
+                        </p>
+                      </div>
+                      <div className="col-md-1 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                        <button
+                          variant=""
+                          className="text-danger border-0"
+                          onClick={() => handleDeleteProduct(product.id)}
+                        >
+                          <i class="bi bi-trash3-fill"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
+          ))}
+          {orderProductsCombos.map((comboProduct) => (
+            <div className="card" key={comboProduct.id}>
+              <div className="card-body">
+                <div className="border">
+                  <div className="c">
+                    <div className="row">
+                      <div className="col-md-1 col-sm-6 d-flex justify-content-center align-items-center">
+                        <img
+                          src={comboProduct.data.productDetailsCombo.tumbnail}
+                          className="img-fluid"
+                          alt={comboProduct.data.name}
+                        />
+                      </div>
+                      <div className="col-md-2 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                        <p className="text-muted mb-0 small">
+                          {comboProduct.data.productDetailsCombo.name}
+                        </p>
+                      </div>
+                     
+                      <div className="col-md-1 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                        <p className="text-muted mb-0 small">
+                       Qty: {comboProduct.data.itemCountcustomer}
+                        </p>
+                      </div>
+
+
+ <div className="col-md-5 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                       <div className="rows">
+                        
+                       {comboProduct.data.selectedItems.map(
+                            (selectedItem, index) => (
+                              <div
+                                key={index}
+                                className="shadow-sm border mb-2"
+                              >
+                                <div className="card-body">
+                                  <div className="row">
+                                    <div className="col-md-2 d-flex justify-content-center align-items-center">
+                                      <img
+                                        src={selectedItem.imageturls}
+                                        className="img-fluid"
+                                        alt={selectedItem.name}
+                                      />
+                                    </div>
+                                    <div className="col-md-4 text-center d-flex justify-content-center align-items-center">
+                                      <p className="text-muted mb-0 small">
+                                        {selectedItem.name}
+                                      </p>
+                                    </div>
+                                    <div className="col-md-4">
+                                      <p className="text-muted mb-0 small">
+                                        Size: {selectedItem.size}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )
+                          )}
+                       </div>
+                      </div>
+
+
+
+
+                      <div className="col-md-2 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                        <p className="text-muted mb-0 small">
+                          Price:{" "}
+                          <i className="bi bi-currency-rupee"></i>{" "}
+                          {comboProduct.data.totalPrice}
+                        </p>
+                      </div>
+                      <div className="col-md-1 col-sm-6 text-center d-flex justify-content-center align-items-center">
+                        <button
+                          variant=""
+                          className="text-danger border-0 fs-4"
+                          onClick={() => handleDeleteProductCombos(comboProduct.id)}
+                        >
+                          <i class="bi bi-trash3-fill"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  </div>
+</div>
+
               {/* ----------------------Help ---------------------------------- */}
               <div
                 class="tab-pane fade"

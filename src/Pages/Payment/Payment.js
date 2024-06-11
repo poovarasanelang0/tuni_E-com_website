@@ -565,10 +565,15 @@ const Payment = ({ cartProducts, productDetailsCombo }) => {
             );
 
             // Adding address history for combo products
+            const newOrdersListAddressCombo = collection(
+              newOrderAddress,
+              "OrderAddress_History_Combos"
+            );
+
             await Promise.all(
               productDetailsCombo.map(async (comboProduct) => {
-                await addDoc(newOrdersListAddress, {
-                  ...comboProduct.data.productDetailsCombo,
+                await addDoc(newOrdersListAddressCombo, {
+                  ...comboProduct.data,
                   orderAddress: formFields,
                   totalPrice: totalCartPrice,
                   orderID: orderData.orderID,
