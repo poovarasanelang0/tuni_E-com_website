@@ -1,0 +1,24 @@
+.video111 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh; 
+  
+}
+
+.video222 {
+    width: 100%; 
+    height: auto; 
+    
+}
+video::-webkit-media-controls {
+    display: none !important;
+}
+
+video::-moz-media-controls {
+    display: none !important;
+}
+
+video::-ms-media-controls {
+    display: none !important;
+}

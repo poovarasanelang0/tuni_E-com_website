@@ -73,19 +73,42 @@ const Payment = ({ cartProducts, productDetailsCombo }) => {
     return unsubscribe;
   }, []);
 
+
+
   const fetchOldAddresses = async (userId) => {
-    const addressesRef = collection(
-      firestore,
-      "AllOrderList",
-      userId,
-      "OrderAddress_History"
-    );
-    const addressesSnapshot = await getDocs(addressesRef);
-    const addressesList = addressesSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      data: doc.data(),
-    }));
-    setOldAddresses(addressesList);
+    try {
+      // Fetch addresses from the 1st collection
+      const addressesRef = collection(
+        firestore,
+        "AllOrderList",
+        userId,
+        "OrderAddress_History"
+      );
+      const addressesSnapshot = await getDocs(addressesRef);
+      const addressesList = addressesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+
+      // Fetch addresses from the 2nd collection
+      const addressesRefCombos = collection(
+        firestore,
+        "AllOrderList",
+        userId,
+        "OrderAddress_History_Combos"
+      );
+      const addressesSnapshotCombos = await getDocs(addressesRefCombos);
+      const addressesListCombos = addressesSnapshotCombos.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+
+      //two lists of addresses  join
+      const allAddresses = [...addressesList, ...addressesListCombos];
+      setOldAddresses(allAddresses);
+    } catch (error) {
+      console.error("Error fetching old addresses:", error);
+    }
   };
 
   const handleSelectOldAddress = (address) => {
@@ -530,7 +553,10 @@ const Payment = ({ cartProducts, productDetailsCombo }) => {
               })
             );
 
-            const newOrdersListCombo = collection(newOrdersRef, "OrderItemPlaced_Combo");
+            const newOrdersListCombo = collection(
+              newOrdersRef,
+              "OrderItemPlaced_Combo"
+            );
             await Promise.all(
               productDetailsCombo.map(async (comboProduct) => {
                 await addDoc(newOrdersListCombo, {
@@ -586,7 +612,7 @@ const Payment = ({ cartProducts, productDetailsCombo }) => {
                 deleteItemFromFirestoreCartItem(product.id)
               ),
               productDetailsCombo.map((product) =>
-              deleteItemFromFirestoreCartItem_Combos(product.id)
+                deleteItemFromFirestoreCartItem_Combos(product.id)
               )
             );
 
@@ -629,11 +655,15 @@ const Payment = ({ cartProducts, productDetailsCombo }) => {
     }
   };
 
-
   const deleteItemFromFirestoreCartItem_Combos = async (productId) => {
     try {
       const userDocRef = doc(
-        collection(firestore, "users", currentUser.uid, "cartCollection_Combos"),
+        collection(
+          firestore,
+          "users",
+          currentUser.uid,
+          "cartCollection_Combos"
+        ),
         productId
       );
       await deleteDoc(userDocRef);
@@ -642,28 +672,87 @@ const Payment = ({ cartProducts, productDetailsCombo }) => {
     }
   };
 
-
   const uniqueAddresses = new Set();
+
+  // const handleDeleteAddress = async (addressId) => {
+  //   try {
+  //     const addressDocRef = doc(
+  //       firestore,
+  //       "AllOrderList",
+  //       currentUser.uid,
+  //       "OrderItemPlaced",
+  //       addressId
+  //     );
+  //     await deleteDoc(addressDocRef);
+  //     setOldAddresses(
+  //       oldAddresses.filter((address) => address.id !== addressId)
+  //     );
+  //     toast.success("Address deleted successfully.");
+  //   } catch (error) {
+  //     console.error("Error deleting address: ", error);
+  //     toast.error("Failed to delete address.");
+  //   }
+  // };
+
+
+
 
   const handleDeleteAddress = async (addressId) => {
     try {
-      const addressDocRef = doc(
+      // Define references to both collections
+      const addressDocRef1 = doc(
         firestore,
         "AllOrderList",
         currentUser.uid,
-        "OrderItemPlaced",
+        "OrderAddress_History",
         addressId
       );
-      await deleteDoc(addressDocRef);
-      setOldAddresses(
-        oldAddresses.filter((address) => address.id !== addressId)
+      const addressDocRef2 = doc(
+        firestore,
+        "AllOrderList",
+        currentUser.uid,
+        "OrderAddress_History_Combos",
+        addressId
       );
+  
+      // Try to delete from the first collection
+      await deleteDoc(addressDocRef1)
+        .then(() => {
+          console.log(`Address ${addressId} deleted from OrderAddress_History.`);
+        })
+        .catch((error) => {
+          if (error.code === "not-found") {
+            console.log(`Address ${addressId} not found in OrderAddress_History.`);
+          } else {
+            throw error; // Re-throw if it's a different error
+          }
+        });
+  
+      // Try to delete from the second collection
+      await deleteDoc(addressDocRef2)
+        .then(() => {
+          console.log(`Address ${addressId} deleted from OrderAddress_History_Combos.`);
+        })
+        .catch((error) => {
+          if (error.code === "not-found") {
+            console.log(`Address ${addressId} not found in OrderAddress_History_Combos.`);
+          } else {
+            throw error; 
+          }
+        });
+  
+     
+      setOldAddresses(oldAddresses.filter((address) => address.id !== addressId));
+  
+     
       toast.success("Address deleted successfully.");
     } catch (error) {
       console.error("Error deleting address: ", error);
       toast.error("Failed to delete address.");
     }
   };
+  
+ 
 
   return (
     <>

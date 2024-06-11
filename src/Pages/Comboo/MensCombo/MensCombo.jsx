@@ -6,6 +6,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../../../firebaseConfig";
+import Video from "./Video/Video";
 
 const MensCombo = () => {
   const navigate = useNavigate();
@@ -143,7 +144,7 @@ const MensCombo = () => {
                       </div>
                       <div className="text-black prices_details">
                         <h5 className="mt-3">{product.name}</h5>
-                      
+
                         <h4>{product.category}</h4>
                         <h6 className="fw-bold">
                           <i className="bi bi-currency-rupee"></i>
@@ -154,15 +155,15 @@ const MensCombo = () => {
                           OFF
                         </h6>
                         <div className="my-2">
-                      <span>
-                        <i className="bi bi-star-fill text-warning"></i>
-                        <i className="bi bi-star-fill text-warning"></i>
-                        <i className="bi bi-star-fill text-warning"></i>
-                        <i className="bi bi-star-fill text-warning"></i>
-                        <i className="bi bi-star-half text-warning"></i> 467
-                        reviews
-                      </span>
-                    </div>
+                          <span>
+                            <i className="bi bi-star-fill text-warning"></i>
+                            <i className="bi bi-star-fill text-warning"></i>
+                            <i className="bi bi-star-fill text-warning"></i>
+                            <i className="bi bi-star-fill text-warning"></i>
+                            <i className="bi bi-star-half text-warning"></i> 467
+                            reviews
+                          </span>
+                        </div>
                         <p className="price_msg_success">
                           Lowest price in last 30 days
                         </p>
@@ -228,7 +229,6 @@ const MensCombo = () => {
                     </div>
                   </div>
                   <div className="text-black prices_details">
-                   
                     <h5 className="mt-1">
                       {product.name} {product.category}
                     </h5>
@@ -272,9 +272,17 @@ const MensCombo = () => {
   return (
     <>
       <Header />
-      <div className="container my-5">
+      <div className="container-fluid my-5">
+        <div className="row">
+          <h4 className="fw-bold py-2 mt-2">Mens Combos</h4>
+
+          <div className="col-12 my-2">
+            <Video />
+          </div>
+        </div>
+      </div>
+      <div className="container">
         <div className="row my-1 py-1">
-          <h4 className="fw-bold">Mens Combos</h4>
           <div className="col-lg-12 col-md-12 col-12">
             <div className="d-flex smallscreen py-2">
               <div>
@@ -304,7 +312,7 @@ const MensCombo = () => {
                   onChange={() => handleRadioChange("Combo1")}
                 />
                 <label className="form-check-label fw-bold" htmlFor="Combo1">
-                  Combo 1 Set of 4{" "}
+                  Combo 1{" "}
                 </label>
               </div>
               <div className="form-check mx-1 ">
@@ -318,7 +326,7 @@ const MensCombo = () => {
                   onChange={() => handleRadioChange("Combo2")}
                 />
                 <label className="form-check-label fw-bold" htmlFor="Combo2">
-                  Combo 2 Set of 8{" "}
+                  Combo 2{" "}
                 </label>
               </div>
             </div>

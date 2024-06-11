@@ -316,10 +316,19 @@ const SingleProductCombo = () => {
     updateQuantityInFirestore(productId, newQuantity, isCombo);
   };
 
-  const updateQuantityInFirestore = async (productId, newQuantity, isCombo = false) => {
+  const updateQuantityInFirestore = async (
+    productId,
+    newQuantity,
+    isCombo = false
+  ) => {
     try {
-      const collectionName = isCombo ? "cartCollection_Combos" : "cartCollection";
-      const userDocRef = doc(collection(firestore, "users", userId, collectionName), productId);
+      const collectionName = isCombo
+        ? "cartCollection_Combos"
+        : "cartCollection";
+      const userDocRef = doc(
+        collection(firestore, "users", userId, collectionName),
+        productId
+      );
       await updateDoc(userDocRef, { itemCountcustomer: newQuantity });
       console.log("Item count updated successfully!");
     } catch (error) {
@@ -384,7 +393,7 @@ const SingleProductCombo = () => {
 
   const calculateTotalPrice = (cartProducts, productDetailsComboSingle) => {
     let totalPrice = 0;
-  
+
     if (cartProducts && Array.isArray(cartProducts)) {
       cartProducts.forEach((cartProduct) => {
         const price = parseInt(cartProduct.data.price);
@@ -392,23 +401,25 @@ const SingleProductCombo = () => {
         totalPrice += price * count;
       });
     }
-  
+
     if (productDetailsComboSingle && Array.isArray(productDetailsComboSingle)) {
       productDetailsComboSingle.forEach((comboProduct) => {
         const price = parseInt(comboProduct.data.productDetailsCombo.price);
         const count = parseInt(comboProduct.data.itemCountcustomer);
         totalPrice += price * count;
       });
-    }
-  
+    } 
+
     console.log(totalPrice, "totalPricetotalPrice");
-  
+
     return totalPrice;
   };
-  
+
   // Assuming cartProducts and productDetailsComboSingle are passed correctly
-  const totalCartPrice = calculateTotalPrice(cartProducts, productDetailsComboSingle);
-  
+  const totalCartPrice = calculateTotalPrice(
+    cartProducts,
+    productDetailsComboSingle
+  );
 
   return (
     <>
