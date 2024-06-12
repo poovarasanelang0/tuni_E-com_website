@@ -549,6 +549,7 @@ const Payment = ({ cartProducts, productDetailsCombo }) => {
                   totalPrice: totalCartPrice,
                   orderAddress: formFields,
                   orderID: orderData.orderID,
+                  orderStatus:false,
                 });
               })
             );
@@ -564,6 +565,8 @@ const Payment = ({ cartProducts, productDetailsCombo }) => {
                   totalPrice: totalCartPrice,
                   orderAddress: formFields,
                   orderID: orderData.orderID,
+                  orderStatus:false,
+
                 });
               })
             );

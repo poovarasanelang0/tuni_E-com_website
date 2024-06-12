@@ -34,6 +34,7 @@ const SingleProductCombo = () => {
   const firestore = getFirestore();
   const [userId, setUserId] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
+  const [selectedItemCount, setSelectedItemCount] = useState(0);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -245,6 +246,23 @@ const SingleProductCombo = () => {
     }
   };
 
+  // const handleAddToCombo = () => {
+  //   const currentProduct =
+  //     productDetailsCombo.combo_details[selectedImageIndex];
+  //   if (
+  //     selectedSize ||
+  //     currentProduct.name.toLowerCase().includes("accessory")
+  //   ) {
+  //     setSelectedItems((prevItems) => [
+  //       ...prevItems,
+  //       { ...currentProduct, size: selectedSize },
+  //     ]);
+  //     setSelectedSize("");
+  //   }
+  // };
+
+
+
   const handleAddToCombo = () => {
     const currentProduct =
       productDetailsCombo.combo_details[selectedImageIndex];
@@ -257,14 +275,17 @@ const SingleProductCombo = () => {
         { ...currentProduct, size: selectedSize },
       ]);
       setSelectedSize("");
+      setSelectedItemCount((prevCount) => prevCount + 1);
     }
   };
+
+  // console.log(selectedItemCount,"selectedItemCount_combo");
 
   const handleRemoveFromCombo = (id) => {
     setSelectedItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  console.log(selectedItems, "selectedItems");
+  // console.log(selectedItems, "selectedItems");
 
   const isAddToCartEnabled = () => {
     const requiredSelections = productDetailsCombo.combo_count === "6" ? 4 : 8;
@@ -540,7 +561,7 @@ const SingleProductCombo = () => {
                     <span className="fw-bold fs-5">
                       {productDetailsCombo.price}{" "}
                     </span>{" "}
-                    <span className="text-muted">(For set of 4 pieces)</span>
+                    <span className="text-muted">(For set of {selectedItemCount} pieces)</span>
                   </p>
                 </div>
                 <div>
@@ -563,6 +584,7 @@ const SingleProductCombo = () => {
                   >
                     Add to Cart
                   </button>
+                  
                 </div>
               </div>
             </div>

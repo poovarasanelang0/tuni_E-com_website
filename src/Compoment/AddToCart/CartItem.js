@@ -115,7 +115,7 @@ const CartItem = ({
                     <div className="col-md-8">
                       <div className=" d-flex align-items-center">
                         <p style={{ fontSize: "20px", marginTop: "10px" }}>
-                          {comboProduct.data.productDetailsCombo.price}
+                        <i class="bi bi-currency-rupee"></i> {comboProduct.data.productDetailsCombo.price}
                         </p>
 
                         <span className="mx-2">

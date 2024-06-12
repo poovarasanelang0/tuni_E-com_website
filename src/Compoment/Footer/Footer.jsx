@@ -18,10 +18,34 @@ const Footer = () => {
                 <h5 className="fw-bold">Categories</h5>
                 <div className="hovercolorfooter mt-4">
                   <ul class="list-unstyled my-2 ">
-                   <Link to="/HalfHandTshirt" className="text-decoration-none text-white"> <li className="py-1 px-2">Men</li></Link>
-                   <Link to="/WomenPant" className="text-decoration-none text-white">  <li className="py-1 px-2">Women</li></Link> 
-                   <Link to="/MensCombo" className="text-decoration-none text-white">    <li className="py-1 px-2">Mens Combo</li></Link>
-                   <Link to="/WomenPant" className="text-decoration-none text-white">    <li className="py-1 px-2">Womens Combo</li></Link> 
+                    <Link
+                      to="/HalfHandTshirt"
+                      className="text-decoration-none text-white"
+                    >
+                      {" "}
+                      <li className="py-1 px-2">Men</li>
+                    </Link>
+                    <Link
+                      to="/WomenPant"
+                      className="text-decoration-none text-white"
+                    >
+                      {" "}
+                      <li className="py-1 px-2">Women</li>
+                    </Link>
+                    <Link
+                      to="/MensCombo"
+                      className="text-decoration-none text-white"
+                    >
+                      {" "}
+                      <li className="py-1 px-2">Mens Combo</li>
+                    </Link>
+                    <Link
+                      to="/WomenPant"
+                      className="text-decoration-none text-white"
+                    >
+                      {" "}
+                      <li className="py-1 px-2">Womens Combo</li>
+                    </Link>
                   </ul>
                 </div>
               </div>
@@ -32,10 +56,28 @@ const Footer = () => {
                 <h5 className="fw-bold">Need Help</h5>
                 <div class="mt-4">
                   <ul class="list-unstyled my-2">
-                  <Link to="/TrackOrder" className="text-decoration-none text-white">     <li className="py-1 px-2">Track Your Order</li></Link>
-                  <Link to="/Account" className="text-decoration-none text-white">     <li className="py-1 px-2">Returns & Exchanges</li> </Link>
+                    <Link
+                      to="/TrackOrder"
+                      className="text-decoration-none text-white"
+                    >
+                      {" "}
+                      <li className="py-1 px-2">Track Your Order</li>
+                    </Link>
+                    <Link
+                      to="/Account"
+                      className="text-decoration-none text-white"
+                    >
+                      {" "}
+                      <li className="py-1 px-2">Returns & Exchanges</li>{" "}
+                    </Link>
                     <li className="py-1 px-2">Chat on WhatsApp</li>
-                    <Link to="/Contact" className="text-decoration-none text-white">     <li className="py-1 px-2">Contact Us</li> </Link>
+                    <Link
+                      to="/Contact"
+                      className="text-decoration-none text-white"
+                    >
+                      {" "}
+                      <li className="py-1 px-2">Contact Us</li>{" "}
+                    </Link>
                     <li className="py-1 px-2">FAQs</li>
                   </ul>
                 </div>
@@ -46,9 +88,24 @@ const Footer = () => {
                 <h5 className="fw-bold">Company</h5>
                 <div class="mt-4">
                   <ul class="list-unstyled my-2">
-                  <Link to="/" className="text-decoration-none text-white">      <li className="py-1 px-2">Shipping Policy</li></Link> 
-                  <Link to="/PrivacyPolicy" className="text-decoration-none text-white">     <li className="py-1 px-2">Privacy Policy</li></Link> 
-                  <Link to="/TermConditions" className="text-decoration-none text-white">   <li className="py-1 px-2">Terms of Service</li></Link> 
+                    <Link to="/" className="text-decoration-none text-white">
+                      {" "}
+                      <li className="py-1 px-2">Shipping Policy</li>
+                    </Link>
+                    <Link
+                      to="/PrivacyPolicy"
+                      className="text-decoration-none text-white"
+                    >
+                      {" "}
+                      <li className="py-1 px-2">Privacy Policy</li>
+                    </Link>
+                    <Link
+                      to="/TermConditions"
+                      className="text-decoration-none text-white"
+                    >
+                      {" "}
+                      <li className="py-1 px-2">Terms of Service</li>
+                    </Link>
                   </ul>
                 </div>
               </div>
@@ -84,10 +141,24 @@ const Footer = () => {
               <div className="apple_android mt-4">
                 {" "}
                 <div className="my-2">
-                <a href="https://play.google.com/store/apps/details?id=com.techtuni.tuni" target="_blank" className="text-decoration-none text-white">    <img src={img0004} alt="" /></a>
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.techtuni.tuni"
+                    target="_blank"
+                    className="text-decoration-none text-white"
+                  >
+                    {" "}
+                    <img src={img0004} alt="" />
+                  </a>
                 </div>
                 <div>
-                <a href="https://apps.apple.com/in/app/tuni/id6499340367" target="_blank" className="text-decoration-none text-white">     <img src={img0005} alt="" /></a>
+                  <a
+                    href="https://apps.apple.com/in/app/tuni/id6499340367"
+                    target="_blank"
+                    className="text-decoration-none text-white"
+                  >
+                    {" "}
+                    <img src={img0005} alt="" />
+                  </a>
                 </div>
               </div>
             </Col>
@@ -128,3 +199,8 @@ const Footer = () => {
 };
 
 export default Footer;
+
+
+
+
+

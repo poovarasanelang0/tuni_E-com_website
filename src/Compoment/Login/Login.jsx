@@ -381,10 +381,10 @@ provider.setCustomParameters({
               <div className="col text-center">
                 <p className="my-5 text-secondary">
                   By logging in, you're agreeing to our ?{" "}
-                  <a href="#" className="text-secondary">
+                  <a href="/PrivacyPolicy" className="text-secondary">
                     Privacy Policy.
                   </a>
-                  <a href="#" className="text-secondary">
+                  <a href="/TermConditions" className="text-secondary">
                     Terms of Service
                   </a>
                 </p>

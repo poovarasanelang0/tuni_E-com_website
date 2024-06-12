@@ -183,79 +183,82 @@ const MensCombo = () => {
     );
   };
 
+
+
   const renderProductCardsLargeScreen = () => {
     return (
       <div className="row">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <div key={product.id} className="col-lg-3 col-md-6 col-12">
-              <Link
-                to={`/SingleProductCombo/${product.id}`}
-                className="text-decoration-none border-0"
+            <Link
+              to={`/SingleProductCombo/${product.id}`}
+              className="text-decoration-none border-0"
+            >
+              <div
+                className="card-container card_containerCombo"
+                onMouseEnter={() => handleMouseEnter(product.id)}
+                onMouseLeave={handleMouseLeave}
               >
-                <div
-                  className="card-container card_containerCombo"
-                  onMouseEnter={() => handleMouseEnter(product.id)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <div className="card text-white">
-                    <div className="">
-                      {hoveredProductId === product.id ? (
-                        <video
-                          src={product.videoUrl}
-                          className="card-img fixed_img_combo"
-                          autoPlay
-                          loop
-                          muted
-                        />
-                      ) : (
-                        <img
-                          src={product.tumbnail}
-                          className="card-img fixed_img_combo"
-                          alt={product.name}
-                        />
-                      )}
-                    </div>
-                    <div className="card-img-overlay">
-                      <span className="badge bg-success">BEST SELLER</span>
-                    </div>
-                    <div className="card-img-overlay d-flex">
-                      <div className="mt-auto">
-                        <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
-                          <i className="bi bi-star-fill text-warning"></i>{" "}
-                          {product.rating} 4.5 | 5.0{product.reviews}
-                        </span>
-                      </div>
-                    </div>
+                <div className="card text-white">
+                  <div className="imagesizefix">
+                    <img
+                      src={product.tumbnail}
+                      className={`card-img fixed_img_combo ${
+                        hoveredProductId === product.id ? "d-none" : "d-block"
+                      }`}
+                      alt={product.name}
+                    />
+                    <video
+                      src={product.videoUrl}
+                      className={`card-img fixed_img_combo ${
+                        hoveredProductId === product.id ? "d-block" : "d-none"
+                      }`}
+                      autoPlay
+                      loop
+                      muted
+                    />
                   </div>
-                  <div className="text-black prices_details">
-                    <h5 className="mt-1">
-                      {product.name} {product.category}
-                    </h5>
-                    <h6 className="fw-bold">
-                      <i className="bi bi-currency-rupee"></i>
-                      {product.price} &nbsp;
-                      <del>
-                        <i className="bi bi-currency-rupee"></i>1,877
-                      </del>{" "}
-                      OFF
-                    </h6>
-                    <div className="my-2">
-                      <span>
-                        <i className="bi bi-star-fill text-warning"></i>
-                        <i className="bi bi-star-fill text-warning"></i>
-                        <i className="bi bi-star-fill text-warning"></i>
-                        <i className="bi bi-star-fill text-warning"></i>
-                        <i className="bi bi-star-half text-warning"></i> 467
-                        reviews
+                  <div className="card-img-overlay">
+                    <span className="badge bg-success">BEST SELLER</span>
+                  </div>
+                  <div className="card-img-overlay d-flex">
+                    <div className="mt-auto">
+                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                        <i className="bi bi-star-fill text-warning"></i>{" "}
+                        {product.rating} 4.5 | 5.0{product.reviews}
                       </span>
                     </div>
-                    <p className="price_msg_success">
-                      Lowest price in last 30 days
-                    </p>
                   </div>
                 </div>
-              </Link>
+                <div className="text-black prices_details">
+                  <h5 className="mt-1">
+                    {product.name} {product.category}
+                  </h5>
+                  <h6 className="fw-bold">
+                    <i className="bi bi-currency-rupee"></i>
+                    {product.price} &nbsp;
+                    <del>
+                      <i className="bi bi-currency-rupee"></i>1,877
+                    </del>{" "}
+                    OFF
+                  </h6>
+                  <div className="my-2">
+                    <span>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-fill text-warning"></i>
+                      <i className="bi bi-star-half text-warning"></i> 467
+                      reviews
+                    </span>
+                  </div>
+                  <p className="price_msg_success">
+                    Lowest price in last 30 days
+                  </p>
+                </div>
+              </div>
+            </Link>
             </div>
           ))
         ) : (
@@ -269,13 +272,17 @@ const MensCombo = () => {
     );
   };
 
+
+  
+  
+  
+
   return (
     <>
       <Header />
       <div className="container-fluid my-5">
         <div className="row">
           <h4 className="fw-bold py-2 mt-2">Mens Combos</h4>
-
           <div className="col-12 my-2">
             <Video />
           </div>
