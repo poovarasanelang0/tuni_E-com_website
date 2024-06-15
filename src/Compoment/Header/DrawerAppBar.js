@@ -719,6 +719,18 @@ const DrawerAppBar = (props) => {
                               My account
                             </MenuItem>
                           </Link>
+                          <Link
+                            to="/ReferAndWallet"
+                            className="text-decoration-none text-black"
+                          >
+                            {" "}
+                            <MenuItem
+                              onClick={handleClose}
+                              className="subdropdown_hover"
+                            > Refer Code
+                            </MenuItem>
+                          </Link>
+                         
                           {user ? (
                             <IconButton color="inherit">
                               <Button

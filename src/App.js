@@ -22,6 +22,8 @@ import TrackOrder from "./Pages/TrackOrder/TrackOrder";
 
 import PrivacyPolicy from "./Pages/PrivacyPolicy/PrivacyPolicy";
 import TermConditions from "./Pages/Terms & Conditions/TermConditions";
+import ReferAndWallet from "./Pages/ReferAndWallet/ReferAndWallet";
+import ShippingPolicy from "./Pages/ShippingPolicy/ShippingPolicy";
 
 
 function App() {
@@ -52,7 +54,11 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/TrackOrder" element={<TrackOrder />} />  
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} /> 
-          <Route path="/TermConditions" element={<TermConditions />} />         
+          <Route path="/TermConditions" element={<TermConditions />} />   
+          <Route path="/ReferAndWallet" element={<ReferAndWallet />} />      
+          <Route path="/ShippingPolicy" element={<ShippingPolicy />} />         
+   
+      
 
 
         

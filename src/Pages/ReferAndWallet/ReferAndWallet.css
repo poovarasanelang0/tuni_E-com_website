@@ -1,0 +1,128 @@
+.boxbored{
+  
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        border-radius: 5px; 
+        border: 1px solid #ccc;
+
+         background-image: linear-gradient(to bottom right, rgb(237, 232, 232), rgb(241, 115, 228));
+         margin-top: 10px;
+         height: 60vh;
+         width: 92vh;
+}
+
+.img_02 img{
+    height: 40vh;
+    width: 30vh;
+    
+    
+}
+.rupee{
+    font-size: 8vh;
+}
+.count_name{
+    font-size: 20vh;
+}
+.total_earnings{
+    display: flex;
+    margin-top: 30px;
+    align-items: center;
+    gap: 20px;
+}
+.imgo1 img{
+    align-items: center;
+    padding-left: 10vh;
+    height: 44vh;
+    width:50vhvh;
+}
+.backbox2{
+   
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 5px; 
+    border: 1px solid #ccc; 
+    padding-left: 20px; 
+    background-image: linear-gradient(to bottom right, rgb(237, 232, 232), rgb(241, 115, 228));
+    margin-top: 10px;
+}
+
+.li_font{
+    list-style: none;
+    padding-left: 24px;
+
+}
+.backbox3{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 5px; 
+    border: 1px solid #ccc; 
+    padding-left: 20px;
+    padding-top: 20px; 
+    background-image: linear-gradient(to bottom right, rgb(237, 232, 232), rgb(241, 115, 228));
+    margin-right: 7px;
+    height: 45vh;
+    width: 82vh;
+}
+.backbox4{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 5px; 
+    border: 1px solid #ccc;
+    padding-left: 10px; 
+    padding-top: 20px;
+    margin-top: 16px;
+    background-image: linear-gradient(to bottom right, rgb(237, 232, 232), rgb(241, 115, 228));
+    height: 45vh;
+    width: 100%;
+}
+.social_media i{
+    
+    padding-left: 30px;
+    font-size: 25px;
+}.text_box1 {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px; 
+    border: 1px solid #ccc; 
+    padding: 10px 10px 20px; 
+    margin-top: 16px;
+    background-image: linear-gradient(to bottom right, rgb(237, 232, 232), rgb(241, 115, 228));
+    height: auto; 
+    width: auto; 
+    max-width: 40vh; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .text_box1 h4 {
+    font-size: 1.2rem; 
+    margin: -5px ;
+  }
+  
+  .text_box1 p {
+    font-size: 0.9rem; 
+    margin: 5px 0; 
+  }
+  
+  .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 10px 0; 
+  }
+  
+  .text_box1 img {
+    max-width: 80%; 
+    height: 30vh; 
+  }
+  
+  .badge {
+    font-size: 0.8rem; 
+    padding: 5px 10px; 
+  }
+
+  .content_items{
+   
+    display: flex;
+    align-items: center;
+    
+  }
+  

@@ -84,6 +84,7 @@ const MensCombo = () => {
   const isSmallScreen = () => {
     return window.innerWidth < 768;
   };
+ 
 
   const renderProductCardsSmallScreen = () => {
     const numberOfSlides = Math.ceil(filteredProducts.length / 10);
@@ -183,107 +184,275 @@ const MensCombo = () => {
     );
   };
 
-
-
   const renderProductCardsLargeScreen = () => {
     return (
-      <div className="row">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
-            <div key={product.id} className="col-lg-3 col-md-6 col-12">
-            <Link
-              to={`/SingleProductCombo/${product.id}`}
-              className="text-decoration-none border-0"
-            >
-              <div
-                className="card-container card_containerCombo"
-                onMouseEnter={() => handleMouseEnter(product.id)}
-                onMouseLeave={handleMouseLeave}
-              >
-                <div className="card text-white">
-                  <div className="imagesizefix">
-                    <img
-                      src={product.tumbnail}
-                      className={`card-img fixed_img_combo ${
-                        hoveredProductId === product.id ? "d-none" : "d-block"
-                      }`}
-                      alt={product.name}
-                    />
-                    <video
-                      src={product.videoUrl}
-                      className={`card-img fixed_img_combo ${
-                        hoveredProductId === product.id ? "d-block" : "d-none"
-                      }`}
-                      autoPlay
-                      loop
-                      muted
-                    />
-                  </div>
-                  <div className="card-img-overlay">
-                    <span className="badge bg-success">BEST SELLER</span>
-                  </div>
-                  <div className="card-img-overlay d-flex">
-                    <div className="mt-auto">
-                      <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
-                        <i className="bi bi-star-fill text-warning"></i>{" "}
-                        {product.rating} 4.5 | 5.0{product.reviews}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="text-black prices_details">
-                  <h5 className="mt-1">
-                    {product.name} {product.category}
-                  </h5>
-                  <h6 className="fw-bold">
-                    <i className="bi bi-currency-rupee"></i>
-                    {product.price} &nbsp;
-                    <del>
-                      <i className="bi bi-currency-rupee"></i>1,877
-                    </del>{" "}
-                    OFF
-                  </h6>
-                  <div className="my-2">
-                    <span>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-fill text-warning"></i>
-                      <i className="bi bi-star-half text-warning"></i> 467
-                      reviews
-                    </span>
-                  </div>
-                  <p className="price_msg_success">
-                    Lowest price in last 30 days
-                  </p>
+      // <div className="row">
+      //   {filteredProducts.length > 0 ? (
+      //     filteredProducts.map((product) => (
+      //       <div
+      //         key={product.id}
+      //         className="col-lg-3 col-md-6 col-12 shareicons"
+      //       >
+      //         <div className="icon share-icon-container">
+      //           <li className="list-unstyled ">
+      //           <button className="border-0 text-primary"><i className="bi bi-share-fill"></i></button>  
+      //           </li>
+      //         </div>
+      //         <Link
+      //           to={`/SingleProductCombo/${product.id}`}
+      //           className="text-decoration-none border-0"
+      //         >
+      //           <div
+      //             className="card-container card_containerCombo"
+      //             onMouseEnter={() => handleMouseEnter(product.id)}
+      //             onMouseLeave={handleMouseLeave}
+      //           >
+      //             <div className="card text-white">
+      //               <div className="imagesizefix">
+      //                 <img
+      //                   src={product.tumbnail}
+      //                   className={`card-img fixed_img_combo ${
+      //                     hoveredProductId === product.id ? "d-none" : "d-block"
+      //                   }`}
+      //                   alt={product.name}
+      //                 />
+      //                 <video
+      //                   src={product.videoUrl}
+      //                   className={`card-img fixed_img_combo ${
+      //                     hoveredProductId === product.id ? "d-block" : "d-none"
+      //                   }`}
+      //                   autoPlay
+      //                   loop
+      //                   muted
+      //                 />
+      //               </div>
+      //               <div className="card-img-overlay">
+      //                 <span className="badge bg-success">BEST SELLER</span>
+      //               </div>
+      //               <div className="card-img-overlay d-flex">
+      //                 <div className="mt-auto">
+      //                   <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+      //                     <i className="bi bi-star-fill text-warning"></i>{" "}
+      //                     {product.rating} 4.5 | 5.0{product.reviews}
+      //                   </span>
+      //                 </div>
+      //               </div>
+      //             </div>
+      //             <div className="text-black prices_details">
+      //               <h5 className="mt-1">
+      //                 {product.name} {product.category}
+      //               </h5>
+      //               <h6 className="fw-bold">
+      //                 <i className="bi bi-currency-rupee"></i>
+      //                 {product.price} &nbsp;
+      //                 <del>
+      //                   <i className="bi bi-currency-rupee"></i>1,877
+      //                 </del>{" "}
+      //                 OFF
+      //               </h6>
+      //               <div className="my-2">
+      //                 <span>
+      //                   <i className="bi bi-star-fill text-warning"></i>
+      //                   <i className="bi bi-star-fill text-warning"></i>
+      //                   <i className="bi bi-star-fill text-warning"></i>
+      //                   <i className="bi bi-star-fill text-warning"></i>
+      //                   <i className="bi bi-star-half text-warning"></i> 467
+      //                   reviews
+      //                 </span>
+      //               </div>
+      //               <p className="price_msg_success">
+      //                 Lowest price in last 30 days
+      //               </p>
+      //             </div>
+      //           </div>
+      //         </Link>
+      //       </div>
+      //     ))
+      //   ) : (
+      //     <div className="col-12">
+      //       <p className="text-center text-danger">
+      //         There are no products available in this category.
+      //       </p>
+      //     </div>
+      //   )}
+      // </div>
+    //   <div className="row">
+    //   {filteredProducts.length > 0 ? (
+    //     filteredProducts.map((product) => (
+    //       <div
+    //         key={product.id}
+    //         className="col-lg-3 col-md-6 col-12 "
+    //       >
+          
+
+    //         <Link
+    //           to={`/SingleProductCombo/${product.id}`}
+    //           className="text-decoration-none border-0"
+    //         >
+    //           <div
+    //             className="card-container card_containerCombo"
+    //             onMouseEnter={() => handleMouseEnter(product.id)}
+    //             onMouseLeave={handleMouseLeave}
+    //           >
+    //             <div className="card text-white imagesizefix">
+    //               <div className="">
+    //                 <img
+    //                   src={product.tumbnail}
+    //                   className={`card-img fixed_img_combo ${
+    //                     hoveredProductId === product.id ? "d-none" : "d-block"
+    //                   }`}
+    //                   alt={product.name}
+    //                 />
+    //                 <video
+    //                   src={product.videoUrl}
+    //                   className={`card-img fixed_img_combo ${
+    //                     hoveredProductId === product.id ? "d-block" : "d-none"
+    //                   }`}
+    //                   autoPlay
+    //                   loop
+    //                   muted
+    //                 />
+    //               </div>
+    //               <div className="card-img-overlay">
+    //                 <span className="badge bg-success">BEST SELLER</span>
+    //               </div>
+    //               <div className="card-img-overlay d-flex">
+    //                 <div className="mt-auto">
+    //                   <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+    //                     <i className="bi bi-star-fill text-warning"></i>{" "}
+    //                     {product.rating} 4.5 | 5.0{product.reviews}
+    //                   </span>
+    //                 </div>
+    //               </div>
+    //             </div>
+    //             <div className="text-black prices_details">
+    //               <h5 className="mt-1">
+    //                 {product.name} {product.category}
+    //               </h5>
+    //               <h6 className="fw-bold">
+    //                 <i className="bi bi-currency-rupee"></i>
+    //                 {product.price} &nbsp;
+    //                 <del>
+    //                   <i className="bi bi-currency-rupee"></i>1,877
+    //                 </del>{" "}
+    //                 OFF
+    //               </h6>
+    //               <div className="my-2">
+    //                 <span>
+    //                   <i className="bi bi-star-fill text-warning"></i>
+    //                   <i className="bi bi-star-fill text-warning"></i>
+    //                   <i className="bi bi-star-fill text-warning"></i>
+    //                   <i className="bi bi-star-fill text-warning"></i>
+    //                   <i className="bi bi-star-half text-warning"></i> 467
+    //                   reviews
+    //                 </span>
+    //               </div>
+    //               <p className="price_msg_success">
+    //                 Lowest price in last 30 days
+    //               </p>
+    //             </div>
+    //           </div>
+    //         </Link>
+    //       </div>
+    //     ))
+    //   ) : (
+    //     <div className="col-12">
+    //       <p className="text-center text-danger">
+    //         There are no products available in this category.
+    //       </p>
+    //     </div>
+    //   )}
+    // </div>
+    <div className="row">
+  {filteredProducts.length > 0 ? (
+    filteredProducts.map((product) => (
+      <div key={product.id} className="col-lg-3 col-md-6 col-12">
+        <Link to={`/SingleProductCombo/${product.id}`} className="text-decoration-none border-0">
+          <div
+            className="card-container card_containerCombo fixed_card_size"
+            onMouseEnter={() => handleMouseEnter(product.id)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="card text-white fixed_card_container">
+              <div className="imagesizefix">
+                <img
+                  src={product.tumbnail}
+                  className={`card-img fixed_img fixed_img_combo ${
+                    hoveredProductId === product.id ? "d-none" : "d-block"
+                  }`}
+                  alt={product.name}
+                />
+                <video
+                  src={product.videoUrl}
+                  className={`card-img fixed_card_video fixed_img_combo ${
+                    hoveredProductId === product.id ? "d-block" : "d-none"
+                  }`}
+                  autoPlay
+                  loop
+                  muted
+                />
+              </div>
+              <div className="card-img-overlay">
+                <span className="badge bg-success">BEST SELLER</span>
+              </div>
+              <div className="card-img-overlay d-flex">
+                <div className="mt-auto">
+                  <span className="badge rounded-pill bg-light text-dark card-text py-2 px-3">
+                    <i className="bi bi-star-fill text-warning"></i>{" "}
+                    {product.rating} 4.5 | 5.0{product.reviews}
+                  </span>
                 </div>
               </div>
-            </Link>
             </div>
-          ))
-        ) : (
-          <div className="col-12">
-            <p className="text-center text-danger">
-              There are no products available in this category.
-            </p>
+           
           </div>
-        )}
+          <div className="text-black prices_details">
+              <h5 className=" ">
+                {product.name} {product.category}
+              </h5>
+              <h6 className="fw-bold">
+                <i className="bi bi-currency-rupee"></i>
+                {product.price} &nbsp;
+                <del>
+                  <i className="bi bi-currency-rupee"></i>1,877
+                </del>{" "}
+                OFF
+              </h6>
+              <div className="my-2">
+                <span>
+                  <i className="bi bi-star-fill text-warning"></i>
+                  <i className="bi bi-star-fill text-warning"></i>
+                  <i className="bi bi-star-fill text-warning"></i>
+                  <i className="bi bi-star-fill text-warning"></i>
+                  <i className="bi bi-star-half text-warning"></i> 467
+                  reviews
+                </span>
+              </div>
+              <p className="price_msg_success">
+                Lowest price in last 30 days
+              </p>
+            </div>
+        </Link>
       </div>
+    ))
+  ) : (
+    <div className="col-12">
+      <p className="text-center text-danger">
+        There are no products available in this category.
+      </p>
+    </div>
+  )}
+</div>
     );
   };
-
-
-  
-  
-  
 
   return (
     <>
       <Header />
-      <div className="container-fluid my-5">
+      <div className="container-fluid mt-5 ">
         <div className="row">
           <h4 className="fw-bold py-2 mt-2">Mens Combos</h4>
-          <div className="col-12 my-2">
+          <div className="col-12 ">
             <Video />
           </div>
         </div>
@@ -341,8 +510,7 @@ const MensCombo = () => {
         </div>
 
         <div className="row">
-          <div className="col-lg-12 col-md-12 col-12 my-2">
-            <div></div>
+          <div className="col-lg-12 col-md-12 col-12 my-2 ">
             {loading ? (
               <div className="text-center">
                 <p>Loading...</p>

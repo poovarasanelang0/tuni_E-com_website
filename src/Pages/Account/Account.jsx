@@ -22,10 +22,10 @@ const Account = () => {
   const fileInputRefImage = useRef(null);
   const [orderProducts, setOrderProducts] = useState([]);
   const [orderProductsCombos, setOrderProductsCombos] = useState([]);
-
   const [userId, setUserId] = useState(null);
-  const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [totalPrice, setTotalPrice] = useState(0);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -96,7 +96,8 @@ const Account = () => {
 
   // ------------------------------profile----------------------------------------------
   const [profile, setProfile] = useState({
-    name: "",
+    firstname: "",
+    lastname: "",
     email: "",
     phoneNumber: "",
     profileUrl: "",
@@ -161,7 +162,8 @@ const Account = () => {
   };
 
   const [errors, setErrors] = useState({
-    name: "",
+    firstname: "",
+    lastname: "",
     email: "",
     phoneNumber: "",
   });
@@ -169,7 +171,8 @@ const Account = () => {
   const handleSubmit = async () => {
     // Reset previous errors
     setErrors({
-      name: "",
+      firstname: "",
+      lastname: "",
       email: "",
       phoneNumber: "",
     });
@@ -177,10 +180,17 @@ const Account = () => {
     let hasError = false;
 
     // Field validation
-    if (!profile.name?.trim()) {
+    if (!profile.firstname?.trim()) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        name: "Please enter your name.",
+        firstname: "Please enter your first name.",
+      }));
+      hasError = true;
+    }
+    if (!profile.lastname?.trim()) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        lastname: "Please enter your  last name.",
       }));
       hasError = true;
     }
@@ -297,6 +307,8 @@ const Account = () => {
     }
   };
 
+
+  
   return (
     <div>
       <Header />
@@ -445,19 +457,46 @@ const Account = () => {
                               htmlFor="name"
                               className="form-label fw-bold"
                             >
-                              Name<span className="text-danger fs-4">*</span>
+                              First Name
+                              <span className="text-danger fs-4">*</span>
                             </label>
                             <div className="">
                               <input
                                 type="text"
-                                name="name"
+                                name="firstname"
                                 id="form3Example1c"
                                 className="form-control"
-                                value={profile.name}
+                                value={profile.firstname}
                                 onChange={handleChange}
                               />
                               {errors.name && (
-                                <div className="text-danger">{errors.name}</div>
+                                <div className="text-danger">
+                                  {errors.firstname}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="my-2">
+                            <label
+                              htmlFor="name"
+                              className="form-label fw-bold"
+                            >
+                              Last Name
+                              <span className="text-danger fs-4">*</span>
+                            </label>
+                            <div className="">
+                              <input
+                                type="text"
+                                name="lastname"
+                                id="form3Example1c"
+                                className="form-control"
+                                value={profile.lastname}
+                                onChange={handleChange}
+                              />
+                              {errors.name && (
+                                <div className="text-danger">
+                                  {errors.lastname}
+                                </div>
                               )}
                             </div>
                           </div>

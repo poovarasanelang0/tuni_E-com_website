@@ -35,6 +35,7 @@ const SingleProductCombo = () => {
   const [userId, setUserId] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
   const [selectedItemCount, setSelectedItemCount] = useState(0);
+  const [visibleShareButtons, setVisibleShareButtons] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -261,8 +262,6 @@ const SingleProductCombo = () => {
   //   }
   // };
 
-
-
   const handleAddToCombo = () => {
     const currentProduct =
       productDetailsCombo.combo_details[selectedImageIndex];
@@ -429,18 +428,28 @@ const SingleProductCombo = () => {
         const count = parseInt(comboProduct.data.itemCountcustomer);
         totalPrice += price * count;
       });
-    } 
+    }
 
     console.log(totalPrice, "totalPricetotalPrice");
 
     return totalPrice;
   };
 
-  // Assuming cartProducts and productDetailsComboSingle are passed correctly
   const totalCartPrice = calculateTotalPrice(
     cartProducts,
     productDetailsComboSingle
   );
+
+  const handleShareButtonClick = (productId) => {
+    if (visibleShareButtons === productId) {
+      setVisibleShareButtons(null);
+    } else {
+      setVisibleShareButtons(productId);
+    }
+  };
+
+  // Get the current page URL
+  const currentURL = window.location.href;
 
   return (
     <>
@@ -472,11 +481,17 @@ const SingleProductCombo = () => {
               <div className="slider-container_combo1">
                 <Slider {...settings} ref={sliderRef}>
                   {productDetailsCombo.combo_details.map((detail, index) => (
-                    <div key={index} className="combo_single">
+                    <div key={index} className="combo_single1">
                       <img
                         src={detail.imageturls}
                         alt={`View ${index + 1}`}
                         className="img-fluid img-container"
+                        style={{
+                          width: "100%",
+                          height: "120vh",
+                          objectFit: "cover",
+                          borderRadius: "10px",
+                        }}
                       />
                     </div>
                   ))}
@@ -485,9 +500,48 @@ const SingleProductCombo = () => {
             </div>
           </div>
           <div className="col-lg-4 col-md-12 col-12">
-            <div className="mx-2 mt-5 pt-3">
-              <div className="">
+            <div className="mx-2 mt-5 pt-3 shareicons">
+              <div className="icon share-icon-container d-flex">
                 <h5 className="fw-bold">{currentProduct.name}</h5>
+
+                <li className="list-unstyled ms-auto ">
+                  <a
+                    className="border-0 text-primary fs-4"
+                    onClick={() => handleShareButtonClick(productId)}
+                  >
+                    <i className="bi bi-share-fill"></i>
+                  </a>
+                </li>
+                {visibleShareButtons === productId && (
+                  <div className="social-media-links ">
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${currentURL}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mx-1 px-1"
+                    >
+                      <i className="bi bi-facebook"></i>
+                    </a>
+                    <a
+                      href={`https://twitter.com/intent/tweet?url=${currentURL}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mx-1 px-1"
+                    >
+                      <i className="bi bi-twitter"></i>
+                    </a>
+                    <a
+                      href={`https://api.whatsapp.com/send?text=${currentURL}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mx-1 px-1"
+                    >
+                      <i className="bi bi-whatsapp"></i>
+                    </a>
+                  </div>
+                )}
+              </div>
+              <div className="">
                 <p className="text-muted">{currentProduct.description}</p>
                 {!isAccessory && (
                   <div className="size-options">
@@ -561,7 +615,9 @@ const SingleProductCombo = () => {
                     <span className="fw-bold fs-5">
                       {productDetailsCombo.price}{" "}
                     </span>{" "}
-                    <span className="text-muted">(For set of {selectedItemCount} pieces)</span>
+                    {/* <span className="text-muted">
+                      (For set of {selectedItemCount} pieces)
+                    </span> */}
                   </p>
                 </div>
                 <div>
@@ -584,7 +640,6 @@ const SingleProductCombo = () => {
                   >
                     Add to Cart
                   </button>
-                  
                 </div>
               </div>
             </div>

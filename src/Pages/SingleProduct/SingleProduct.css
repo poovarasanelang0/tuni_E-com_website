@@ -143,4 +143,11 @@ border: none;
   }
   
 
+  .share_icon_container {
+    display: none;
+  }
+  
+  .shareicons:hover .share_icon_container {
+    display: block;
+  }
   

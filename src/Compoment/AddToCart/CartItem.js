@@ -100,7 +100,7 @@ const CartItem = ({
 
                 <div key={comboProduct.id}>
                   <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-2">
                       <img
                         src={comboProduct.data.productDetailsCombo.tumbnail}
                         alt="C"
@@ -112,13 +112,13 @@ const CartItem = ({
                         }}
                       />
                     </div>
-                    <div className="col-md-8">
+                    <div className="col-md-10">
                       <div className=" d-flex align-items-center">
                         <p style={{ fontSize: "20px", marginTop: "10px" }}>
                         <i class="bi bi-currency-rupee"></i> {comboProduct.data.productDetailsCombo.price}
                         </p>
 
-                        <span className="mx-2">
+                        <span className="mx-2 d-flex justify-content-center ms-auto">
                         <Product_add 
                             initialQuantity={comboProduct.data.itemCountcustomer}
                             onQuantityChange={(newQuantity) =>

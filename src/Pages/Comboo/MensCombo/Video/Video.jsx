@@ -4,7 +4,7 @@ import './Video.css';
 
 const Video = () => {
     return (
-        <div className='video111'>
+        <div className='video111 smallscrennMencombo'>
             <video className='video222' autoPlay loop muted>
                 <source src={myvideo} type="video/mp4"  style={{borderRadius:"10px"}}/>
             </video>

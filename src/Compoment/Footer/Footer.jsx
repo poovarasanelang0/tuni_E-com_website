@@ -88,7 +88,7 @@ const Footer = () => {
                 <h5 className="fw-bold">Company</h5>
                 <div class="mt-4">
                   <ul class="list-unstyled my-2">
-                    <Link to="/" className="text-decoration-none text-white">
+                    <Link to="/ShippingPolicy" className="text-decoration-none text-white">
                       {" "}
                       <li className="py-1 px-2">Shipping Policy</li>
                     </Link>
@@ -130,6 +130,7 @@ const Footer = () => {
                     className="btn btn-outline-secondary"
                     type="button"
                     id="button-addon2"
+                    style={{ zIndex: "1" }}
                   >
                     SUBSCRIBE
                   </button>
@@ -199,8 +200,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
-
-
-
-

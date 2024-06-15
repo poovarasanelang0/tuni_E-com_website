@@ -61,6 +61,7 @@ const SingleProduct = () => {
   const [productDetails, setProductDetails] = useState(null);
   const [userId, setUserId] = useState(null);
   const [productDetailsCombo, setProductDetailsCombo] = useState([]);
+  const [visibleShareButtons, setVisibleShareButtons] = useState(null);
 
   const auth = getAuth();
   const firestore = getFirestore();
@@ -442,13 +443,27 @@ const SingleProduct = () => {
   const allSizes = ["S", "M", "L", "XL", "XXL"];
   const availableSizes = productDetails.size;
 
+
+  const handleShareButtonClick = (productId) => {
+    if (visibleShareButtons === productId) {
+      setVisibleShareButtons(null);
+    } else {
+      setVisibleShareButtons(productId); 
+    }
+  };
+
+  // Get the current page URL
+  const currentURL = window.location.href;
+
+
+
   return (
     <>
       <Header />
       <div className="container my-5 fontfamily">
         <div className="row">
           <div className="col-lg-6 col-md-12 col-12 my-4">
-            <div className="slider-container">
+            <div className="slider-container py-1 my-4">
               <Slider {...settings} ref={sliderRef}>
                 {productDetails.imageUrl.map((imageUrl, index) => (
                   <div key={index} className="single_img">
@@ -478,9 +493,50 @@ const SingleProduct = () => {
             </div>
           </div>
 
-          <div className="col-lg-6 col-md-12 col-12">
-            <div className="product-details py-1 my-4">
-              <h2>{productDetails.name}</h2>
+          <div className="col-lg-6 col-md-12 col-12 ">
+            <div className="shareicons py-1 my-4">
+          <div className="icon share-icon-container d-flex">
+          <h2>{productDetails.name}</h2>
+
+              <li className="list-unstyled ms-auto ">
+                <a
+                  className="border-0 text-primary fs-4"
+                  onClick={() => handleShareButtonClick(productId)}
+                >
+                  <i className="bi bi-share-fill "></i>
+                </a>
+              </li>
+              {visibleShareButtons === productId && (
+                <div className="social-media-links ">
+                 <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${currentURL}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mx-1 px-1"
+                >
+                  <i className="bi bi-facebook"></i>
+                </a>
+                <a
+                  href={`https://twitter.com/intent/tweet?url=${currentURL}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mx-1 px-1"
+                >
+                  <i className="bi bi-twitter"></i>
+                </a>
+                  <a
+                  href={`https://api.whatsapp.com/send?text=${currentURL}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mx-1 px-1"
+                >
+                  <i className="bi bi-whatsapp"></i>
+                </a>
+                </div>
+              )}
+            </div>
+            <div className="product-details ">
+              {/* <h2>{productDetails.name}</h2> */}
               <p>
                 Description of the product goes here. You can provide all the
                 details about the product, its features, specifications, etc.
@@ -658,6 +714,7 @@ const SingleProduct = () => {
                   </div>
                 </div>
               </div>
+            </div>
             </div>
           </div>
         </div>

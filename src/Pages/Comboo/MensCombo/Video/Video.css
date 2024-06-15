@@ -22,3 +22,12 @@ video::-moz-media-controls {
 video::-ms-media-controls {
     display: none !important;
 }
+
+
+@media (max-width: 768px) {
+   .smallscrennMencombo{
+    margin-top: -20vh;
+    margin-bottom: -20vh;
+   }
+   
+ }
